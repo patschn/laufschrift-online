@@ -7,6 +7,7 @@ class SignController < ApplicationController
   def commit
     @text = params[:text]
     # TODO: Text übergeben
+    #header :not_found
     render plain: "OK"
   end
 end

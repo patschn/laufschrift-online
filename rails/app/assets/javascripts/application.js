@@ -12,5 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.all
+//= require achtung/ui.achtung
 // require turbolinks (disabled, we don't need it)
 //= require_tree .

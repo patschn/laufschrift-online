@@ -11,6 +11,14 @@ var current_sequence = null;
 // Referenz zum Sequenz-<select>-Element
 var sequence_select;
 
+function message_success(text) {
+  $.achtung({message: text, timeout:5, className:'achtungSuccess'});
+}
+
+function message_error(text) {
+  $.achtung({message: text, className:'achtungFail'});
+}
+
 // Gibt den Text aus dem Debug-Textfeld zurück
 function get_commit_text() {
   return commit_text_field.val();
@@ -39,8 +47,9 @@ function load_sequence() {
   }).done(function (data, status, xhr) {
     current_sequence = data;
     load_sequence_from_text(data.text);
+    message_success("Sequenz »" + data.title + "« geladen");
   }).fail(function (xhr, status, e) {
-    alert("Laden fehlgeschlagen: " + e);
+    message_error("Laden fehlgeschlagen: " + e);
   });
 }
 
@@ -55,25 +64,28 @@ function save_sequence() {
     type: 'patch',
     data: { sequence: { text: $("#commit_text").val() } }
   }).done(function (data, status, xhr) {
-    alert("Sequenz gespeichert");
+    message_success("Sequenz gespeichert");
   }).fail(function (xhr, status, e) {
-    alert("Speichern fehlgeschlagen: " + e);
+    message_error("Speichern fehlgeschlagen: " + e);
   });
 }
 
 function save_sequence_as() {
   var title = prompt("Bitte geben Sie einen Sequenznamen ein", (current_sequence === null) ? "" : current_sequence.title);
+  if (title == null) {
+    return;
+  }
   $.ajax({
     url: '<%=j sequences_path %>',
     type: 'post',
     data: { sequence: { title: title, text: get_commit_text() } }
   }).done(function (data, status, xhr) {
     current_sequence = data;
-    alert("Sequenz gespeichert");
     var new_option = $("<option/>", { value: current_sequence.id, text: current_sequence.title } );
     sequence_select.append(new_option);
+    message_success("Sequenz gespeichert");
   }).fail(function (xhr, status, e) {
-    alert("Speichern fehlgeschlagen: " + e);
+    message_error("Speichern fehlgeschlagen: " + e);
   });
 }
 
@@ -83,13 +95,13 @@ function delete_sequence() {
     url: '<%=j sequences_path %>/' + delete_id,
     type: 'delete'
   }).done(function (data, status, xhr) {
-    alert("Sequenz gelöscht");
     sequence_select.find("option[value=" + delete_id + "]").remove();
     if (current_sequence !== null && current_sequence.id == delete_id) {
       current_sequence = null;
     }
+    message_success("Sequenz gelöscht");
   }).fail(function (xhr, status, e) {
-    alert("Löschen fehlgeschlagen: " + e);
+    message_error("Löschen fehlgeschlagen: " + e);
   });
 }
 
@@ -105,12 +117,9 @@ $(document).ready(function() {
   
   $("#commit_form")
     .on("ajax:success", function(e, data, status, xhr) {
-      var text = $("<p>Text an die Laufschrift übergeben</p>");
-      $("#commit_status").append(text);
-      window.setTimeout(function() { text.fadeOut(1000); }, 2000);
+      message_success('Text an die Laufschrift übergeben');
     })
     .on("ajax:error", function(e, xhr, status, error) {
-      // TODO escape
-      $("#commit_status").replaceAll("<p class='error'>Fehler: " + error + "</p>");
+      message_error('Fehler beim Senden an die Laufschrift: ' + error);
     });
 });

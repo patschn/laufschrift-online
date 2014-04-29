@@ -14,6 +14,7 @@ rails/app/assets/images/.keep -text
 rails/app/assets/javascripts/application.js -text
 rails/app/assets/javascripts/sign.js.erb -text
 rails/app/assets/stylesheets/application.css -text
+rails/app/assets/stylesheets/base.css -text
 rails/app/assets/stylesheets/sequences.css.scss -text
 rails/app/assets/stylesheets/sign.css.scss -text
 rails/app/controllers/application_controller.rb -text
@@ -77,4 +78,11 @@ rails/test/models/.keep -text
 rails/test/models/sequence_part_test.rb -text
 rails/test/test_helper.rb -text
 rails/vendor/assets/javascripts/.keep -text
+rails/vendor/assets/javascripts/achtung/AUTHORS.txt -text
+rails/vendor/assets/javascripts/achtung/LICENSE.txt -text
+rails/vendor/assets/javascripts/achtung/ui.achtung-min.js -text
+rails/vendor/assets/javascripts/achtung/ui.achtung.js -text
+rails/vendor/assets/javascripts/achtung/version.txt -text
 rails/vendor/assets/stylesheets/.keep -text
+rails/vendor/assets/stylesheets/achtung/ui.achtung-min.css -text
+rails/vendor/assets/stylesheets/achtung/ui.achtung.css -text
