@@ -1,0 +1,31 @@
+<h2>Sequenzen</h2>
+<div>
+
+<a href="#" id="sequence_new">Neu</a>
+<select size="1" id="sequences">
+<% @sequences.each do |sequence| %>
+<option value="<%= sequence.id %>"><%= sequence.title %> 
+</option>
+<% end %>
+</select>
+<a href="#" id="sequence_load">Laden</a>
+<a href="#" id="sequence_save">Speichern</a>
+<a href="#" id="sequence_save_as">Speichern als…</a>
+<a href="#" id="sequence_delete">Löschen</a>
+</div>
+
+<!--<div>Sequenztitel: <%= text_field_tag(:sequence_title) %></div>-->
+<!--<%= form_for(@sequence, remote: true) do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <%= f.label :text %>
+  <%= f.text_field :text %>
+  <%= f.submit %>
+<% end %>-->
+
+<h2>Debug-Feld</h2>
+<%= form_tag({controller: "sign", action: "commit"}, remote: true, id: "commit_form") do %>
+  <%= text_area_tag(:text, "Test<BIG>Test", id: "commit_text", size: "24x6") %>
+  <%= submit_tag("Los") %>
+<% end %>
+<div id="commit_status"></div>

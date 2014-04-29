@@ -1,0 +1,94 @@
+<% Rails.application.assets.context_class.class_eval do
+  include Rails.application.routes.url_helpers
+  include ActionView::Helpers::JavaScriptHelper
+end
+%>
+
+// reference to the 'debug' text field
+var commit_text_field;
+// id of the sequence currently loaded, -1 if not in database
+var current_sequence_id = -1;
+
+// Returns the text entered into the debug field
+function get_commit_text() {
+  return commit_text_field.val();
+}
+
+function load_sequence_from_text(text) {
+  commit_text_field.val(text);
+}
+
+// Returns the ID of the sequence selected in the sequence selector
+function get_selected_sequence_id() {
+// FIXME handle no selection
+  return $("#sequences option:selected").val();
+}
+
+function new_sequence() {
+  load_sequence_from_text("");
+  current_sequence_id = -1;
+}
+
+function load_sequence() {
+  $.ajax({
+    url: '<%=j sequences_path %>/' + get_selected_sequence_id(),
+    type: 'get'
+  }).done(function (data, status, xhr) {
+    current_sequence_id = data.id;
+    load_sequence_from_text(data.text);
+  }).fail(function (xhr, status, e) {
+    alert("Laden fehlgeschlagen: " + status);
+  });
+}
+
+function save_sequence() {
+  if (current_sequence_id == -1) {
+    save_sequence_as();
+  }
+  $.ajax({
+    url: '<%=j sequences_path %>/' + current_sequence_id,
+    type: 'put',
+    data: { sequence: { text: $("#commit_text").val()  } }
+  }).done(function (data, status, xhr) {
+    alert("Sequenz gespeichert");
+  }).fail(function (xhr, status, e) {
+    alert("Speichern fehlgeschlagen: " + status);
+  });
+}
+
+function save_sequence_as() {
+}
+
+function delete_sequence() {
+  $.ajax({
+    url: '<%=j sequences_path %>/' + $("#sequences option:selected").val(),
+    type: 'delete'
+  }).done(function (data, status, xhr) {
+    alert("Sequenz gelöscht");
+  }).fail(function (xhr, status, e) {
+    alert("Löschen fehlgeschlagen: " + status);
+  });
+}
+
+$("#sequences option:selected").val()
+
+$(document).ready(function() {
+  commit_text_field = $("#commit_text");
+
+  $("#sequence_new").click(new_sequence);
+  $("#sequence_load").click(load_sequence);
+  $("#sequence_save").click(save_sequence);
+  $("#sequence_save_as").click(save_sequence_as);
+  $("#sequence_delete").click(delete_sequence);
+  
+  $("#commit_form")
+    .on("ajax:success", function(e, data, status, xhr) {
+      var text = $("<p>Text an die Laufschrift übergeben</p>");
+      $("#commit_status").append(text);
+      window.setTimeout(function() { text.fadeOut(1000); }, 2000);
+    })
+    .on("ajax:error", function(e, xhr, status, error) {
+      // TODO escape
+      $("#commit_status").replaceAll("<p class='error'>Fehler: " + error + "</p>");
+    });
+});
