@@ -1,1 +1,8 @@
 * text=auto !eol
+hardware/Funktionen.cpp -text
+hardware/Funktionen.h -text
+hardware/LauflichtTestprogramm.cbp -text
+hardware/LauflichtTestprogramm.depend -text
+hardware/main.cpp -text
+hardware/rs232.c -text
+hardware/rs232.h -text
