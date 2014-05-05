@@ -1,3 +1,5 @@
+"use strict";
+
 $(document).ready(function() {
   SequenceControl._init();
   HTMLAccess._init();

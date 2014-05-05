@@ -1,3 +1,8 @@
+"use strict";
+
+// Repräsentiert eine Sequenz mit Titel, Text
+// und optional ID, falls die Sequenz auch auf dem Server existiert.
+// Mit den entsprechenden Funktionen kann die auf dem Server gespeicherte Sequenz manipuliert werden.
 function Sequence() {
   var id = null;
   var self = this;
@@ -12,7 +17,8 @@ function Sequence() {
     return (id !== null);
   }
   
-  this.load = function(loadID, onSuccess, onFail) {
+  this.load = function(loadID) {
+    var dfd = new $.Deferred();
     $.ajax({
       url: Config.sequenceBasePath + '/' + loadID,
       type: 'get'
@@ -20,50 +26,57 @@ function Sequence() {
       id = data.id;
       self.title = data.title;
       self.text = data.text;
-      onSuccess();
+      dfd.resolve();
     }).fail(function (xhr, status, e) {
-      onFail(e);
+      dfd.reject(e);
     });
+    return dfd.promise();
   }
   
-  this.update = function(onSuccess, onFail) {
+  this.update = function() {
     if (id === null) {
       throw Error("Sequence not created in database yet");
     }
+    var dfd = new $.Deferred();
     $.ajax({
       url: Config.sequenceBasePath + '/' + id,
       type: 'patch',
       data: { sequence: { title: self.title, text: self.text } }
     }).done(function (data, status, xhr) {
-      onSuccess();
+      dfd.resolve();
     }).fail(function (xhr, status, e) {
-      onFail(e);
+      dfd.reject(e);
     });
+    return dfd.promise();
   }
   
-  this.create = function(onSuccess, onFail) {
+  this.create = function() {
+    var dfd = new $.Deferred();
     $.ajax({
       url: Config.sequenceBasePath,
       type: 'post',
       data: { sequence: { title: self.title, text: self.text } }
     }).done(function (data, status, xhr) {
       id = data.id;
-      onSuccess();
+      dfd.resolve();
     }).fail(function (xhr, status, e) {
-      onFail(e);
+      dfd.reject(e);
     });
+    return dfd.promise();
   }
   
-  this.destroy = function(onSuccess, onFail) {
+  this.destroy = function() {
+    var dfd = new $.Deferred();
     $.ajax({
       url: Config.sequenceBasePath + '/' + id,
       type: 'delete'
     }).done(function (data, status, xhr) {
       id = null;
-      onSuccess();
+      dfd.resolve();
     }).fail(function (xhr, status, e) {
-      onFail(e);
+      dfd.reject();
     });
+    return dfd.promise();
   }
 }
 

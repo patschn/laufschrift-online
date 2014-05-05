@@ -1,3 +1,5 @@
+"use strict";
+
 var FlashMessage = {
   success: function(text) {
     $.achtung({message: text, timeout:5, className:'achtungSuccess'});

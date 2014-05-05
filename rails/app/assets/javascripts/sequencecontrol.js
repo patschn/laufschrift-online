@@ -1,3 +1,5 @@
+"use strict";
+
 var SequenceControl = {
   // Die momentan geladene Sequenz
   currentSequence: null,
@@ -36,17 +38,13 @@ var SequenceControl = {
       return;
     }
     var loadedSequence = new Sequence;
-    loadedSequence.load(
-      loadID,
-      $.proxy(function() {
-        this.currentSequence = loadedSequence;
-        this.loadSequenceFromText(this.currentSequence.text);
-        FlashMessage.success("Sequenz »" + this.currentSequence.title + "« geladen");
-      }, this),
-      function(e) {
-        FlashMessage.error("Laden fehlgeschlagen: " + e);
-      }
-    );
+    loadedSequence.load(loadID).done($.proxy(function() {
+      this.currentSequence = loadedSequence;
+      this.loadSequenceFromText(this.currentSequence.text);
+      FlashMessage.success("Sequenz »" + this.currentSequence.title + "« geladen");
+    }, this)).fail(function(e) {
+      FlashMessage.error("Laden fehlgeschlagen: " + e);
+    });
   },
 
   save: function() {
@@ -56,33 +54,27 @@ var SequenceControl = {
       return;
     }
     this.currentSequence.text = HTMLAccess.commitTextField.val();
-    this.currentSequence.update(
-      function() {
-        FlashMessage.success("Sequenz gespeichert");
-      },
-      function(e) {
-        FlashMessage.error("Speichern fehlgeschlagen: " + e);
-      }
-    );
+    this.currentSequence.update().done(function() {
+      FlashMessage.success("Sequenz gespeichert");
+    }).fail(function(e) {
+      FlashMessage.error("Speichern fehlgeschlagen: " + e);
+    });
   },
 
   saveAs: function() {
     var title = prompt("Bitte geben Sie einen Sequenznamen ein", (this.currentSequence.existsOnServer()) ? this.currentSequence.title : "");
-    if (title == null) {
+    if (title == null || title == "") {
       return;
     }
     var seq = this.currentSequence;
     seq.text = HTMLAccess.commitTextField.val();;
     seq.title = title;
-    seq.create(
-      $.proxy(function() {
+    seq.create().done($.proxy(function() {
         $("<option/>", { value: seq.getID(), text: seq.title } ).appendTo(HTMLAccess.sequenceSelect);
         FlashMessage.success("Sequenz gespeichert");
-      }, this),
-      function(e) {
-        FlashMessage.error("Speichern fehlgeschlagen: " + e);
-      }
-    );
+    }, this)).fail(function(e) {
+      FlashMessage.error("Speichern fehlgeschlagen: " + e);
+    });
   },
 
   destroy: function(){
@@ -91,19 +83,16 @@ var SequenceControl = {
       return;
     }
     destroySequence = new Sequence;
-    destroySequence.load(destroyID, $.proxy(function() {
-      destroySequence.destroy(
-        $.proxy(function() {
-          HTMLAccess.sequenceSelect.find("option[value=" + destroyID + "]").remove();
-          if (this.currentSequence.existsOnServer() && this.currentSequence.getID() == destroyID) {
-            this.currentSequence = new Sequence;
-          }
-          FlashMessage.success("Sequenz gelöscht");
-        }, this),
-        function(e) {
-          FlashMessage.error("Löschen fehlgeschlagen: " + e);
+    destroySequence.load(destroyID).done($.proxy(function() {
+      destroySequence.destroy().done($.proxy(function() {
+        HTMLAccess.sequenceSelect.find("option[value=" + destroyID + "]").remove();
+        if (this.currentSequence.existsOnServer() && this.currentSequence.getID() == destroyID) {
+          this.currentSequence = new Sequence;
         }
-      );
-    }, this), function(e) { FlashMessage.error("Löschen fehlgeschlagen: " + e); });
+        FlashMessage.success("Sequenz gelöscht");
+      }, this)).fail(function(e) {
+        FlashMessage.error("Löschen fehlgeschlagen: " + e);
+      });
+    }, this)).fail(function(e) { FlashMessage.error("Löschen fehlgeschlagen: " + e); });
   }
 }

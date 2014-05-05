@@ -1,6 +1,5 @@
 class SignController < ApplicationController
   def index
-    @sequence = Sequence.new
     @sequences = Sequence.all
   end
 
