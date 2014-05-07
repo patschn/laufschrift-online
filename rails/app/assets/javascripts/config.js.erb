@@ -4,6 +4,5 @@
 end
 %>
 
-var Config = {
-  sequenceBasePath: '<%=j sequences_path %>'
-};
+var Config = { };
+Object.defineProperty(Config, "sequenceBasePath", { value: '<%=j sequences_path %>', writable: false , configurable: false, enumerable: true });

@@ -1,8 +1,8 @@
 "use strict";
 
 $(document).ready(function() {
-  SequenceControl._init();
   HTMLAccess._init();
+  SequenceControl._init();
   
   $("#commit_form")
     .on("ajax:success", function(e, data, status, xhr) {
