@@ -10,15 +10,24 @@ var FlashMessage = {
   }
 }
 
-var HTMLAccess = {
+var HTMLAccess = (function() {
   // Referenz zum Debug-Textfeld
-  commitTextField: null,
+  var commitTextField = null;
   // Referenz zum Sequenz-<select>-Element
-  sequenceSelect: null,
+  var sequenceSelect = null;
   
   // Initialisieren
-  _init: function() {
-    this.commitTextField = $("#commit_text");
-    this.sequenceSelect = $("#sequences");
-  }
-};
+  var init = function() {
+    commitTextField = $("#commit_text");
+    sequenceSelect = $("#sequences");
+  };
+  
+  var obj = {
+    init: init
+  };
+  Object.defineProperties(obj, {
+    commitTextField: { get: function() { return commitTextField; }, enumerable: true },
+    sequenceSelect: { get: function() { return sequenceSelect; }, enumerable: true }
+  });
+  return obj;
+})();

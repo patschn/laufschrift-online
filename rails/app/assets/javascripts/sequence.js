@@ -9,10 +9,6 @@ function Sequence() {
   this.title = null;
   this.text = null;
   
-  this.getID = function() {
-    return id;
-  }
-  
   this.existsOnServer = function() {
     return (id !== null);
   }
@@ -78,6 +74,10 @@ function Sequence() {
     });
     return dfd.promise();
   }
+  
+  Object.defineProperties(this, {
+    id: { get: function() { return id; }, enumerable: true }
+  });
 }
 
 
