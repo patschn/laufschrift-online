@@ -1,0 +1,6 @@
+#!/bin/sh
+read txt
+if [ "$txt" == "test" ]; then
+	echo "fehlertest"
+	exit 1
+fi

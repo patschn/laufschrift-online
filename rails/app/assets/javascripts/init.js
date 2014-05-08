@@ -9,6 +9,10 @@ $(document).ready(function() {
       FlashMessage.success('Text an die Laufschrift übergeben');
     })
     .on("ajax:error", function(e, xhr, status, error) {
-      FlashMessage.error('Fehler beim Senden an die Laufschrift: ' + error);
+      var errMsg = error;
+      if (xhr.status == 500) {
+        errMsg = xhr.responseText;
+      }
+      FlashMessage.error('Fehler beim Senden an die Laufschrift: ' + errMsg);
     });
 });

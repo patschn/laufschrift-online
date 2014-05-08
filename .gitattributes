@@ -61,6 +61,7 @@ rails/config/secrets.yml -text
 rails/db/migrate/20140422153329_create_sequences.rb -text
 rails/db/schema.rb -text
 rails/db/seeds.rb -text
+rails/laufschrift_steuerung_bsp -text
 rails/lib/assets/.keep -text
 rails/lib/tasks/.keep -text
 rails/log/.keep -text
