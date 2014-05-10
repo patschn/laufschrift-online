@@ -1,3 +1,41 @@
 body {
   font-family: sans-serif;
 }
+
+#sequence {
+  min-height: 200px;
+  border: 1px solid gray;
+}
+
+#sequence-box {
+  border: 1px dotted black;
+  padding: 10px;
+}
+
+#sequence-inner {
+  border: 2px solid blue;
+}
+
+#toolbox {
+  border: 1px solid gray;
+  padding: 3px;
+}
+
+.tool {
+  border: 1px solid red;
+/*  display: inline;*/
+  float: left;
+  margin: 5px;
+}
+
+.clear { 
+  clear: both;
+}
+
+.component {
+  border: 1px solid green;
+/*  display: inline-block;*/
+  float: left;
+  height: 30px;
+  margin: 5px;
+}
