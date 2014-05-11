@@ -80,7 +80,8 @@ var SequenceControl = (function() {
   };
   
   var decoratedComponentHTML = function(component) {
-    var elem = component.createHTMLElement();
+    var elem = component.getHTMLElement();
+    $(component).on("change", updateCommitTextField);
     var deleteButton = $('<button>Löschen</button>');
     elem.append(deleteButton);
     deleteButton.button({
@@ -179,10 +180,10 @@ var SequenceControl = (function() {
     // Item ist die unsichtbare Kopie, die hinterher eingefügt wird (ein Klon des Toolbox-
     // Elements, das kann auch nicht beeinflusst werden)
 
-    // Nur ersetzen, wenn das Element von der Toolbox kam und component-info hat
-    var compInfo = ui.helper.data("component-info");
-    if (compInfo) {
-      var c = compInfo.factory();
+    // Nur ersetzen, wenn das Element von der Toolbox kam und tool-info hat
+    var toolInfo = ui.helper.data("tool-info");
+    if (toolInfo) {
+      var c = toolInfo.createComponent();
       ui.item.replaceWith(decoratedComponentHTML(c));
     }
   };
@@ -190,19 +191,19 @@ var SequenceControl = (function() {
   var init = function() {
     currentSequence = new Sequence();
     
-    commitTextField = $("#commit_text");
+    commitTextField = $("#commit-text");
     sequenceSelect = $("#sequences");
-    sequenceDiv = $('#sequence_inner');
+    sequenceDiv = $('#sequence-inner');
     
     function preventDefaultProxy(fun) { return function(e) { fun(); e.preventDefault(); };  }
-    $("#sequence_new").click(preventDefaultProxy(createNew));
-    $("#sequence_load").click(preventDefaultProxy(load));
-    $("#sequence_save").click(preventDefaultProxy(save));
-    $("#sequence_save_as").click(preventDefaultProxy(saveAs));
-    $("#sequence_delete").click(preventDefaultProxy(destroy));
+    $("#sequence-new").click(preventDefaultProxy(createNew));
+    $("#sequence-load").click(preventDefaultProxy(load));
+    $("#sequence-save").click(preventDefaultProxy(save));
+    $("#sequence-save-as").click(preventDefaultProxy(saveAs));
+    $("#sequence-delete").click(preventDefaultProxy(destroy));
    
     // Workaround für http://bugs.jqueryui.com/ticket/7498
-    var workaroundHelper = $('<div id="sequence_init_helper" class="component"></div>');
+    var workaroundHelper = $('<div id="sequence-init-helper" class="component"></div>');
     sequenceDiv.append(workaroundHelper);
     sequenceDiv.sortable({
         items: "> div.component",

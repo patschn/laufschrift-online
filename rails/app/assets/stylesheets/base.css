@@ -6,14 +6,17 @@ body {
   border: 1px solid gray;
   padding: 3px;
   margin-bottom: 3px;
+  width: 70%;
+  display: inline-block;
+  vertical-align: top;
 }
 
-#sequence_box {
+#sequence-box {
   border: 1px dotted black;
   padding: 10px;
 }
 
-#sequence_inner {
+#sequence-inner {
   min-height: 200px;
 /*  border: 2px solid blue;*/
 }
@@ -21,6 +24,15 @@ body {
 #toolbox {
   border: 1px solid gray;
   padding: 3px;
+  display: inline-block;
+  width: 20%;
+  margin-left: 5%;
+  vertical-align: top;
+}
+
+#commit-text {
+  width: 95%;
+  height: 3em;
 }
 
 .tool {
@@ -35,8 +47,8 @@ body {
 }
 
 .component {
-  border: 1px solid #079;
-  background-color: #aef;
+  border: 1px solid #333;
+  background-color: #eee;
   display: inline-block;
 /*  float: left;*/
   height: 40px;
@@ -54,4 +66,37 @@ body {
 
 .component>* {
   vertical-align: middle;
+}
+
+.color-bg-r {
+  background-color: red;
+}
+
+.color-bg-g {
+  background-color: green;
+}
+
+.color-bg-y {
+  background-color: orange;
+}
+
+.color-bg-b {
+  background-color: black;
+  color: white;
+}
+
+.color-fg-r {
+  color: red;
+}
+
+.color-fg-g {
+  color: green;
+}
+
+.color-fg-y {
+  color: orange;
+}
+
+.color-fg-b {
+  color: black;
 }

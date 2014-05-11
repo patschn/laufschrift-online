@@ -5,7 +5,7 @@ $(document).ready(function() {
   SequenceControl.init();
   Toolbox.create();
   
-  $("#commit_form")
+  $("#commit-form")
     .on("ajax:success", function(e, data, status, xhr) {
       FlashMessage.success('Text an die Laufschrift übergeben');
     })
