@@ -74,13 +74,31 @@ var SequenceControl = (function() {
     commitTextField.val(text);
   };
   
+  var deleteComponent = function(elem) {
+    elem.remove();
+    updateCommitTextField();
+  };
+  
+  var decoratedComponentHTML = function(component) {
+    var elem = component.createHTMLElement();
+    var deleteButton = $('<button>Löschen</button>');
+    elem.append(deleteButton);
+    deleteButton.button({
+      icons: { primary: "ui-icon-trash" },
+      text: false
+    });
+    deleteButton.click(function() { deleteComponent(elem); });
+    return elem;
+  };
+  
   // Lädt einen Sequenz-String
   var loadSequenceFromText = function(text) {
     // Alte Komponenten löschen
     sequenceDiv.children("div.component").remove();
-    var component = SequenceCodec.decodeFromString(text);
-    $.each(component, function() {
-      sequenceDiv.append(this.createHTMLElement());
+    var components = SequenceCodec.decodeFromString(text);
+    $.each(components, function() {
+      var elem = decoratedComponentHTML(this); 
+      sequenceDiv.append(elem);
     });
     updateCommitTextField();
   };
@@ -165,7 +183,7 @@ var SequenceControl = (function() {
     var compInfo = ui.helper.data("component-info");
     if (compInfo) {
       var c = compInfo.factory();
-      ui.item.replaceWith(c.createHTMLElement());
+      ui.item.replaceWith(decoratedComponentHTML(c));
     }
   };
   
