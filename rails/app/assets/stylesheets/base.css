@@ -3,17 +3,19 @@ body {
 }
 
 #sequence {
-  min-height: 200px;
   border: 1px solid gray;
+  padding: 3px;
+  margin-bottom: 3px;
 }
 
-#sequence-box {
+#sequence_box {
   border: 1px dotted black;
   padding: 10px;
 }
 
-#sequence-inner {
-  border: 2px solid blue;
+#sequence_inner {
+  min-height: 200px;
+/*  border: 2px solid blue;*/
 }
 
 #toolbox {
@@ -23,8 +25,8 @@ body {
 
 .tool {
   border: 1px solid red;
-/*  display: inline;*/
-  float: left;
+  display: inline-block;
+/*  float: left;*/
   margin: 5px;
 }
 
@@ -34,8 +36,9 @@ body {
 
 .component {
   border: 1px solid green;
-/*  display: inline-block;*/
-  float: left;
+  display: inline-block;
+/*  float: left;*/
   height: 30px;
   margin: 5px;
+  vertical-align: top;
 }

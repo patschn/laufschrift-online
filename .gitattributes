@@ -7,7 +7,6 @@ hardware/main.cpp -text
 hardware/rs232.c -text
 hardware/rs232.h -text
 rails/Gemfile -text
-rails/Gemfile.lock -text
 rails/README.rdoc -text
 rails/Rakefile -text
 rails/app/assets/images/.keep -text

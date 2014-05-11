@@ -11,7 +11,7 @@ function Sequence() {
   
   this.existsOnServer = function() {
     return (id !== null);
-  }
+  };
   
   this.load = function(loadID) {
     var dfd = new $.Deferred();
@@ -27,11 +27,11 @@ function Sequence() {
       dfd.reject(e);
     });
     return dfd.promise();
-  }
+  };
   
   this.update = function() {
     if (id === null) {
-      throw Error("Sequence not created in database yet");
+      throw new Error("Sequence not created in database yet");
     }
     var dfd = new $.Deferred();
     $.ajax({
@@ -44,7 +44,7 @@ function Sequence() {
       dfd.reject(e);
     });
     return dfd.promise();
-  }
+  };
   
   this.create = function() {
     var dfd = new $.Deferred();
@@ -59,7 +59,7 @@ function Sequence() {
       dfd.reject(e);
     });
     return dfd.promise();
-  }
+  };
   
   this.destroy = function() {
     var dfd = new $.Deferred();
@@ -73,7 +73,7 @@ function Sequence() {
       dfd.reject();
     });
     return dfd.promise();
-  }
+  };
   
   Object.defineProperties(this, {
     id: { get: function() { return id; }, enumerable: true }
