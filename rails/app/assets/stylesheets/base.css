@@ -1,5 +1,11 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
 body {
   font-family: sans-serif;
+  padding: 10px;
 }
 
 #sequence {
@@ -36,10 +42,15 @@ body {
 }
 
 .tool {
-  border: 1px solid red;
+  border-top: 1px solid #55f;
+  border-left: 1px solid #55f;
+  border-right: 1px solid #005;
+  border-bottom: 1px solid #005;
   display: inline-block;
+  background-color: #eef;
 /*  float: left;*/
   margin: 5px;
+  cursor: move;
 }
 
 .clear { 
