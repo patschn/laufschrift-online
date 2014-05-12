@@ -93,5 +93,7 @@ rails/vendor/assets/javascripts/achtung/version.txt -text
 rails/vendor/assets/stylesheets/.keep -text
 rails/vendor/assets/stylesheets/achtung/ui.achtung-min.css -text
 rails/vendor/assets/stylesheets/achtung/ui.achtung.css -text
-website/design.css -text
-website/laufschrift.html -text
+website/v1/design.css -text
+website/v1/laufschrift.html -text
+website/v2/design_02.css -text
+website/v2/laufschrift_02.html -text
