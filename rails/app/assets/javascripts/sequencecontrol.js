@@ -156,12 +156,13 @@ var SequenceControl = (function() {
     });
   };
 
-  var destroy = function() {
+   var destroy = function() {
     var destroyID = getSelectedSequenceID();
     if (destroyID === undefined) {
       return;
     }
     var destroySequence = new Sequence();
+    if (confirm('Wollen Sie wirklich diese Sequenz löschen?')) {
     destroySequence.load(destroyID).done(function() {
       destroySequence.destroy().done(function() {
         sequenceSelect.find("option[value=" + destroyID + "]").remove();
@@ -172,7 +173,8 @@ var SequenceControl = (function() {
       }).fail(function(e) {
         FlashMessage.error("Löschen fehlgeschlagen: " + e);
       });
-    }).fail(function(e) { FlashMessage.error("Löschen fehlgeschlagen: " + e); });
+    }).fail(function(e) { FlashMessage.error("Löschen fehlgeschlagen: " + e); });}
+    else {FlashMessage.error("Löschen abgebrochen");}
   };
   
   var replaceDraggableWithNewComponent = function(event, ui) {

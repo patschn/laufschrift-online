@@ -31,18 +31,18 @@ var Toolbox = (function() {
   var create = function() {
     function groupDef(name, text) { return { name: name, text: text }; }
     var groups = [
-      groupDef("text", "Textelement"),
-      groupDef("color", "Farbe"),
-      groupDef("charwidth", "Zeichenbreite"),
-      groupDef("pause", "Warten"),
-      groupDef("speed", "Geschwindigkeit"),
-      groupDef("open_animation", "Anfangs-Animationen"),
-      groupDef("close_animation", "End-Animationen"),
+      groupDef("text", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Textelement"),
+      groupDef("color", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Farbe"),
+      groupDef("charwidth", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zeichenbreite"),
+      groupDef("pause", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Warten"),
+      groupDef("speed", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Geschwindigkeit"),
+      groupDef("open_animation", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Anfangsanimationen"),
+      groupDef("close_animation", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Endanimationen"),
     ];
     var toolInfos = getAllToolInfosByGroup();
     $.each(groups, function(i, group) {
       var groupDiv = $('<div class="tool-group"></div>').appendTo(toolboxDiv);
-      var heading = $('<h3></h3>').append(group.text).appendTo(groupDiv);
+      var heading = $('<div class="point"><h3></h3></div>').append(group.text).appendTo(groupDiv);
       var groupTools = toolInfos[group.name];
       if (groupTools !== undefined) {
         $.each(groupTools, function(j, tool) {

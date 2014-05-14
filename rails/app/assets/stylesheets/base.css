@@ -1,113 +1,168 @@
 * {
-  padding: 0;
-  margin: 0;
+	padding: 0;
+	margin: 0;
 }
 
 body {
-  font-family: sans-serif;
-  padding: 10px;
+	font-family: sans-serif;
+	padding: 10px;
+	background-image: url(background.jpg);
+	color: white;
+}
+
+a:link {
+	color: white;
+}
+a:visited {
+	color: white;
+}
+a:hover {
+	color: #f00;
+}
+a:active {
+	color: #f00;
+}
+
+#title {
+	text-align: center;
+	color: white;
+}
+
+#help {
+	text-align: right;
+}
+
+#seq {
+	border: 1px solid gray;
+	display: inline-block;
+	position: relative;
+	padding-left: 5px;
+	float: left;
+	color: white;
+	font-size: 20px;
+	text-align: center;
+	width: 15%;
+}
+
+
+#sequences {
+	width: 90%;
+	background: transparent;
+	border: none;
+	color: white;
 }
 
 #sequence {
-  border: 1px solid gray;
-  padding: 3px;
-  margin-bottom: 3px;
-  width: 70%;
-  display: inline-block;
-  vertical-align: top;
+	border: 1px solid gray;
+	padding: 3px;
+	margin-bottom: 3px;
+	margin-left: 1%;
+	width: 60%;
+	display: inline-block;
+	vertical-align: top;
+	border-radius: 11px 11px 11px 11px;
 }
-
+.point{
+	background:blue;
+	width: 20px;
+	box-shadow: 3px 0px 10px #000 inset;
+	border-radius: 0 35px 35px 0;
+}
 #sequence-box {
-  border: 1px dotted black;
-  padding: 10px;
+	border: 1px dotted black;
+	padding: 10px;
+	background: #2E2F30;
 }
 
 #sequence-inner {
-  min-height: 200px;
-/*  border: 2px solid blue;*/
+	min-height: 200px;
+	/*  border: 2px solid blue;*/
+	background: #2E2F30;
 }
 
 #toolbox {
-  border: 1px solid gray;
-  padding: 3px;
-  display: inline-block;
-  width: 20%;
-  margin-left: 5%;
-  vertical-align: top;
+	border: 1px solid gray;
+	padding: 3px;
+	display: inline-block;
+	width: 20%;
+	margin-left: 1%;
+	vertical-align: top;
 }
 
 #commit-text {
-  width: 95%;
-  height: 3em;
+	width: 95%;
+	height: 3em;
+	background: #2E2F30;
+	color: white;
 }
 
 .tool {
-  border-top: 1px solid #55f;
-  border-left: 1px solid #55f;
-  border-right: 1px solid #005;
-  border-bottom: 1px solid #005;
-  display: inline-block;
-  background-color: #eef;
-/*  float: left;*/
-  margin: 5px;
-  cursor: move;
+	border-top: 1px solid #55f;
+	border-left: 1px solid #55f;
+	border-right: 1px solid #005;
+	border-bottom: 1px solid #005;
+	display: inline-block;
+	background-color: transparent;
+	/*  float: left;*/
+	margin: 5px;
+	cursor: move;
 }
 
-.clear { 
-  clear: both;
+.clear {
+	clear: both;
 }
 
 .component {
-  border: 1px solid #333;
-  background-color: #eee;
-  display: inline-block;
-/*  float: left;*/
-  height: 40px;
-  margin: 5px;
-  padding: 3px;
-  vertical-align: top;
-  cursor: move;
+	border: 0.1px solid gray;
+	background-color: transparent;
+	display: inline-block;
+	/*  float: left;*/
+	height: 40px;
+	margin: 5px;
+	padding: 3px;
+	vertical-align: top;
+	cursor: move;
 }
 
 .component-inner {
-  display: inline-block;
-  padding: 3px;
-  margin-right: 4px;
+	display: inline-block;
+	padding: 3px;
+	margin-right: 4px;
 }
 
-.component>* {
-  vertical-align: middle;
+.component > * {
+	vertical-align: middle;
 }
 
 .color-bg-r {
-  background-color: red;
+	background-color: red;
 }
 
 .color-bg-g {
-  background-color: green;
+	background-color: green;
 }
 
 .color-bg-y {
-  background-color: orange;
+	background-color: orange;
 }
 
 .color-bg-b {
-  background-color: black;
-  color: white;
+	background-color: black;
 }
 
 .color-fg-r {
-  color: red;
+	color: red;
 }
 
 .color-fg-g {
-  color: green;
+	color: green;
 }
 
 .color-fg-y {
-  color: orange;
+	color: orange;
 }
 
 .color-fg-b {
-  color: black;
+	color: black;
 }
+
