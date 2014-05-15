@@ -88,6 +88,11 @@ body {
 	height:936px;
 
 	background: transparent;
+	
+	font-size:20px;
+	font-weight:bold;
+	color:white;
+	font-family:Arial;
 	}
 	
 	#durchsichtig{opacy: 0.0;}
