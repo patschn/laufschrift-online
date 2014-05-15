@@ -10,6 +10,7 @@ rails/Gemfile -text
 rails/README.rdoc -text
 rails/Rakefile -text
 rails/app/assets/images/.keep -text
+rails/app/assets/images/background.jpg -text
 rails/app/assets/javascripts/application.js -text
 rails/app/assets/javascripts/components.js -text
 rails/app/assets/javascripts/config.js.erb -text
