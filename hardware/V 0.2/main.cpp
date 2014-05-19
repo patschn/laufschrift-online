@@ -12,22 +12,9 @@
     Als Parameter werden sowohl die Befehle, als auch der String übermittelt und in argv abgelegt.
 */
 
-void Testfunktion()
-{
-    SWP::stSequenz s;
-
-    s.sOriginal = "<START><LEFT>1553<END>";
-    std::cout << "Originalstring: " << s.sOriginal << std::endl;
-    SWP::InitialisiereTabelle();
-    SWP::KonvertiereString(s);
-
-    std::cout << "Konvertierter string: " << s.sKonvertiert;
-}
-
-
 int main(int argc, char *argv[])
 {
-    /*Dient zu Debuggingzwecken: */
+    /* Dient zu Debuggingzwecken: */
     std::ofstream myfile;
     myfile.open("debug.txt");
     myfile << "Originalstring:\n";
@@ -37,7 +24,8 @@ int main(int argc, char *argv[])
     //String speichern:
     for(std::string line; std::getline(std::cin, line);)
     {
-        myfile << line;
+        myfile << line << "\n"; //DEBUG
+        Sequenz.sOriginal = line;
     }
 
     //Codetabelle initialisieren
@@ -55,9 +43,8 @@ int main(int argc, char *argv[])
 
     //Sequenz konvertieren
     SWP::KonvertiereString(Sequenz);
+    myfile << "Konvertiert: \n";
     myfile << Sequenz.sKonvertiert;
-
-
 
 
 

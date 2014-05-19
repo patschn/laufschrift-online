@@ -8,6 +8,8 @@
 #include "rs232.h"      //Bibliothek von http://www.teuniz.net/RS-232/
 #include <iostream>
 
+#define RS232_PORT_NUMBER 1
+
 bool SWP::OeffneRS232(int iComPort)
 {
     //Port öffnen
@@ -23,7 +25,7 @@ bool SWP::OeffneRS232(int iComPort)
 
 void SWP::KonvertiereString(stSequenz &sBefehl)
 {
-    sBefehl.sKonvertiert = "AAAAAAAAAAAAAAAAAAAA";  //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
+    //sBefehl.sKonvertiert = "AAAAAAAAAAAAAAAAAAAA";  //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
 
     std::string sTemp = "";
 
@@ -54,7 +56,7 @@ void SWP::KonvertiereString(stSequenz &sBefehl)
     }
 }
 
-void SWP::SendeString(std::string sBefehl)
+void SWP::SendeString(stSequenz sBefehl, int iComPort)
 {
     /*
         ToDo: Hier String an Gerät senden
@@ -63,7 +65,10 @@ void SWP::SendeString(std::string sBefehl)
         --> Hexzahl im Format AA hat ein Byte
     */
 
-
+	for(unsigned int i = 0; i < sBefehl.sKonvertiert.length();i++)
+	{
+		RS232_SendByte(iComPort, sBefehl.sKonvertiert[i]);
+	}
 }
 
 void SWP::SchliesseRS232(int iComPort)
@@ -93,8 +98,10 @@ void SWP::InitialisiereTabelle()
     LauflichtCodetabelle["<RANDM>"] = "8E";     //Zufällige Auswahl des Effektes
     LauflichtCodetabelle["<SPEED>"] = "8D";     //Geschwindigkeit der Anzeige muss von einer Zahl von 1-9 gefolgt werden,
                                                 //wobei 1 = schnell und 9 = langsam
-    LauflichtCodetabelle["WAIT"] = "8F";        //Pause bei der Anzeige; muss von einer Zahl von 1-9 gefolgt werden,
+    LauflichtCodetabelle["<WAIT>"] = "8F";        //Pause bei der Anzeige; muss von einer Zahl von 1-9 gefolgt werden,
                                                 //wobei 1 = schnell und 9 = langsam
+    LauflichtCodetabelle["<COLOR r>"] = "AB";       //FEHLER
+    LauflichtCodetabelle["<SNOW>"] = "CD";        //FEHLER
 
     LauflichtCodetabelle["0"] = "30";
     LauflichtCodetabelle["1"] = "31";

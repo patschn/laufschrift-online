@@ -35,7 +35,7 @@ namespace SWP
     void KonvertiereString(stSequenz &sBefehl);
 
 
-    void SendeString(std::string sBefehl);
+    void SendeString(stSequenz sBefehl, int iComPort);
 
 
     /**
