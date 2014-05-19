@@ -1,4 +1,11 @@
 * text=auto !eol
+hardware/V[!!-~]0.2/Funktionen.cpp -text
+hardware/V[!!-~]0.2/Funktionen.h -text
+hardware/V[!!-~]0.2/LauflichtTestprogramm.cbp -text
+hardware/V[!!-~]0.2/LauflichtTestprogramm.depend -text
+hardware/V[!!-~]0.2/main.cpp -text
+hardware/V[!!-~]0.2/rs232.c -text
+hardware/V[!!-~]0.2/rs232.h -text
 rails/Gemfile -text
 rails/README.rdoc -text
 rails/Rakefile -text
