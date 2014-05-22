@@ -46,62 +46,97 @@
 	</div>
 </div>	
 <div id="toolbox_bg">
-	<div id="toolbox">
 
-	<p><h3>Standardelement</h3></p><p>
-		<a href="#" class="button-size1"></a>
+	<div id="toolbox">
+	
+		<div id="tollbox_oben">
+		
+			<div id="toolbox_standard">
+			<p><h3>Standardelement</h3></p><p>
+			<a href="#" class="button-size1"></a>
+			</div>
+			
+			<div id="toolbox_help">
+			<a href="#" class="button-help">?</a>
+			</div>
+			
+		
+		
+		</div>
+			
+		<div id="toolbox_links">
+		
 		<h3>Textfeld</h3>
 		<p>
 		<form action="input_text.html">
 	        <input name="debug" type="text" size="20" maxlength="20" value="Beispieltext" ;  input style="color: white; background-color: transparent;border-color:black;"
 	                 />
-
-	<p><h3>Hintergrundfarbe</h3></p><p>
+		
+		
+				
+		<p><h3>Hintergrundfarbe</h3></p><p>
 	    <a href="#" class="button-red"></a>  
 		<a href="#" class="button-black"></a>
 		<a href="#" class="button-yellow"></a>
 		<a href="#" class="button-green"></a>
 		
-		<p><h3>Wartezeit</h3><p>
-		<p><h3>Geschwindigkeit</h3></p>
-		<p><h3>Animationen</h3></p>
+		</div>
 		
-		<a href="#" class="button-size1"></a>
-		<a href="#" class="button-size1"></a>
-		<a href="#" class="button-size1"></a>
-		<a href="#" class="button-size1"></a>
+		<div id="toolbox_rechts">
 		
-	    <p><h3>Zeichenbreite</h3></p>
+		<h3>Zeichenbreite</h3>
 		<a href="#" class="button-size1">A</a>
-					<a href="#" class="button-size1"><b>A</b></a>
-		<p><h3>Anzeigedauer</h3></p>
-		<br></br>
+		<a href="#" class="button-size1"><b>A</b></a>
+					
+		<h3>Textfarbe</h3><p>
+		<a href="#" class="button-letter_red">A</a>	
 		
-	    <p><h3>Geschwindigkeit</h3></p>
-		<!-- Schieberegler wird nicht von firefox unterstuetz!!!
-		<input type0="range" min="1" max="3" value="1" step="1" onchange="showValue(this.value)"/>
+		</div>
+		
+		<div id="toolbox_unten">
+		<p><h3>Wartezeit</h3><p>
+		
+		
+		<input type="range" min="1" max="9" value="1" step="1" onchange="showValue(this.value)"/>
 					<span id="range">1</span>
 					<script type="text/javascript">
 					function showValue(newValue)
 					{	document.getElementById("range").innerHTML=newValue;
 					}
 					</script>
-					-->
-	                													
+		
+		<p><h3>Geschwindigkeit</h3></p>
+		
+		<input type="range" min="1" max="9" value="1" step="1" onchange="showValue(this.value)"/>
+					<span id="range">1</span>
+					<script type="text/javascript">
+					function showValue(newValue)
+					{	document.getElementById("range").innerHTML=newValue;
+					}
+					</script>
+		
+			    									                													
 					<br></br>
 					
 	    <p><h3>Animation</h3></p>
-		Anfangsbefehle <p>
+		<b>Anfangsbefehle</b> <p>
+		<a href="#" class="button-size1"></a>
+		<a href="#" class="button-size1"></a>
+		<a href="#" class="button-size1"></a>
+		<a href="#" class="button-size1"></a>
+		<p>
+		<b>Endbefehle</b> <p>
+		<a href="#" class="button-size1"></a>
+		<a href="#" class="button-size1"></a>
+		<a href="#" class="button-size1"></a>
 		<a href="#" class="button-size1"></a>
 		
-		Endbefehle <p>
-		<a href="#" class="button-size1"></a>
-		
-	    <p>Sonderzeichen</p>	
+	    <p><h3>Sonderzeichen</h3></p>	
 		<a href="#" class="button-size1"></a>
 		<a href="#" class="button-size1"></a>
 	    <a href="#" class="button-size1"></a>
-		<a href="#" class="button-size1"></a>							
+		<a href="#" class="button-size1"></a>	
+		</div>	
 	</div>
 </div>
 
@@ -116,7 +151,7 @@
 	
 	
 	<form action="input_text.html">
-	        <input name="debug" type="text" size="82"  value="Debuggingzeile";background-color: transparent; border:none; 
+	        <input name="debug" type="text" size="60"  value="Debuggingzeile";background-color: transparent; border:none; 
 	                 />
 	        <a href="#" class="button-run">RUN</a>   
 	</form> 
