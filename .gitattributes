@@ -20,7 +20,7 @@ hardware/V[!!-~]0.3/LauflichtTestprogramm.depend -text
 hardware/V[!!-~]0.3/LauflichtTestprogramm.layout -text
 hardware/V[!!-~]0.3/main.cpp -text
 hardware/V[!!-~]0.3/rs232.c -text
-hardware/rs232.h -text
+hardware/V[!!-~]0.3/rs232.h -text
 rails/Gemfile -text
 rails/README.rdoc -text
 rails/Rakefile -text
