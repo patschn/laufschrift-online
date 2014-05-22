@@ -1,5 +1,4 @@
 * text=auto !eol
-hardware/LauflichtTestprogramm.cbp -text
 hardware/LauflichtTestprogramm.depend -text
 hardware/LauflichtTestprogramm.layout -text
 hardware/V[!!-~]0.1/Funktionen.cpp -text
@@ -18,6 +17,7 @@ hardware/V[!!-~]0.2/rs232.c -text
 hardware/V[!!-~]0.2/rs232.h -text
 hardware/V[!!-~]0.3/Funktionen.cpp -text
 hardware/V[!!-~]0.3/Funktionen.h -text
+hardware/V[!!-~]0.3/LauflichtTestprogramm.cbp -text
 hardware/main.cpp -text
 hardware/rs232.c -text
 hardware/rs232.h -text
