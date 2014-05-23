@@ -262,10 +262,14 @@ function ToolInfo(group, componentInfo, options) {
 
 	this.createComponent = function() {
 		var extraArgs = [];
+		var factoryToUse = componentInfo.factory;
 		if (options.factoryArguments !== undefined) {
 			extraArgs = options.factoryArguments;
 		}
-		return componentInfo.factory.apply(componentInfo, extraArgs);
+		if (options.overrideFactory !== undefined) {
+		    factoryToUse = options.overrideFactory;
+		}
+		return factoryToUse.apply(componentInfo, extraArgs);
 	};
 
 	this.createToolHTMLElement = function() {
@@ -350,15 +354,17 @@ var ASC333Components = {
 		});
 
 		Toolbox.registerToolInfo(new ToolInfo('pause', ComponentMapper.registerComponentInfo(new ComponentInfo('WAIT', function(s) {
-			return new SliderCommandComponent('WAIT', slide.value);}))
+			return new SliderCommandComponent('WAIT', s);}))
 		, {
-			toolText : '<div id="slider" >&nbsp;&nbsp;&nbsp;1s&nbsp;&nbsp;&nbsp;<input id="slide" type="range" name="points" min="1" max="9" step="1" value ="1" onchange="updateSlider(this.value)"/>&nbsp;&nbsp;&nbsp;9s&nbsp;&nbsp;&nbsp;</div>'
+			toolText : '<div class="slider">1s<input id="wait_slider" type="range" name="points" min="1" max="9" step="1" value="1" />9s</div>',
+			overrideFactory : function() { return this.factory($('#wait_slider').val()); }
 		}));
 
 		Toolbox.registerToolInfo(new ToolInfo('speed', ComponentMapper.registerComponentInfo(new ComponentInfo('SPEED', function(s) {
-			return new SliderCommandComponent('SPEED', slide.value);
+			return new SliderCommandComponent('SPEED', s);
 		})), {
-			toolText : '<div id="slider" >&nbsp;&nbsp;schnell&nbsp;&nbsp;<input id="slide" type="range" name="points" min="1" max="9" step="1" value ="5" onchange="updateSlider(this.value)"/>&nbsp;&nbsp;langsam&nbsp;&nbsp;</div>'
+			toolText : '<div class="slider" >schnell<input id="speed_slider" type="range" name="points" min="1" max="9" step="1" value="5" />langsam</div>',
+			overrideFactory : function() { return this.factory($('#speed_slider').val()); }
 		}));
 
 	}
