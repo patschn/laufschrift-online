@@ -26,7 +26,10 @@ rails/Gemfile -text
 rails/README.rdoc -text
 rails/Rakefile -text
 rails/app/assets/images/.keep -text
+rails/app/assets/images/PIDvl.ttf -text svneol=unset#application/x-font-ttf
 rails/app/assets/images/background.jpg -text
+rails/app/assets/images/delete-hover.png -text svneol=unset#image/png
+rails/app/assets/images/delete.png -text svneol=unset#image/png
 rails/app/assets/images/linksoben.png -text svneol=unset#image/png
 rails/app/assets/images/linksunten.png -text svneol=unset#image/png
 rails/app/assets/images/mitte.png -text svneol=unset#image/png
@@ -48,6 +51,7 @@ rails/app/assets/javascripts/toolbox.js -text
 rails/app/assets/javascripts/util.js -text
 rails/app/assets/stylesheets/application.css -text
 rails/app/assets/stylesheets/base.css -text
+rails/app/assets/stylesheets/fonts.css -text
 rails/app/assets/stylesheets/sequences.css.scss -text
 rails/app/assets/stylesheets/sign.css.scss -text
 rails/app/controllers/application_controller.rb -text

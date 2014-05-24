@@ -141,11 +141,12 @@ var SequenceControl = (function() {
     var elem = component.getHTMLElement();
     $(component).on("change", updateCommitTextField);
     var deleteButton = $('<button>Löschen</button>');
+    deleteButton.addClass('component-delete-button');
     elem.append(deleteButton);
-    deleteButton.button({
+    /*deleteButton.button({
       icons: { primary: "ui-icon-trash" },
       text: false
-    });
+    });*/
     deleteButton.click(function() { deleteComponent(elem); });
     return elem;
   };
