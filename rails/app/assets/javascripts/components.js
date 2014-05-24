@@ -410,15 +410,15 @@ var ASC333Components = {
 				Toolbox.registerToolInfo(new ToolInfo('color', colorInfo[type], {
 					extraClass : 'button-color-' + type + '-' + color,
 					factoryArguments : [color],
-					toolText : (type == 'fg') ? 'A' : '&nbsp;&nbsp;&nbsp;&nbsp;'
+					toolText : (type == 'fg') ? 'A' : ''
 				}));
 			});
 		});
 
-		var charwidth = ['NORMAL', 'BIG'];
-		$.each(charwidth, function(i, charwidth) {
+		var charwidths = ['NORMAL', 'BIG'];
+		$.each(charwidths, function(i, charwidth) {
 			var charwidthInfo = ComponentMapper.registerComponentInfo(new ComponentInfo(charwidth));
-			Toolbox.registerToolInfo(new ToolInfo('charwidth', charwidthInfo));
+			Toolbox.registerToolInfo(new ToolInfo('charwidth', charwidthInfo, { toolText: 'A' }));
 		});
 
 		Toolbox.registerToolInfo(new ToolInfo('pause', ComponentMapper.registerComponentInfo(new ComponentInfo('WAIT', function(s) {

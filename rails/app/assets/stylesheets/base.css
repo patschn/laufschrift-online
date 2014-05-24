@@ -343,12 +343,16 @@ body {
     text-align: right;
 }
 
-.tool-command-COLOR {
+.tool-command-COLOR, .tool-command-NORMAL, .tool-command-BIG {
     font-family: PIDvl;
     font-size: 39px;
     vertical-align: top;
     padding-left: 4px;
     box-sizing: border-box;
+}
+
+.tool-command-BIG {
+    font-family: "PIDvl bold";
 }
 	
 .button-run {

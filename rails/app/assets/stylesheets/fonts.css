@@ -1,5 +1,9 @@
-@font-face
-{
+@font-face {
     font-family: PIDvl;
-    src: url(PIDvl.ttf);
+    src: url(PIDvl.ttf) format('truetype');
+    
+}
+@font-face {
+    font-family: "PIDvl bold";
+    src: url('PIDvl bold.ttf') format('truetype');
 }
