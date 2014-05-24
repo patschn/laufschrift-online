@@ -32,10 +32,11 @@ var SequenceCodec = {
     var lastSuccessfulIndex = 0;
     var text, command, commandArgs, commandWithArgs, argSeparatorIndex, commandComponent, openIndex, closeIndex, lastMatchIndex;
     
-    while ((openIndex = str.indexOf('<', lastMatchIndex)) !== -1) {
+    while ((openIndex = StringUtil.indexOfAny(str, ['<', "\\"], lastMatchIndex)) !== -1) {
       lastMatchIndex = openIndex + 1;
-      // < wurde escaped -> weiter
-      if (openIndex !== 0 && str.charAt(openIndex - 1) === "\\") {
+      // Escape-Zeichen -> weiter
+      if (str.charAt(openIndex) === "\\") {
+        lastMatchIndex++; // das Zeichen nach dem Escape-Zeichen überspringen
         continue;
       }
       
@@ -46,10 +47,11 @@ var SequenceCodec = {
       // Damit wird <GROUP <COLOR r>> dann nur als GROUP-Befehl mit dem Argument
       // "<COLOR r>" verarbeitet. Die Komponente kann dann nochmal diese Funktion
       // aufrufen, falls sie es nochmal aufgeteilt braucht
-      while ((closeIndex = StringUtil.indexOfAny(str, ['<','>'], lastMatchIndex)) !== -1) {
+      while ((closeIndex = StringUtil.indexOfAny(str, ['<','>', "\\"], lastMatchIndex)) !== -1) {
         lastMatchIndex = closeIndex + 1;
-        // > wurde escaped -> weiter
-        if (str.charAt(closeIndex - 1) === "\\") {
+        // Escape-Zeichen -> weiter
+        if (str.charAt(closeIndex) === "\\") {
+          lastMatchIndex++; // das Zeichen nach dem Escape-Zeichen überspringen
           continue;
         } else {
           if (str.charAt(closeIndex) === '<') {

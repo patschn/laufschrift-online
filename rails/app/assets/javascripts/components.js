@@ -230,12 +230,12 @@ function GroupComponent(components) {
         return SequenceCodec.encodeToString(components, true);
     };
     
-	this.createInsideHTMLElement = function(containerElem, elem) {
-		containerElem.addClass("component-group");
-		$.each(components, function(i, component) {
-		    elem.append(component.getHTMLElement());
-		});
-	};
+    this.createInsideHTMLElement = function(containerElem, elem) {
+        containerElem.addClass("component-group");
+        $.each(components, function(i, component) {
+            elem.append(component.getHTMLElement());
+        });
+    };
     
     Object.defineProperties(this, {
         components : {

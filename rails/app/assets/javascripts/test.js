@@ -31,8 +31,10 @@ $(document).ready(function() {
   checkStr("test<LEFT>aaa<COLOR g>");
   checkStr("test\\<LEFT\\>");
   checkStr("test<GROUP <UP> \\>>a\\\\\\<<RIGHT>\\>b");
+  checkStr("<COLOR r><GROUP <COLOR y><BGCOLOR b>bla\\<LEFT\\>\\\\>dings");
   checkStr("\\<");
   checkStr("\\>");
+  checkStr("\\\\<LEFT>");
   checkStr("a\<LEFT>\\>");
   checkStr("a<LEFT>\\<");
 });
