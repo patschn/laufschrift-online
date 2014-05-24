@@ -19,7 +19,7 @@ $(document).ready(function() {
 //  console.log(SequenceCodec.encodeToString(blubb));
   function checkStr(str) {
     var components = SequenceCodec.decodeFromString(str);
-    var newstr = SequenceCodec.encodeToString(components);
+    var newstr = SequenceCodec.encodeToString(components, false);
     if (newstr !== str) {
       throw new Error("Check failed ('" + str + "' vs '" + newstr + "')");
     }
@@ -30,7 +30,7 @@ $(document).ready(function() {
   checkStr("test<LEFT>");
   checkStr("test<LEFT>aaa<COLOR g>");
   checkStr("test\\<LEFT\\>");
-  checkStr("test<LEFT>a\\\\\\<<RIGHT>\\>b");
+  checkStr("test<GROUP <UP> \\>>a\\\\\\<<RIGHT>\\>b");
   checkStr("\\<");
   checkStr("\\>");
   checkStr("a\<LEFT>\\>");

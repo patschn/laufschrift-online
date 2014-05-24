@@ -136,7 +136,7 @@ function ColorCommandComponent(command, color) {
 	var that = this;
 
 	if (color === undefined) {
-		color = 'y';
+		color = (command === 'BGCOLOR') ? 'b' : 'y';
 	}
 
 	this.getAsText = function() {
@@ -211,6 +211,43 @@ function SliderCommandComponent(command, value) {
 }
 
 SliderCommandComponent.prototype = new CommandComponent();
+
+function GroupComponent(components) {
+    Component.call(this);
+    
+    if (components === undefined) {
+        components = [];
+    }
+    if (typeof(components) === "string") {
+        components = SequenceCodec.decodeFromString(components);
+    }
+    
+    this.getAsText = function() {
+        return "<GROUP " + SequenceCodec.encodeToString(components, false) + ">";
+    };
+    
+    this.getSignText = function() {
+        return SequenceCodec.encodeToString(components, true);
+    };
+    
+	this.createInsideHTMLElement = function(containerElem, elem) {
+		containerElem.addClass("component-group");
+		$.each(components, function(i, component) {
+		    elem.append(component.getHTMLElement());
+		});
+	};
+    
+    Object.defineProperties(this, {
+        components : {
+            get: function() {
+                return components;
+            },
+            enumerable: true
+        }
+    });
+}
+
+GroupComponent.prototype = new Component();
 
 // ComponentInfo
 // ==============
@@ -311,9 +348,10 @@ function ToolInfo(group, componentInfo, options) {
 // =============================
 var ASC333Components = {
 	register : function() {
-		Toolbox.registerToolInfo(new ToolInfo('text', new ComponentInfo(null, function(t) {
+	    var textComponentInfo = new ComponentInfo(null, function(t) {
 			return new TextComponent(t);
-		}), {
+		});
+		Toolbox.registerToolInfo(new ToolInfo('text', textComponentInfo, {
 			toolText : 'Text'
 		}));
 
@@ -367,6 +405,19 @@ var ASC333Components = {
 			overrideFactory : function() { return this.factory($('#speed_slider').val()); }
 		}));
 
+		var groupComponentInfo = new ComponentInfo('GROUP', function(c) { return new GroupComponent(c); });
+		ComponentMapper.registerComponentInfo(groupComponentInfo);
+		Toolbox.registerToolInfo(new ToolInfo('text', groupComponentInfo, {
+		    toolText : 'Standardelement',
+		    overrideFactory: function() {
+		        var components = [
+		            colorInfo.fg.factory(),
+		            colorInfo.bg.factory(),
+		            textComponentInfo.factory()
+		        ];
+		        return groupComponentInfo.factory(components);
+		    }
+		}));
 	}
 };
 

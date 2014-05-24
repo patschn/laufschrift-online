@@ -30,7 +30,7 @@ var SequenceCodec = {
     var components = [];
     console.log("Decoding string '" + str + "' to components...");
     var lastSuccessfulIndex = 0;
-    var text, command, commandArgs, commandWithArgs, commandParts, commandComponent, openIndex, closeIndex, lastMatchIndex;
+    var text, command, commandArgs, commandWithArgs, argSeparatorIndex, commandComponent, openIndex, closeIndex, lastMatchIndex;
     
     while ((openIndex = str.indexOf('<', lastMatchIndex)) !== -1) {
       lastMatchIndex = openIndex + 1;
@@ -40,14 +40,27 @@ var SequenceCodec = {
       }
       
       var closeFound = false;
-      while ((closeIndex = str.indexOf('>', lastMatchIndex)) !== -1) {
+      var level = 1;
+      // weiter in die Zeichenketten hineinsteigen, aber nur die oberste Ebene
+      // dann weiterverarbeiten.
+      // Damit wird <GROUP <COLOR r>> dann nur als GROUP-Befehl mit dem Argument
+      // "<COLOR r>" verarbeitet. Die Komponente kann dann nochmal diese Funktion
+      // aufrufen, falls sie es nochmal aufgeteilt braucht
+      while ((closeIndex = StringUtil.indexOfAny(str, ['<','>'], lastMatchIndex)) !== -1) {
         lastMatchIndex = closeIndex + 1;
         // > wurde escaped -> weiter
         if (str.charAt(closeIndex - 1) === "\\") {
           continue;
         } else {
-          closeFound = true;
-          break;
+          if (str.charAt(closeIndex) === '<') {
+            level++;
+          } else if (str.charAt(closeIndex) === '>') {
+            level--;
+          }
+          if (level === 0) {
+            closeFound = true;
+            break;
+          }
         }
       }
       
@@ -57,9 +70,14 @@ var SequenceCodec = {
       
       text = this.unescapeText(str.slice(lastSuccessfulIndex, openIndex));
       commandWithArgs = str.slice(openIndex + 1, closeIndex);
-      commandParts = commandWithArgs.split(" ", 2);
-      command = commandParts[0];
-      commandArgs = commandParts[1];
+      argSeparatorIndex = commandWithArgs.indexOf(' ');
+      if (argSeparatorIndex === -1) {
+        command = commandWithArgs;
+        commandArgs = undefined;
+      } else {
+        command = commandWithArgs.slice(0, argSeparatorIndex);
+        commandArgs = commandWithArgs.slice(argSeparatorIndex + 1);
+      }
     
       console.log("- decoded part: text '" + text + "' command '" + command + "' args '" + commandArgs + "'");
       if (text.length > 0) {
