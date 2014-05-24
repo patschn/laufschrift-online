@@ -214,7 +214,7 @@ var SequenceControl = (function() {
     });
   };
 
-   var destroy = function() {
+  var destroy = function() {
     var destroyID = getSelectedSequenceID();
     if (destroyID === undefined) {
       return;

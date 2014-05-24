@@ -331,11 +331,17 @@ function ToolInfo(group, componentInfo, options) {
 		    sliderElem.attr("step", options.sliderStep);
 		    sliderElem.attr("value", options.sliderInitialValue);
 		    sliderElem.attr("id", options.sliderID);
-		    var sliderContainer = $('<div class="slider"/>');
-		    sliderContainer.append(options.sliderLabels[0]);
+		    var sliderContainer = $('<div class="tool-slider"/>');
+		    sliderContainer.append($('<span class="tool-slider-lower-limit"/>').append(options.sliderLabels[0]));
 		    sliderContainer.append(sliderElem);
-		    sliderContainer.append(options.sliderLabels[1]);
-		    elem.append(sliderElem);
+		    sliderContainer.append($('<span class="tool-slider-upper-limit"/>').append(options.sliderLabels[1]));
+		    var sliderButton = $('<div class="button-toolbox"/>');
+		    sliderButton.append(options.sliderInitialValue);
+		    sliderElem.on("change", function() {
+		       sliderButton.text($(this).val());
+		    });
+		    sliderContainer.append(sliderButton);
+		    elem.append(sliderContainer);
         } else {
 		    elem.append(text);
 
