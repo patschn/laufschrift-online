@@ -17,4 +17,22 @@ $(document).ready(function() {
 //  var blubb = SequenceCodec.decodeFromString("test<LEFT>asdefdings<COLOR r>bldings<COLOR r>bladings<COLOR r>bladings<COLOR r>bladings<COLOR r>bladings<COLOR r>bladings<COLOR r>bladings<COLOR r>blaa");
 //  console.log(blubb);
 //  console.log(SequenceCodec.encodeToString(blubb));
+  function checkStr(str) {
+    var components = SequenceCodec.decodeFromString(str);
+    var newstr = SequenceCodec.encodeToString(components);
+    if (newstr !== str) {
+      throw new Error("Check failed ('" + str + "' vs '" + newstr + "')");
+    }
+  }
+  
+  checkStr("<RIGHT>");
+  checkStr("test<LEFT>asdefdings<COLOR r>bld");
+  checkStr("test<LEFT>");
+  checkStr("test<LEFT>aaa<COLOR g>");
+  checkStr("test\\<LEFT\\>");
+  checkStr("test<LEFT>a\\\\\\<<RIGHT>\\>b");
+  checkStr("\\<");
+  checkStr("\\>");
+  checkStr("a\<LEFT>\\>");
+  checkStr("a<LEFT>\\<");
 });

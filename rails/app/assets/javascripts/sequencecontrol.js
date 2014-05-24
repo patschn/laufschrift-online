@@ -1,6 +1,20 @@
 "use strict";
 
 var SequenceCodec = {
+  escapeText: function(str) {
+    str = str.replace(/\\/g, "\\\\");
+    str = str.replace(/</g, "\\<");
+    str = str.replace(/>/g, "\\>");
+    return str;
+  },
+  
+  unescapeText: function(str) {
+    str = str.replace(/\\</g, '<');
+    str = str.replace(/\\>/g, '>');
+    str = str.replace(/\\\\/g, "\\");
+    return str;
+  },
+
   encodeToString: function(components, useSignText) {
     if (useSignText === undefined) {
       useSignText = true;
@@ -13,16 +27,40 @@ var SequenceCodec = {
   },
 
   decodeFromString: function(str) {
-    var re = /(.*?)<(?!<)([^>]*?)(?: ([^>]+?))?>/g;
-    var parts;
     var components = [];
     console.log("Decoding string '" + str + "' to components...");
     var lastSuccessfulIndex = 0;
-    var text, command, commandArgs, commandComponent;
-    while ((parts = re.exec(str)) !== null) {
-      text = parts[1];
-      command = parts[2];
-      commandArgs = parts[3];
+    var text, command, commandArgs, commandWithArgs, commandParts, commandComponent, openIndex, closeIndex, lastMatchIndex;
+    
+    while ((openIndex = str.indexOf('<', lastMatchIndex)) !== -1) {
+      lastMatchIndex = openIndex + 1;
+      // < wurde escaped -> weiter
+      if (openIndex !== 0 && str.charAt(openIndex - 1) === "\\") {
+        continue;
+      }
+      
+      var closeFound = false;
+      while ((closeIndex = str.indexOf('>', lastMatchIndex)) !== -1) {
+        lastMatchIndex = closeIndex + 1;
+        // > wurde escaped -> weiter
+        if (str.charAt(closeIndex - 1) === "\\") {
+          continue;
+        } else {
+          closeFound = true;
+          break;
+        }
+      }
+      
+      if (!closeFound) {
+        break;
+      }
+      
+      text = this.unescapeText(str.slice(lastSuccessfulIndex, openIndex));
+      commandWithArgs = str.slice(openIndex + 1, closeIndex);
+      commandParts = commandWithArgs.split(" ", 2);
+      command = commandParts[0];
+      commandArgs = commandParts[1];
+    
       console.log("- decoded part: text '" + text + "' command '" + command + "' args '" + commandArgs + "'");
       if (text.length > 0) {
         components.push(new TextComponent(text));
@@ -30,9 +68,9 @@ var SequenceCodec = {
       
       commandComponent = ComponentMapper.getComponentInfoForCommand(command).factory(commandArgs);
       components.push(commandComponent);
-      lastSuccessfulIndex = re.lastIndex;
+      lastSuccessfulIndex = closeIndex + 1;
     }
-    var lastText = str.substr(lastSuccessfulIndex);
+    var lastText = this.unescapeText(str.substr(lastSuccessfulIndex));
     if (lastText.length > 0) {
       console.log("- adding text: '" + lastText + "'");
       components.push(new TextComponent(lastText));

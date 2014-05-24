@@ -73,7 +73,7 @@ function TextComponent(text) {
 	var inputElem = null;
 
 	this.getAsText = function() {
-		return text;
+		return SequenceCodec.escapeText(text);
 	};
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
