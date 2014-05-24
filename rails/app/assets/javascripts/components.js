@@ -296,6 +296,9 @@ function ToolInfo(group, componentInfo, options) {
 	if (options === undefined) {
 		options = {};
 	}
+	if (options.toolType === undefined) {
+	    options.toolType = "button";
+	}
 
 	this.createComponent = function() {
 		var extraArgs = [];
@@ -314,12 +317,33 @@ function ToolInfo(group, componentInfo, options) {
 		if (options.toolText !== undefined) {
 			text = options.toolText;
 		}
-
-		var elem = $('<div class="tool">' + text + '</div>');
+		
+		var elem = $('<div class="tool"/>');
 		elem.data("tool-info", this);
 		if (componentInfo.command) {
 			elem.addClass("tool-command-" + componentInfo.command);
 		}
+		
+		if (options.toolType === 'slider') {
+		    var sliderElem = $('<input type="range" />');
+		    sliderElem.attr("min", options.sliderRange[0]);
+		    sliderElem.attr("max", options.sliderRange[1]);
+		    sliderElem.attr("step", options.sliderStep);
+		    sliderElem.attr("value", options.sliderInitialValue);
+		    sliderElem.attr("id", options.sliderID);
+		    var sliderContainer = $('<div class="slider"/>');
+		    sliderContainer.append(options.sliderLabels[0]);
+		    sliderContainer.append(sliderElem);
+		    sliderContainer.append(options.sliderLabels[1]);
+		    elem.append(sliderElem);
+        } else {
+		    elem.append(text);
+
+		    if (options.toolType === "button") {
+        		elem.addClass("button-toolbox");
+        	}
+        }
+        
 		if (options.extraClass !== undefined) {
 			elem.addClass(options.extraClass);
 		}
@@ -378,7 +402,7 @@ var ASC333Components = {
 		$.each(['fg', 'bg'], function(i, type) {
 			$.each(colors, function(j, color) {
 				Toolbox.registerToolInfo(new ToolInfo('color', colorInfo[type], {
-					extraClass : 'color-' + type + '-' + color,
+					extraClass : 'button-color-' + type + '-' + color,
 					factoryArguments : [color],
 					toolText : (type == 'fg') ? 'A' : '&nbsp;&nbsp;&nbsp;&nbsp;'
 				}));
@@ -394,14 +418,24 @@ var ASC333Components = {
 		Toolbox.registerToolInfo(new ToolInfo('pause', ComponentMapper.registerComponentInfo(new ComponentInfo('WAIT', function(s) {
 			return new SliderCommandComponent('WAIT', s);}))
 		, {
-			toolText : '<div class="slider">1s<input id="wait_slider" type="range" name="points" min="1" max="9" step="1" value="1" />9s</div>',
+		    sliderID: 'wait_slider',
+		    toolType: 'slider',
+		    sliderStep: 1,
+		    sliderRange: [1, 9],
+		    sliderInitialValue: 5,
+		    sliderLabels: ['1s', '9s'],
 			overrideFactory : function() { return this.factory($('#wait_slider').val()); }
 		}));
 
 		Toolbox.registerToolInfo(new ToolInfo('speed', ComponentMapper.registerComponentInfo(new ComponentInfo('SPEED', function(s) {
 			return new SliderCommandComponent('SPEED', s);
 		})), {
-			toolText : '<div class="slider" >schnell<input id="speed_slider" type="range" name="points" min="1" max="9" step="1" value="5" />langsam</div>',
+			sliderID: 'speed_slider',
+			toolType: 'slider',
+			sliderStep: 1,
+			sliderRange: [1, 9],
+			sliderInitialValue: 5,
+			sliderLabels: ['schnell', 'langsam'],
 			overrideFactory : function() { return this.factory($('#speed_slider').val()); }
 		}));
 

@@ -42,7 +42,7 @@ var Toolbox = (function() {
     var toolInfos = getAllToolInfosByGroup();
     $.each(groups, function(i, group) {
       var groupDiv = $('<div class="tool-group"></div>').appendTo(toolboxDiv);
-      var heading = $('<div class="point"><h3></h3></div>').append(group.text).appendTo(groupDiv);
+      var heading = $('<h3></h3>').append(group.text).appendTo(groupDiv);
       var groupTools = toolInfos[group.name];
       if (groupTools !== undefined) {
         $.each(groupTools, function(j, tool) {
