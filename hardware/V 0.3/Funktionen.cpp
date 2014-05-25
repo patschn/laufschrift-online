@@ -28,13 +28,14 @@ void SWP::KonvertiereString(stSequenz &sBefehl)
     //sBefehl.sKonvertiert = "AAAAAAAAAAAAAAAAAAAA";  //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
 
     std::string sTemp = "";
+    std::string sColor = "03"; //Standartfarbe (Vordergrund: Rot, Hintergrund: Schwarz) initialisieren, da eine Farbe benötigt wird
 
     /*
         Start der Konvertierung - der fertige Befehl wird in sBefehl.sKonvertiert gespeichert
     */
     for(unsigned int i = 0;i < sBefehl.sOriginal.length();i++)
     {
-        if(sBefehl.sOriginal[i] == '<' && sBefehl.sOriginal[i+1] != '<') //Befehlsanfang wurde gefunden
+        if(sBefehl.sOriginal[i] == '<') //Befehlsanfang wurde gefunden
         {
             for(;sBefehl.sOriginal[i] != '>';i++)   //Den kompletten Befehl einlesen
             {
@@ -43,25 +44,33 @@ void SWP::KonvertiereString(stSequenz &sBefehl)
 
             sTemp += '>';   //Da bei '>' die Schleife abgebrochen wird, muss das Zeichen für das Ende des Befehls
                             //hinzugefügt werden
-
             //Befehl in der Codetabelle nachschauen und konvertieren:
-            sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;
+            sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second + sColor;
+            if(sTemp == "<COLOR b>"||"<COLOR r>"||"<COLOR y>"||"<COLOR g>")
+            {
+                sColor = LauflichtCodetabelle.find(sTemp)->second;
+            }
+            else
+            {
+
+            }
         }
         else    //Wenn kein Befehl gefunden, dann muss es normaler Text sein
         {
-            if(sBefehl.sOriginal[i] == '<') //Falls ein "<" im Text einfefügt werden soll
+            if(sBefehl.sOriginal[i] == '/') //Falls "<", ">" oder "/" im Text einfefügt werden soll
             {
-                sTemp = sBefehl.sOriginal[i];
-                sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;
+                sTemp = sBefehl.sOriginal[i] + sBefehl.sOriginal[i+1]; // "<", ">" und "/" werden als "/*zeichen*" im Befehlsstring gepseichert, daher werden 2 Zeichen benötigt
+                sBefehl.sKonvertiert += sColor + LauflichtCodetabelle.find(sTemp)->second;
                 i++;
             }
             else
             {
                 sTemp = sBefehl.sOriginal[i];
-                sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;
+                sBefehl.sKonvertiert += sColor + LauflichtCodetabelle.find(sTemp)->second;
             }
         sTemp = "";
     }
+}
 }
 
 void SWP::SendeString(stSequenz sBefehl, int iComPort)
@@ -78,6 +87,7 @@ void SWP::SendeString(stSequenz sBefehl, int iComPort)
 		RS232_SendByte(iComPort, sBefehl.sKonvertiert[i]);
 	}
 }
+
 
 void SWP::SchliesseRS232(int iComPort)
 {
