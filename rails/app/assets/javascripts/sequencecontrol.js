@@ -269,6 +269,7 @@ var SequenceControl = (function() {
     sequenceDiv.sortable({
         items: "> div.component",
         revert: false,
+//        handle: ".component",
         // Wenn von der Toolbox Elemente reingezogen werden, müssen sie noch als Komponenten
         // neu erzeugt werden.
         // Es muss sortbeforestop sein, weil es bei sortstop den Helper nicht mehr gibt,

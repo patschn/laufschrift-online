@@ -38,5 +38,5 @@ $(document).ready(function() {
   checkStr("a\<LEFT>\\>");
   checkStr("a<LEFT>\\<");
   
-  SequenceControl.loadSequenceFromText('<BGCOLOR r><BGCOLOR y><COLOR r>test');
+  SequenceControl.loadSequenceFromText('<BGCOLOR r><BGCOLOR y><GROUP <COLOR y><BGCOLOR b>bla><COLOR r>test');
 });
