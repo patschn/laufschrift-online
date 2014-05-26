@@ -389,12 +389,19 @@ var ASC333Components = {
 		var closeAnimations = ['CLOSEMID', 'CLOSERIGHT', 'SQUEEZEMID', 'DSNOW'];
 		$.each(openAnimations, function(i, animation) {
 			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation));
-			Toolbox.registerToolInfo(new ToolInfo('open_animation', info));
+			Toolbox.registerToolInfo(new ToolInfo('open_animation', info,{
+				extraClass: 'open_animation-' + animation,
+				toolText: '<span class="tooltip-'+animation+'">&nbsp;&nbsp;&nbsp;</span>'
+			}));
 		});
 		$.each(closeAnimations, function(i, animation) {
 			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation));
-			Toolbox.registerToolInfo(new ToolInfo('close_animation', info));
+			Toolbox.registerToolInfo(new ToolInfo('close_animation', info, {
+				extraClass: 'close_animation-' + animation,
+				toolText: '<span class="tooltip-'+animation+'">&nbsp;&nbsp;&nbsp;</span>'
+			}));
 		});
+
 
 		var colors = ['y', 'r', 'g', 'b'];
 		var colorInfo = {

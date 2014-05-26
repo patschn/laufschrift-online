@@ -381,3 +381,68 @@ body {
 	position:relative;
 	top:1px;
 }
+.open_animation-LEFT, .open_animation-LEFT:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-RIGHT, .open_animation-RIGHT:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-UP, .open_animation-UP:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-DOWN, .open_animation-DOWN:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-DOFF, .open_animation-DOFF:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-DOBIG, .open_animation-DOBIG:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-FLASH, .open_animation-FLASH:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-JUMP, .open_animation-JUMP:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-OPENMID, .open_animation-OPENMID:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-OPENRIGHT, .open_animation-OPENRIGHT:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-RAINBOW, .open_animation-RAINBOW:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-RANDOM, .open_animation-RANDOM:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-SHIFTMID, .open_animation-SHIFTMID:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.open_animation-SNOW, .open_animation-SNOW:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.close_animation-CLOSEMID, .close_animation-CLOSEMID:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.close_animation-CLOSERIGHT, .close_animation-CLOSERIGHT:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.close_animation-SQUEEZEMID, .close_animation-SQUEEZEMID:hover{
+ 	background-image: url(favicon.ico) ;
+}
+.close_animation-DSNOW, .close_animation-DSNOW:hover{
+ 	background-image: url(favicon.ico) ;
+}
+
+.tooltip-LEFT:hover:after{
+	content:         "Von links nach rechts";
+	position:        absolute;
+   	bottom:          10em;
+   	left:            1em;
+   	width:           20em;
+   	color:           white;
+   	background-image:url(linksoben.png);
+   	border:          1px solid #575757;
+} 
