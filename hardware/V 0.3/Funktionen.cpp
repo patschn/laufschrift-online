@@ -15,8 +15,6 @@ bool SWP::OeffneRS232(int iComPort)
     //Port öffnen
     if(RS232_OpenComport(iComPort,2400) == 1)   //Rückgabe von 1 signalisiert Fehler
     {
-        std::cout << "Fehler beim Öffnen des Com-Ports" << std::endl;
-
         return false;
     }
 
@@ -28,7 +26,7 @@ void SWP::KonvertiereString(stSequenz &sBefehl)
     //sBefehl.sKonvertiert = "AAAAAAAAAAAAAAAAAAAA";  //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
 
     std::string sTemp = "";
-    std::string sColor = "03"; //Standartfarbe (Vordergrund: Rot, Hintergrund: Schwarz) initialisieren, da eine Farbe benötigt wird
+    std::string sColor = "03"; //Standardfarbe (Vordergrund: Rot, Hintergrund: Schwarz) initialisieren, da eine Farbe benötigt wird
 
     /*
         Start der Konvertierung - der fertige Befehl wird in sBefehl.sKonvertiert gespeichert
@@ -46,7 +44,7 @@ void SWP::KonvertiereString(stSequenz &sBefehl)
                             //hinzugefügt werden
             //Befehl in der Codetabelle nachschauen und konvertieren:
             sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second + sColor;
-            if(sTemp == "<COLOR b>"||"<COLOR r>"||"<COLOR y>"||"<COLOR g>")
+            if(sTemp == "<COLOR b>"||sTemp == "<COLOR r>"||sTemp == "<COLOR y>"||sTemp == "<COLOR g>")
             {
                 sColor = LauflichtCodetabelle.find(sTemp)->second;
             }

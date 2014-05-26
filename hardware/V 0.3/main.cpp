@@ -35,11 +35,13 @@ int main(int argc, char *argv[])
     //ToDo:...
 
     //Verbindung öffnen
-    //if(RS232_OpenComport(1,115200) == 1)
-    /*{
+    if(!SWP::OeffneRS232(1))
+    {
         //Verbindungsfehler
-        return 1;   //Fehler beim Aufbau der Verbindung
-    }*/
+        std::cerr << "Fehler beim Öffnen des Com-Ports!" << std::endl;
+
+        return 1;
+    }
 
     //Sequenz konvertieren
     SWP::KonvertiereString(Sequenz);
