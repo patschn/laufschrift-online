@@ -185,7 +185,9 @@ function ColorCommandComponent(command, color, hasPopover) {
     	    button.addClass('button-color-' + colorType + '-' + color);
       	    button.click(function() {
     	        that.color = color;
-    	        buttons.data('popover').hide();
+    	        if (buttons.data('popover') ) {
+    	            buttons.data('popover').hide();
+    	        }
     	    });
     	    buttons.append(button);
     	});
@@ -216,6 +218,7 @@ function ColorCommandComponent(command, color, hasPopover) {
     			}
 			    color = newColor;
 			    updateClasses();
+			    $(that).trigger('change');
 			},
 			enumerable : true
 		}
@@ -270,6 +273,8 @@ SliderCommandComponent.prototype = new CommandComponent();
 function GroupComponent(components) {
     Component.call(this);
     
+    var that = this;
+    
     if (components === undefined) {
         components = [];
     }
@@ -293,6 +298,10 @@ function GroupComponent(components) {
             if (component instanceof ColorCommandComponent) {
                 component.activatePopover();
             }
+            // Änderungen weitergeben
+            $(component).on('change', function() {
+                $(that).trigger('change');
+            });
         });
     };
     
