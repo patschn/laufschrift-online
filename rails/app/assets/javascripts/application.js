@@ -14,5 +14,6 @@
 //= require jquery_ujs
 //= require jquery.ui.all
 //= require achtung/ui.achtung
+//= require jquery-popover
 // require turbolinks (disabled, we don't need it)
 //= require_tree .

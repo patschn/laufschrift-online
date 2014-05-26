@@ -43,3 +43,4 @@ gem 'spring',        group: :development
 # gem 'debugger', group: [:development, :test]
 
 gem 'jquery-ui-rails', '~> 4.2.1'
+gem 'jquery-popover'

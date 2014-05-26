@@ -37,4 +37,6 @@ $(document).ready(function() {
   checkStr("\\\\<LEFT>");
   checkStr("a\<LEFT>\\>");
   checkStr("a<LEFT>\\<");
+  
+  SequenceControl.loadSequenceFromText('<BGCOLOR r><BGCOLOR y><COLOR r>test');
 });

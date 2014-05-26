@@ -291,6 +291,7 @@ var SequenceControl = (function() {
     save: save,
     saveAs: saveAs,
     destroy: destroy,
-    getSequenceSortable: getSequenceSortable
+    getSequenceSortable: getSequenceSortable,
+    loadSequenceFromText: loadSequenceFromText
   };
 }());

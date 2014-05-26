@@ -62,6 +62,10 @@ function Component() {
 		//elem.draggable();
 		return htmlElement;
 	};
+	
+	this.getInnerHTMLElement = function() {
+	    return this.getHTMLElement().children("div.component-inner");
+	};
 }
 
 function TextComponent(text) {
@@ -115,7 +119,12 @@ function CommandComponent(command) {
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
 		containerElem.addClass("component-command-" + this.command);
-		elem.append(this.command);
+		if (command === 'BIG' || command === 'NORMAL') {
+		    elem.append('A');
+		    elem.addClass('button-component');
+		} else {
+    		elem.append(this.command);
+        }
 	};
 
 	Object.defineProperties(this, {
@@ -130,13 +139,15 @@ function CommandComponent(command) {
 
 CommandComponent.prototype = new Component();
 
+
 function ColorCommandComponent(command, color) {
 	CommandComponent.call(this, command);
 
 	var that = this;
+	var colorType = (command === 'BGCOLOR') ? 'bg' : 'fg';
 
 	if (color === undefined) {
-		color = (command === 'BGCOLOR') ? 'b' : 'y';
+		color = (colorType === 'bg') ? 'b' : 'y';
 	}
 
 	this.getAsText = function() {
@@ -147,16 +158,22 @@ function ColorCommandComponent(command, color) {
 		if (!that.hasHTMLElement()) {
 			return;
 		}
-		var htmlElem = that.getHTMLElement();
-		var type = (command === 'BGCOLOR') ? 'bg' : 'fg';
-		htmlElem.addClass('color-' + type + '-' + color);
+		var htmlElem = that.getInnerHTMLElement();
+		htmlElem.addClass('button-component');
+		htmlElem.addClass('button-color-' + colorType + '-' + color);
 	};
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
-		//ColorCommandComponent.prototype.createInsideHTMLElement.apply(that, arguments);
-		if (command === 'COLOR') {
-			elem.append('A');
-		}
+		ColorCommandComponent.prototype.createInsideHTMLElement.apply(that, arguments);
+		elem.empty();
+		var buttons = $('<div></div>');
+    	var colors = (colorType === 'fg') ? Config.fgColors : Config.bgColors;
+    	$.each(colors, function(i, color) {
+    	    var button = $('<div class="button-component button-color"></div>');
+    	});
+    	buttons.css("border", "10px solid red");
+    	elem.append(buttons);
+		elem.popover({ my: 'center top', at: 'center bottom', popover: buttons });
 		updateClasses();
 	};
 
@@ -171,6 +188,7 @@ function ColorCommandComponent(command, color) {
 }
 
 ColorCommandComponent.prototype = new CommandComponent();
+
 
 function SliderCommandComponent(command, value) {
 	CommandComponent.call(this, command);
@@ -211,6 +229,7 @@ function SliderCommandComponent(command, value) {
 }
 
 SliderCommandComponent.prototype = new CommandComponent();
+
 
 function GroupComponent(components) {
     Component.call(this);
@@ -402,8 +421,7 @@ var ASC333Components = {
 			}));
 		});
 
-
-		var colors = ['y', 'r', 'g', 'b'];
+		var colors = { fg: Config.fgColors, bg: Config.bgColors };
 		var colorInfo = {
 			fg : ComponentMapper.registerComponentInfo(new ComponentInfo('COLOR', function(c) {
 				return new ColorCommandComponent('COLOR', c);
@@ -413,11 +431,11 @@ var ASC333Components = {
 			}))
 		};
 		$.each(['fg', 'bg'], function(i, type) {
-			$.each(colors, function(j, color) {
+			$.each(colors[type], function(j, color) {
 				Toolbox.registerToolInfo(new ToolInfo('color', colorInfo[type], {
 					extraClass : 'button-color-' + type + '-' + color,
 					factoryArguments : [color],
-					toolText : (type == 'fg') ? 'A' : ''
+					toolText : ''
 				}));
 			});
 		});
@@ -425,7 +443,7 @@ var ASC333Components = {
 		var charwidths = ['NORMAL', 'BIG'];
 		$.each(charwidths, function(i, charwidth) {
 			var charwidthInfo = ComponentMapper.registerComponentInfo(new ComponentInfo(charwidth));
-			Toolbox.registerToolInfo(new ToolInfo('charwidth', charwidthInfo, { toolText: 'A' }));
+			Toolbox.registerToolInfo(new ToolInfo('charwidth', charwidthInfo, { toolText: '' }));
 		});
 
 		Toolbox.registerToolInfo(new ToolInfo('pause', ComponentMapper.registerComponentInfo(new ComponentInfo('WAIT', function(s) {

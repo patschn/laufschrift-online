@@ -165,25 +165,29 @@ body {
 }	
 
 .component {
-	border: 0.1px solid gray;
+/*	border: 0.1px solid gray;*/
 	background-color: transparent;
 	display: inline-block;
 	height: 40px;
 	margin: 5px;
-	padding: 3px;
+/*	padding: 3px;*/
 	vertical-align: top;
 	cursor: move;
 	position: relative; /* damit man dann den delete-button auf position: absolute stellen kann */
 }
 
 .component-inner {
-	display: inline-block;
+/*	display: inline-block;
 	padding: 3px;
-	margin-right: 4px;
+	margin-right: 4px;*/
 }
 
 .component > * {
 	vertical-align: middle;
+}
+
+.component-text .component-inner {
+    margin-top: 7px;
 }
 
 .component-delete-button {
@@ -210,7 +214,7 @@ body {
 	display: inline-block;
 	cursor: move;
 }
-.button-toolbox {
+.button-toolbox, .button-component {
 	border-radius: 12px;
 	display:inline-block;
 	color:#ffffff;
@@ -222,13 +226,15 @@ body {
 	text-align:center;
 	text-shadow:1px 1px 1px #000000;
 	background-image: linear-gradient(#a6a19a 5%, #423d37 100% );
-	margin-left: 12px;
-	margin-bottom: 12px;
 	box-shadow: inset 0px 1px 0px 0px #787168;
 	border: 1px solid #9c9891;
 }
-.button-toolbox:hover {
+.button-toolbox:hover, .button-component:hover {
     background-image: linear-gradient(#423d37 5%, #a6a19a 100% );
+}
+.button-toolbox {
+	margin-left: 12px;
+	margin-bottom: 12px;    
 }
 
 .button-color-fg-r {
@@ -327,6 +333,7 @@ body {
 
 #toolbox h3 {
     margin-bottom: 9px;
+    margin-left: 20px;
 }
 
 .tool-slider > * {
@@ -343,7 +350,7 @@ body {
     text-align: right;
 }
 
-.tool-command-COLOR, .tool-command-NORMAL, .tool-command-BIG {
+.tool-command-COLOR, .tool-command-NORMAL, .tool-command-BIG, .component-command-COLOR .button-component, .component-command-BIG .button-component, .component-command-NORMAL .button-component {
     font-family: PIDvl;
     font-size: 39px;
     vertical-align: top;
@@ -351,7 +358,11 @@ body {
     box-sizing: border-box;
 }
 
-.tool-command-BIG {
+.tool-command-COLOR:before, .tool-command-NORMAL:before, .tool-command-BIG:before, .component-command-COLOR .button-component:before, .component-command-BIG .button-component:before, .component-command-NORMAL .button-component:before {
+    content: "A";
+}
+
+.tool-command-BIG, .component-command-BIG .button-component {
     font-family: "PIDvl bold";
 }
 	

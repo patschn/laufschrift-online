@@ -31,13 +31,13 @@ var Toolbox = (function() {
   var create = function() {
     function groupDef(name, text) { return { name: name, text: text }; }
     var groups = [
-      groupDef("text", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Textelement"),
-      groupDef("color", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Farbe"),
-      groupDef("charwidth", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zeichenbreite"),
-      groupDef("pause", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Warten"),
-      groupDef("speed", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Geschwindigkeit"),
-      groupDef("open_animation", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Anfangsanimationen"),
-      groupDef("close_animation", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Endanimationen"),
+      groupDef("text", "Textelement"),
+      groupDef("color", "Farbe"),
+      groupDef("charwidth", "Zeichenbreite"),
+      groupDef("pause", "Warten"),
+      groupDef("speed", "Geschwindigkeit"),
+      groupDef("open_animation", "Anfangsanimationen"),
+      groupDef("close_animation", "Endanimationen"),
     ];
     var toolInfos = getAllToolInfosByGroup();
     $.each(groups, function(i, group) {
