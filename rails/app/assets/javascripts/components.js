@@ -111,28 +111,90 @@ function TextComponent(text) {
 
 TextComponent.prototype = new Component();
 
-function CommandComponent(command) {
+function CommandComponent(command, hasPopover) {
 	Component.call(this);
+	
+	var that = this;
+	var ci;
+	try {
+    	ci = ComponentMapper.getComponentInfoForCommand(command);
+    } catch (e) {}
 
 	this.getAsText = function() {
 		return "<" + command + ">";
 	};
+	
+	this.getPopoverContents = function() {
+	    var group = ci.options.exchangeableInGroup;
+	    if (group === undefined) {
+	        return [];
+	    }
+	    var tools = Toolbox.getToolInfosForGroup(group);
+	    return $.map(tools, function(tool) {
+	        var button = $('<div class="button-component"></div>');
+	        var command = tool.componentInfo.command;
+	        button.addClass('button-command-' + command);
+      	    button.click(function() {
+	            that.command = command;
+	        });
+	        return button;
+	    });
+	};
+	
+	// Damit man das Popover noch nachträglich aktivieren kann
+	this.activatePopover = function() {
+	    if (!hasPopover) {
+	        hasPopover = true;
+	    }
+    	var containerElem = that.getHTMLElement();
+    	if (containerElem.data('popover') ) {
+    	    return false;
+    	}
+    	var contents = this.getPopoverContents();
+    	if (contents === []) {
+    	    return false;
+    	}
+	    var popover = $('<div></div>');
+	    popover.append(contents);
+    	popover.addClass('popover');
+    	containerElem.append(popover);
+	    containerElem.popover({ my: 'center top', at: 'center bottom', popover: popover });
+	    return true;
+	};
+
+    var updateClasses = function() {
+        if (!that.hasHTMLElement()) {
+            return;
+        }
+        that.getHTMLElement().addClass("component-command-" + command);
+    };
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
-		containerElem.addClass("component-command-" + this.command);
+	    updateClasses();
+		elem.addClass('button-component');
 //		containerElem.addClass("component-handle");
 		if (command === 'BIG' || command === 'NORMAL') {
-		    elem.append('A');
-		    elem.addClass('button-component');
+		    //elem.append('A');
+		    //elem.addClass('button-component');
 		} else {
     		elem.append(this.command);
         }
+        if (hasPopover) {
+            activatePopover();
+		}
 	};
 
 	Object.defineProperties(this, {
 		command : {
 			get : function() {
 				return command;
+			},
+			set : function(newCommand) {
+			    if (this.hasHTMLElement()) {
+    			    this.getHTMLElement().removeClass("component-command-" + command);
+    			}
+	   		    command = newCommand;
+			    updateClasses();
 			},
 			enumerable : true
 		}
@@ -143,16 +205,13 @@ CommandComponent.prototype = new Component();
 
 
 function ColorCommandComponent(command, color, hasPopover) {
-	CommandComponent.call(this, command);
+	CommandComponent.call(this, command, hasPopover);
 
 	var that = this;
 	var colorType = (command === 'BGCOLOR') ? 'bg' : 'fg';
 
 	if (color === undefined) {
 		color = (colorType === 'bg') ? 'b' : 'y';
-	}
-	if (hasPopover === undefined) {
-	    hasPopover = false;
 	}
 
 	this.getAsText = function() {
@@ -168,32 +227,16 @@ function ColorCommandComponent(command, color, hasPopover) {
 		htmlElem.addClass('button-color-' + colorType + '-' + color);
 	};
 	
-	// Damit man das Popover noch nachträglich aktivieren kann
-	this.activatePopover = function() {
-	    if (!hasPopover) {
-	        hasPopover = true;
-	    }
-    	var containerElem = that.getHTMLElement();
-    	if (containerElem.data('popover') ) {
-    	    return;
-    	}
-	    var buttons = $('<div></div>');
-    	var colors = (colorType === 'fg') ? Config.fgColors : Config.bgColors;
-    	var button;
-    	$.each(colors, function(i, color) {
-    	    button = $('<div class="button-component"></div>');
-    	    button.addClass('button-color-' + colorType + '-' + color);
+	this.getPopoverContents = function() {
+	    var colors = (colorType === 'fg') ? Config.fgColors : Config.bgColors;
+    	return $.map(colors, function(color) {
+	        var button = $('<div class="button-component"></div>');
+	        button.addClass('button-color-' + colorType + '-' + color);
       	    button.click(function() {
-    	        that.color = color;
-    	        if (buttons.data('popover') ) {
-    	            buttons.data('popover').hide();
-    	        }
-    	    });
-    	    buttons.append(button);
-    	});
-    	buttons.addClass('popover');
-    	containerElem.append(buttons);
-	    containerElem.popover({ my: 'center top', at: 'center bottom', popover: buttons });
+	            that.color = color;
+	        });
+	        return button;
+	    });
 	};
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
@@ -201,9 +244,6 @@ function ColorCommandComponent(command, color, hasPopover) {
 		elem.empty();
 //		containerElem.removeClass("component-handle");
 //		elem.addClass("component-handle");
-        if (hasPopover) {
-            activatePopover();
-		}
 		updateClasses();
 	};
 
@@ -295,7 +335,7 @@ function GroupComponent(components) {
 //		containerElem.addClass("component-handle");
         $.each(components, function(i, component) {
             elem.append(component.getHTMLElement());
-            if (component instanceof ColorCommandComponent) {
+            if (component instanceof CommandComponent) {
                 component.activatePopover();
             }
             // Änderungen weitergeben
@@ -320,7 +360,7 @@ GroupComponent.prototype = new Component();
 // ComponentInfo
 // ==============
 
-function ComponentInfo(command, factory) {
+function ComponentInfo(command, factory, options) {
 	if (factory === undefined) {
 		// Siehe https://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible
 		// Das ruft nur den Konstruktor von CommandComponent auf, übergibt aber sowohl den gespeicherten
@@ -353,7 +393,13 @@ function ComponentInfo(command, factory) {
 				return factory;
 			},
 			enumerable : true
-		}
+		},
+		options : {
+		    get : function() {
+		        return options;
+		    },
+		    enumerable: true
+		},
 	});
 }
 
@@ -456,7 +502,7 @@ var ASC333Components = {
 		var openAnimations = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'DOFF', 'DOBIG', 'FLASH', 'JUMP', 'OPENMID', 'OPENRIGHT', 'RAINBOW', 'RANDOM', 'SHIFTMID', 'SNOW'];
 		var closeAnimations = ['CLOSEMID', 'CLOSERIGHT', 'SQUEEZEMID', 'DSNOW'];
 		$.each(openAnimations, function(i, animation) {
-			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation));
+			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation, undefined, { exchangeableInGroup: 'open_animation' }));
 			Toolbox.registerToolInfo(new ToolInfo('open_animation', info,{
 				extraClass: 'open_animation-' + animation,
 				toolText: '<span class="tooltip-'+animation+'">&nbsp;&nbsp;&nbsp;</span>'
@@ -527,6 +573,7 @@ var ASC333Components = {
 		        var components = [
 		            colorInfo.fg.factory(undefined),
 		            colorInfo.bg.factory(undefined),
+		            ComponentMapper.getComponentInfoForCommand('LEFT').factory(),
 		            textComponentInfo.factory()
 		        ];
 		        return groupComponentInfo.factory(components);

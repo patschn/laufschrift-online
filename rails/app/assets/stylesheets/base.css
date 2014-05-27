@@ -391,6 +391,7 @@ body {
 	
 .popover {
     position: absolute;
+    z-index: 1000;
 }
 	
 .button-run {

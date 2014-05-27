@@ -21,6 +21,10 @@ var Toolbox = (function() {
     return toolInfosByGroup;
   };
   
+  var getToolInfosForGroup = function(group) {
+    return toolInfosByGroup[group];
+  };
+  
   var dragHelper = function(elem) {
     // Die ToolInfo als data-Attribut muss erhalten bleiben
     var clone = elem.clone();
@@ -58,6 +62,7 @@ var Toolbox = (function() {
     init: init,
     registerToolInfo: registerToolInfo,
     getAllToolInfosByGroup: getAllToolInfosByGroup,
+    getToolInfosForGroup: getToolInfosForGroup,
     create: create
   }; 
 }());
