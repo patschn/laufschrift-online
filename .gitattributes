@@ -29,6 +29,10 @@ rails/app/assets/images/.keep -text
 rails/app/assets/images/PIDvl[!!-~]bold.ttf -text svneol=unset#application/x-font-ttf
 rails/app/assets/images/PIDvl.ttf -text svneol=unset#application/x-font-ttf
 rails/app/assets/images/background.jpg -text
+rails/app/assets/images/bug.png -text
+rails/app/assets/images/debuglinks.png -text
+rails/app/assets/images/debugmitte.png -text
+rails/app/assets/images/debugrechts.png -text
 rails/app/assets/images/delete-hover.png -text svneol=unset#image/png
 rails/app/assets/images/delete.png -text svneol=unset#image/png
 rails/app/assets/images/linksoben.png -text svneol=unset#image/png
@@ -41,6 +45,9 @@ rails/app/assets/images/mittemitte2.png -text svneol=unset#image/png
 rails/app/assets/images/mitterechts.png -text svneol=unset#image/png
 rails/app/assets/images/mitterechts2.png -text svneol=unset#image/png
 rails/app/assets/images/rechts.png -text svneol=unset#image/png
+rails/app/assets/images/toplinks.png -text
+rails/app/assets/images/topmitte.png -text
+rails/app/assets/images/toprechts.png -text
 rails/app/assets/javascripts/application.js -text
 rails/app/assets/javascripts/components.js -text
 rails/app/assets/javascripts/config.js.erb -text
