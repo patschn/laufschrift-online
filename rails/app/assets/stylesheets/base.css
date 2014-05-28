@@ -10,14 +10,19 @@ body {
     margin-bottom:10px;
     height:100px;
     width:100%;
-    background-color:lightyellow;
+    background-image: url(toplinks.png), url(toprechts.png), url(topmitte.png);
+    background-repeat: no-repeat, no-repeat, repeat-x;
+    background-position: top left, top right, top left;
+    text-align:center;
+    font-family:Arial;
+    color:white;
+    font-size:80px;
 }
-
 #links {
     position:absolute;
     top:130px;
     left:10px;
-    margin-left:20px;					/*				Mittelfenster variable groesse(eigentlich nicht wirklich eine verbesserung) --> wie formatiert  man so hintergrundbilder richtig???, bitte keine absolute positionierung*/
+    margin-left:20px;
     height: 1000px;
     background-color: transparent;
     width: 250px;
@@ -108,28 +113,48 @@ body {
 }
 
 #debug {
-    height: 100px;
-    background:transparent;
+    margin-left: 130px;
+    margin-right: 80px;
+    margin-top: 20px;
+    min-width: 325px;
+    height: 30px;
+}
+#debug-bg{
+    background-image: url(debuglinks.png), url(debugrechts.png), url(debugmitte.png);
+    background-repeat: no-repeat, no-repeat, repeat-x;
+    background-position: left,right,left;
+}
+
+#debug-feld{
+    background: transparent;
+}
+
+#bug{
+    position:absolute;
+    top:800px;
+    left:330px;		
+    width: 64px;		
+    height:72px;
+    background: url(bug.png);
 }
 
 #toolbox_bg{
     position:absolute;
-    top:120px;
+    top:130px;
     right:0px;		
     width: 450px;
     float: right;		
-    height:600px;
+    height:750px;
     background: url(rechts.png); opacity: 0.5;
     margin-right:20px;	
 }
 
-
 #toolbox{
     position:absolute;
-    top:130px;
+    top:140px;
     right:10px;								
     margin:20px;;
-    height:590px;
+    height:730px;
     background: transparent;
     width: 430px;
     float: right;
