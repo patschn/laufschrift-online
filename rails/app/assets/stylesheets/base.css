@@ -170,19 +170,20 @@ body {
 
 
 .button {
-	background-image: linear-gradient(#969096 5%, #0d0c0d 100% );
+	background-image: linear-gradient(#474747 5%, #1f181f 100% );
 	display: block;
-    color:#ffffff;
+    	color:#ffffff;
 	font-size:17px;
 	height:40px;
 	line-height:40px;
 	width:150px;
+	border-radius:3px;
 	text-decoration:none;
 	text-align:center;
 	text-shadow:1px 1px 0px #000000;
 }
 .button:hover {
-	background-image: linear-gradient(#0d0c0d 5%, #969096 100% );
+	background-image: linear-gradient(#1f181f 5%, #474747 100% );
 }
 .button:active {
 	position:relative;
@@ -209,7 +210,7 @@ body {
 }
 
 .component-group {
-    background-color: #0d1014;
+    background-color: #1f181f;
     height: 55px;
 }
 .component-group>.component-inner {
@@ -327,9 +328,9 @@ body {
 	
 .button-seq {										/*Button fuer Sequenzliste*/
 	box-shadow: 0px 0px 0px 0px #ffffff;
-	background-image: linear-gradient(#969096 5%, #0d0c0d 100% );
-	background-color:#969096;
-	border-radius: 0;
+	background-image: linear-gradient(#474747 5%, #1f181f 100% );
+	background-color:#474747;
+	border-radius:3px;
 	text-indent:0px;
 	display:inline-block;
 	color:#ffffff;
@@ -345,8 +346,8 @@ body {
 	text-shadow:1px 1px 0px #000000;
 }
 .button-seq:hover {
-	background-image: linear-gradient(#0d0c0d 5%, #969096 100% );
-	background-color:#0d0c0d;
+	background-image: linear-gradient(#1f181f 5%, #474747 100% );
+	background-color:#1f181f;
 }
 .button-seq:active {
 	position:relative;
@@ -420,8 +421,8 @@ body {
 }
 	
 .button-run {
-	background-image: linear-gradient(#969096 5%, #0d0c0d 100% );
-	background-color:#969096;
+	background-image: linear-gradient(#a6a19a 5%, #423d37 100% );
+	background-color:#a6a19a;
 	border-radius: 20px;
 	border:1px solid #9c9891;
 	display:inline-block;
