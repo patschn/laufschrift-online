@@ -1,12 +1,14 @@
 body {
 background-image:url(http://abload.de/img/site_backgroundyia3x.jpg);
 text-align:center;
+font-family:Arial, Serif;
 }
 #top{
 margin-bottom:10px;
 height:100px;
 width:100%;
 background-color:lightyellow;
+
 }
 
 #links {
@@ -63,6 +65,10 @@ left:300px;
 width: 325px;
 height: 650px;
 background:url(http://abload.de/img/mittelinkslsufu.png);
+text-align:left;
+
+
+
 
 font-family:Arial;
 color:white;
@@ -181,50 +187,48 @@ background:transparent;
 }
 
 
-.button{						/*Standardbutton(Button links oben)*/
-		background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #969096), color-stop(1, #0d0c0d) );
-        background:-moz-linear-gradient( center top, #969096 5%, #0d0c0d 100% );
-        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#969096', endColorstr='#0d0c0d');
-        background-color:#969096;
-        border-top-left-radius:0px;
-        border-top-right-radius:0px;
-        border-bottom-right-radius:0px;
-		border-bottom-left-radius:0px;
-        text-indent:0px;
-        display:inline-block;
-        color:#ffffff;		/*font color*/
-        font-family:Arial;
-        font-size:17px;
-        font-weight:normal;
-        font-style:normal;
-        height:40px;
-        line-height:40px;
-        width:150px;
-        text-decoration:none;
-        text-align:center;
-		text-shadow:1px 1px 0px #000000;
+.button{
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #474747), color-stop(1, #1f181f) );
+	background:-moz-linear-gradient( center top, #474747 5%, #1f181f 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#474747', endColorstr='#1f181f');
+	background-color:#474747;
+	border-radius:3px;
+	text-indent:0;
+	display:inline-block;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	font-weight:normal;
+	font-style:normal;
+	height:40px;
+	line-height:40px;
+	width:150px;
+	text-decoration:none;
+	text-align:center;
+	}
+.button:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #1f181f), color-stop(1, #474747) );
+	background:-moz-linear-gradient( center top, #1f181f 5%, #474747 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#1f181f', endColorstr='#474747');
+	background-color:#1f181f;
+}.button:active {
+	position:relative;
+	top:1px;
 }
 
-.button:hover {
-        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #0d0c0d), color-stop(1, #969096) );
-        background:-moz-linear-gradient( center top, #0d0c0d 5%, #969096 100% );
-        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0d0c0d', endColorstr='#969096');
-        background-color:#0d0c0d;
-}.button:active {
-        position:relative;
-        top:1px;
-}
+
+
 
 .links_unten {						/*Button fuer Sequenzen */
         height:30px;
         line-height:30px;
-        width:200px;
+        width:250px;
       }
 .links_unten:hover {
-        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #0d0c0d), color-stop(1, #969096) );
-        background:-moz-linear-gradient( center top, #0d0c0d 5%, #969096 100% );
-        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0d0c0d', endColorstr='#969096');
-        background-color:#0d0c0d;
+        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #1f181f), color-stop(1, #474747) );
+		background:-moz-linear-gradient( center top, #1f181f 5%, #474747 100% );
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#1f181f', endColorstr='#474747');
+		background-color:#1f181f;
 }.links_unten:active {
         position:relative;
         top:1px;
@@ -239,10 +243,10 @@ background:transparent;
 }
 
 .klein:hover {
-        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #0d0c0d), color-stop(1, #969096) );
-        background:-moz-linear-gradient( center top, #0d0c0d 5%, #969096 100% );
-        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0d0c0d', endColorstr='#969096');
-        background-color:#0d0c0d;
+        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #1f181f), color-stop(1, #474747) );
+		background:-moz-linear-gradient( center top, #1f181f 5%, #474747 100% );
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#1f181f', endColorstr='#474747');
+		background-color:#1f181f;
 }.klein:active {
         position:relative;
         top:1px;
@@ -346,12 +350,23 @@ background:transparent;
 }
 
 .standard{									/*Kominations element*/
-		width:50px;
-		height:32px;
-		line-height:32px;
+		width:80px;
+		height:40px;
+		line-height:65px;
 		font-size:20px;
+		border-radius:2px;
+		text-indent:0;
+		display:inline-block;
+		color:#ffffff;
+		border-radius:3px;
+		font-family:Arial;
+		font-size:15px;
+		font-weight:normal;
+		font-style:normal;			
+		text-decoration:none;
+		text-align:center;
+		text-shadow:1px 1px 0px #633963;
 }
-
 
 
 
