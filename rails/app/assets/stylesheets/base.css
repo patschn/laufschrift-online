@@ -398,7 +398,13 @@ body {
 .tool-slider-lower-limit {
     text-align: right;
 }
+.clock-CLOCK12,.clock-CLOCK12:hover{
+	background-image: url(favicon.ico);
+}
 
+.clock-CLOCK24,.clock-CLOCK24:hover{
+	background-image: url(favicon.ico);
+}
 .tool-command-COLOR, .tool-command-NORMAL, .tool-command-BIG, .component-command-COLOR .button-component, .component-command-BIG .button-component, .component-command-NORMAL .button-component {
     font-family: PIDvl;
     font-size: 39px;

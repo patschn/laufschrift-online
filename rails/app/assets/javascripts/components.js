@@ -579,6 +579,12 @@ var ASC333Components = {
 		        return groupComponentInfo.factory(components);
 		    }
 		}));
+		
+		var clocks = ['CLOCK12', 'CLOCK24'];
+		$.each(clocks, function(i, clock) {
+			var clockInfo = ComponentMapper.registerComponentInfo(new ComponentInfo(clock));
+			Toolbox.registerToolInfo(new ToolInfo('clock', clockInfo, { extraClass: 'clock-'+clock, toolText: '' }));
+		});
 	}
 };
 

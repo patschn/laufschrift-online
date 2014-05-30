@@ -36,6 +36,7 @@ var Toolbox = (function() {
     function groupDef(name, text) { return { name: name, text: text }; }
     var groups = [
       groupDef("text", "Textelement"),
+      groupDef("clock", "Uhrzeit"),
       groupDef("color", "Farbe"),
       groupDef("charwidth", "Zeichenbreite"),
       groupDef("pause", "Warten"),
