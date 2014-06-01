@@ -15,6 +15,9 @@ SWP::CLauflicht::CLauflicht()
 
     //Com-Port festlegen:
     m_iComPort = 22;    //22 = ttyAMA0
+    m_iColors[0] = 3;
+    m_iColors[1] = 0;
+    m_iColors[2] = m_iColors[0] + m_iColors[1];
 }
 
 bool SWP::CLauflicht::OeffneRS232()
@@ -22,9 +25,14 @@ bool SWP::CLauflicht::OeffneRS232()
     //Port öffnen, Baudrate: 2400 - ROOT RECHTE BENÖTIGT!
     if(RS232_OpenComport(m_iComPort,2400) == 1)   //Rückgabe von 1 signalisiert Fehler
     {
-        std::cerr << "Fehler beim Öffnen des Com-Ports" << std::endl;
+        std::cerr << "Fehler beim Öffnen des Com-Ports....Rechte?" << std::endl;
 
         return false;
+    }
+    else
+    {
+        m_debugfile << "Verbindung erfolgreich aufgebaut!" << std::endl;
+        m_debugfile << "Farbe: " << m_iColors[2];
     }
 
     return true;    //Port erfolgreich geöffnet
@@ -41,17 +49,24 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
         m_debugfile << line;        //In Debugdatei schreiben
         sBefehl.sOriginal = line;   //String der Website
     }
+    m_debugfile << std::endl;
 }
 
 void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 {
     //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
     sBefehl.sKonvertiert = LauflichtCodetabelle.find("<INIT>")->second;
+    sBefehl.sKonvertiert = LauflichtCodetabelle.find("<INIT>")->second;
+    m_debugfile << "Initialisierungssequenz: ";
+    m_debugfile << LauflichtCodetabelle.find("<INIT>")->second;
+    m_debugfile << std::endl;
 
     //Sequenzstart signalisieren
+    m_debugfile << "Startsequenz: " << LauflichtCodetabelle.find("<START>")->second << std::endl;
     sBefehl.sKonvertiert = LauflichtCodetabelle.find("<START>")->second;
 
     //Programmwahl im Lauflicht (für die Website wird immer Programm A benutzt
+    m_debugfile << "Programmwahl: " << LauflichtCodetabelle.find("<PROGRAM->")->second << LauflichtCodetabelle.find("A")->second << std::endl;
     sBefehl.sKonvertiert = LauflichtCodetabelle.find("<PROGRAM->")->second;
     sBefehl.sKonvertiert = LauflichtCodetabelle.find("A")->second;
 
@@ -102,19 +117,28 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             {
                 //Befehl in der Codetabelle nachschauen und konvertieren:
                 sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;
+                m_debugfile << "Befehl: " << LauflichtCodetabelle.find(sTemp)->second << std::endl;
                 sBefehl.sKonvertiert += m_iColors[2];
+                m_debugfile << "Farbe: " << m_iColors[2] << std::endl;
             }
-        }
+        }//if(sBefehl.sOriginal[i] == '<')...
         else    //Wenn kein Befehl gefunden wurde, dann muss es normaler Text sein
         {
             //Bei Zeichen kommt erst die Farbe, anschließend das Zeichen
             sTemp = sBefehl.sOriginal[i];
             sBefehl.sKonvertiert += m_iColors[2];                               //Farbe
+            m_debugfile << "Farbe: " << m_iColors[2] << std::endl;
             sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;   //Zeichen
+            m_debugfile << "Zeichen: " << LauflichtCodetabelle.find(sTemp)->second << std::endl;
         }
+        sTemp = ""; //Temporären String leeren
 
-        sTemp = "";
-    }//for
+    }//for(unsigned int i = 0;i < sBefehl.sOriginal.length();i++)...
+
+    //Endsequenz
+    sBefehl.sKonvertiert += 191;
+    sBefehl.sKonvertiert += 177;
+    m_debugfile << "Endsequenz: " << "191" << " " << "171" << std::endl;
 
     m_debugfile << "Konvertiert:" << std::endl;
     m_debugfile << sBefehl.sKonvertiert;        //Konvertierte Sequenz in Datei schreiben
@@ -122,6 +146,8 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 
 void SWP::CLauflicht::SendeString(stSequenz sBefehl)
 {
+    m_debugfile << "Sende Bytes" << std::endl;
+
 	for(unsigned int i = 0; i < sBefehl.sKonvertiert.length();i++)
 	{
 		RS232_SendByte(m_iComPort, sBefehl.sKonvertiert[i]);
@@ -144,8 +170,14 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["<INIT>"] = 170;
     LauflichtCodetabelle["<START>"] = 187;      //Programm-Start
     LauflichtCodetabelle["<PROGRAM->"] = 175;   //Speicherwahl
-    LauflichtCodetabelle["<END>"] = '\x80';     //Programm-Ende
     LauflichtCodetabelle["<CLEAR>"] = 142;      //Anzeige leeren
+    LauflichtCodetabelle["<WAIT>"] = 161;       //Pause bei der Anzeige; muss von einer Zahl von 1-9 gefolgt werden,
+                                                //wobei 1 = schnell und 9 = langsam
+    LauflichtCodetabelle["<SPEED>"] = 160;      //Geschwindigkeit der Anzeige muss von einer Zahl von 1-9 gefolgt werden,
+                                                //wobei 1 = schnell und 9 = langsam
+    //LauflichtCodetabelle["<END>"] = ;         //Programm-Ende
+
+    //Einführungsbefehle
     LauflichtCodetabelle["<LEFT>"] = 128;       //Text scrollt nach links
     LauflichtCodetabelle["<RIGHT>"] = 129;      //Text scrollt nach rechts
     LauflichtCodetabelle["<UP>"] = 130;         //Text scrollt nach oben
@@ -153,18 +185,22 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["<JUMP>"] = 139;       //Text erscheint sofort ohne Effekt
     LauflichtCodetabelle["<OPENMID>"] = 132;    //Text "von innen öffnen"
     LauflichtCodetabelle["<OPENRIGHT>"] = 134;
-    LauflichtCodetabelle["<CLOSEMID>"] = 133;   //Text "von außen öffnen"
-    LauflichtCodetabelle["<CLOSERIGHT>"] = 135; //Text "von außen öffnen"
     LauflichtCodetabelle["<FLASH>"] = 138;      //Text blinkt
     LauflichtCodetabelle["<DOFF>"] = 140;       //Buchstaben erscheinen einzeln, von links nach rechts
     LauflichtCodetabelle["<DOBIG>"] = 141;      //Fettschrift scrollt von rechts nach links
     LauflichtCodetabelle["<RANDOM>"] = 163;     //Zufällige Auswahl des Effektes
-    LauflichtCodetabelle["<SPEED>"] = 160;      //Geschwindigkeit der Anzeige muss von einer Zahl von 1-9 gefolgt werden,
-                                                //wobei 1 = schnell und 9 = langsam
-    LauflichtCodetabelle["<WAIT>"] = 161;       //Pause bei der Anzeige; muss von einer Zahl von 1-9 gefolgt werden,
-                                                //wobei 1 = schnell und 9 = langsam
     LauflichtCodetabelle["<SNOW>"] = 144;       //Schneeeffekt
 
+    //Endbefehle
+    LauflichtCodetabelle["<CLOSEMID>"] = 133;   //Text "von außen öffnen"
+    LauflichtCodetabelle["<CLOSERIGHT>"] = 135; //Text "von außen öffnen"
+
+    /*ToDo:
+        Clock12
+        Clock24
+        Squeezemid
+        dsnow
+    */
     LauflichtCodetabelle["0"] = 48;
     LauflichtCodetabelle["1"] = 49;
     LauflichtCodetabelle["2"] = 50;
