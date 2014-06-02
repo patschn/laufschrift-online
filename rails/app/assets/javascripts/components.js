@@ -114,7 +114,7 @@ TextComponent.prototype = new Component();
 function CommandComponent(command, hasPopover) {
 	Component.call(this);
 	
-	var that = this;
+	//var that = this;
 	var ci;
 	try {
     	ci = ComponentMapper.getComponentInfoForCommand(command);
@@ -146,7 +146,7 @@ function CommandComponent(command, hasPopover) {
 	    if (!hasPopover) {
 	        hasPopover = true;
 	    }
-    	var containerElem = that.getHTMLElement();
+    	var containerElem = this.getHTMLElement();
     	if (containerElem.data('popover') ) {
     	    return false;
     	}
@@ -162,7 +162,7 @@ function CommandComponent(command, hasPopover) {
 	    return true;
 	};
 
-    var updateClasses = function() {
+    var updateClasses = function(that) {
         if (!that.hasHTMLElement()) {
             return;
         }
@@ -170,7 +170,7 @@ function CommandComponent(command, hasPopover) {
     };
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
-	    updateClasses();
+	    updateClasses(this);
 		elem.addClass('button-component');
 //		containerElem.addClass("component-handle");
 		if (command === 'BIG' || command === 'NORMAL') {
@@ -207,7 +207,6 @@ CommandComponent.prototype = new Component();
 function ColorCommandComponent(command, color, hasPopover) {
 	CommandComponent.call(this, command, hasPopover);
 
-	var that = this;
 	var colorType = (command === 'BGCOLOR') ? 'bg' : 'fg';
 
 	if (color === undefined) {
@@ -218,7 +217,7 @@ function ColorCommandComponent(command, color, hasPopover) {
 		return "<" + this.command + " " + color + ">";
 	};
 
-	var updateClasses = function() {
+	var updateClasses = function(that) {
 		if (!that.hasHTMLElement()) {
 			return;
 		}
@@ -229,22 +228,22 @@ function ColorCommandComponent(command, color, hasPopover) {
 	
 	this.getPopoverContents = function() {
 	    var colors = (colorType === 'fg') ? Config.fgColors : Config.bgColors;
-    	return $.map(colors, function(color) {
+    	return $.map(colors, $.proxy(function(color) {
 	        var button = $('<div class="button-component"></div>');
 	        button.addClass('button-color-' + colorType + '-' + color);
       	    button.click(function() {
-	            that.color = color;
+	            this.color = color;
 	        });
 	        return button;
-	    });
+	    }, this));
 	};
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
-		ColorCommandComponent.prototype.createInsideHTMLElement.apply(that, arguments);
+		ColorCommandComponent.prototype.createInsideHTMLElement.apply(this, arguments);
 		elem.empty();
 //		containerElem.removeClass("component-handle");
 //		elem.addClass("component-handle");
-		updateClasses();
+		updateClasses(this);
 	};
 
 	Object.defineProperties(this, {
@@ -257,8 +256,8 @@ function ColorCommandComponent(command, color, hasPopover) {
     			    this.getInnerHTMLElement().removeClass('button-color-' + colorType + '-' + color);
     			}
 			    color = newColor;
-			    updateClasses();
-			    $(that).trigger('change');
+			    updateClasses(this);
+			    $(this).trigger('change');
 			},
 			enumerable : true
 		}
