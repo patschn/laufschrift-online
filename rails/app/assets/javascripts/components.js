@@ -35,19 +35,6 @@ var ComponentMapper = ( function() {
 function Component() {
 	var htmlElement = null;
 
-	this.getAsText = function() {
-		throw new Error("Pure virtual function");
-	};
-
-	// Normalerweise sollte das gleich sein, außer bei Spezialfällen wie Twitter
-	this.getSignText = function() {
-		return this.getAsText();
-	};
-
-	this.createInsideHTMLElement = function() {
-		throw new Error("Pure virtual function");
-	};
-
 	this.hasHTMLElement = function() {
 		return (htmlElement !== null);
 	};
@@ -62,11 +49,21 @@ function Component() {
 		//elem.draggable();
 		return htmlElement;
 	};
-	
-	this.getInnerHTMLElement = function() {
-	    return this.getHTMLElement().children("div.component-inner");
-	};
 }
+Component.prototype.getInnerHTMLElement = function() {
+    return this.getHTMLElement().children("div.component-inner");
+};
+Component.prototype.createInsideHTMLElement = function() {
+	throw new Error("Pure virtual function");
+};
+Component.prototype.getAsText = function() {
+    throw new Error("Pure virtual function");
+};
+// Normalerweise sollte das gleich sein, außer bei Spezialfällen wie Twitter
+Component.prototype.getSignText = function() {
+	return this.getAsText();
+};
+
 
 function TextComponent(text) {
 	Component.call(this);
@@ -76,20 +73,16 @@ function TextComponent(text) {
 	}
 	var inputElem = null;
 
-	this.getAsText = function() {
-		return SequenceCodec.escapeText(text);
-	};
-
 	this.createInsideHTMLElement = function(containerElem, elem) {
 		containerElem.addClass("component-text");
 //		containerElem.addClass("component-handle");
 		inputElem = $('<input type="text" />');
 		inputElem.val(text);
 		var that = this;
-		inputElem.change(function() {
-			text = $(this).val();
-			$(that).trigger('change');
-		});
+		inputElem.change($.proxy(function() {
+			text = inputElem.val();
+			$(this).trigger('change');
+		}, this));
 		elem.append(inputElem);
 	};
 
@@ -109,21 +102,29 @@ function TextComponent(text) {
 	});
 }
 
-TextComponent.prototype = new Component();
+TextComponent.prototype = Object.create(Component.prototype);
+TextComponent.prototype.constructor = TextComponent;
+TextComponent.prototype.getAsText = function() {
+	return SequenceCodec.escapeText(this.text);
+};
+
 
 function CommandComponent(command, hasPopover) {
 	Component.call(this);
 	
-	//var that = this;
+	var that = this;
 	var ci;
 	try {
     	ci = ComponentMapper.getComponentInfoForCommand(command);
     } catch (e) {}
+    
+    var updateClasses = function() {
+        if (!that.hasHTMLElement()) {
+            return;
+        }
+        that.getHTMLElement().addClass("component-command-" + command);
+    };
 
-	this.getAsText = function() {
-		return "<" + command + ">";
-	};
-	
 	this.getPopoverContents = function() {
 	    var group = ci.options.exchangeableInGroup;
 	    if (group === undefined) {
@@ -146,11 +147,11 @@ function CommandComponent(command, hasPopover) {
 	    if (!hasPopover) {
 	        hasPopover = true;
 	    }
-    	var containerElem = this.getHTMLElement();
+    	var containerElem = that.getHTMLElement();
     	if (containerElem.data('popover') ) {
     	    return false;
     	}
-    	var contents = this.getPopoverContents();
+    	var contents = that.getPopoverContents();
     	if (contents === []) {
     	    return false;
     	}
@@ -162,22 +163,15 @@ function CommandComponent(command, hasPopover) {
 	    return true;
 	};
 
-    var updateClasses = function(that) {
-        if (!that.hasHTMLElement()) {
-            return;
-        }
-        that.getHTMLElement().addClass("component-command-" + command);
-    };
-
 	this.createInsideHTMLElement = function(containerElem, elem) {
-	    updateClasses(this);
+	    updateClasses();
 		elem.addClass('button-component');
 //		containerElem.addClass("component-handle");
 		if (command === 'BIG' || command === 'NORMAL') {
 		    //elem.append('A');
 		    //elem.addClass('button-component');
 		} else {
-    		elem.append(this.command);
+    		elem.append(that.command);
         }
         if (hasPopover) {
             activatePopover();
@@ -190,8 +184,8 @@ function CommandComponent(command, hasPopover) {
 				return command;
 			},
 			set : function(newCommand) {
-			    if (this.hasHTMLElement()) {
-    			    this.getHTMLElement().removeClass("component-command-" + command);
+			    if (that.hasHTMLElement()) {
+    			    that.getHTMLElement().removeClass("component-command-" + command);
     			}
 	   		    command = newCommand;
 			    updateClasses();
@@ -201,23 +195,24 @@ function CommandComponent(command, hasPopover) {
 	});
 }
 
-CommandComponent.prototype = new Component();
-
+CommandComponent.prototype = Object.create(Component.prototype);
+CommandComponent.prototype.constructor = CommandComponent;
+CommandComponent.prototype.getAsText = function() {
+	return "<" + this.command + ">";
+};
 
 function ColorCommandComponent(command, color, hasPopover) {
 	CommandComponent.call(this, command, hasPopover);
 
 	var colorType = (command === 'BGCOLOR') ? 'bg' : 'fg';
+	var parentMethods = { createInsideHTMLElement: this.createInsideHTMLElement };
+	var that = this;
 
 	if (color === undefined) {
 		color = (colorType === 'bg') ? 'b' : 'y';
 	}
 
-	this.getAsText = function() {
-		return "<" + this.command + " " + color + ">";
-	};
-
-	var updateClasses = function(that) {
+	var updateClasses = function() {
 		if (!that.hasHTMLElement()) {
 			return;
 		}
@@ -228,22 +223,22 @@ function ColorCommandComponent(command, color, hasPopover) {
 	
 	this.getPopoverContents = function() {
 	    var colors = (colorType === 'fg') ? Config.fgColors : Config.bgColors;
-    	return $.map(colors, $.proxy(function(color) {
+    	return $.map(colors, function(color) {
 	        var button = $('<div class="button-component"></div>');
 	        button.addClass('button-color-' + colorType + '-' + color);
       	    button.click(function() {
-	            this.color = color;
+	            that.color = color;
 	        });
 	        return button;
-	    }, this));
+	    });
 	};
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
-		ColorCommandComponent.prototype.createInsideHTMLElement.apply(this, arguments);
+		parentMethods.createInsideHTMLElement.apply(that, arguments);
 		elem.empty();
 //		containerElem.removeClass("component-handle");
 //		elem.addClass("component-handle");
-		updateClasses(this);
+		updateClasses();
 	};
 
 	Object.defineProperties(this, {
@@ -252,20 +247,23 @@ function ColorCommandComponent(command, color, hasPopover) {
 				return color;
 			},
 			set : function(newColor) {
-			    if (this.hasHTMLElement()) {
-    			    this.getInnerHTMLElement().removeClass('button-color-' + colorType + '-' + color);
+			    if (that.hasHTMLElement()) {
+    			    that.getInnerHTMLElement().removeClass('button-color-' + colorType + '-' + color);
     			}
 			    color = newColor;
-			    updateClasses(this);
-			    $(this).trigger('change');
+			    updateClasses();
+			    $(that).trigger('change');
 			},
 			enumerable : true
 		}
 	});
 }
 
-ColorCommandComponent.prototype = new CommandComponent();
-
+ColorCommandComponent.prototype = Object.create(CommandComponent.prototype);
+ColorCommandComponent.prototype.constructor = ColorCommandComponent;
+ColorCommandComponent.prototype.getAsText = function() {
+	return "<" + this.command + " " + this.color + ">";
+};
 
 function SliderCommandComponent(command, value) {
 	CommandComponent.call(this, command);
@@ -275,10 +273,6 @@ function SliderCommandComponent(command, value) {
 	if (value === undefined) {
 		value = 1;
 	}
-
-	this.getAsText = function() {
-		return "<" + this.command + " " + value + ">";
-	};
 
 	var updateClasses = function() {
 		if (!that.hasHTMLElement()) {
@@ -290,9 +284,9 @@ function SliderCommandComponent(command, value) {
 	};
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
-		containerElem.addClass("component-command-" + this.command);
+		containerElem.addClass("component-command-" + that.command);
 //		containerElem.addClass("component-handle");
-		elem.append(this.command + '&nbsp;' + value + '&nbsp;');
+		elem.append(that.command + '&nbsp;' + value + '&nbsp;');
 		updateClasses();
 	};
 
@@ -306,7 +300,11 @@ function SliderCommandComponent(command, value) {
 	});
 }
 
-SliderCommandComponent.prototype = new CommandComponent();
+SliderCommandComponent.prototype = Object.create(CommandComponent.prototype);
+SliderCommandComponent.prototype.constructor = SliderCommandComponent;
+SliderCommandComponent.prototype.getAsText = function() {
+	return "<" + this.command + " " + this.slider + ">";
+};
 
 
 function GroupComponent(components) {
@@ -320,14 +318,6 @@ function GroupComponent(components) {
     if (typeof(components) === "string") {
         components = SequenceCodec.decodeFromString(components);
     }
-    
-    this.getAsText = function() {
-        return "<GROUP " + SequenceCodec.encodeToString(components, false) + ">";
-    };
-    
-    this.getSignText = function() {
-        return SequenceCodec.encodeToString(components, true);
-    };
     
     this.createInsideHTMLElement = function(containerElem, elem) {
         containerElem.addClass("component-group");
@@ -354,7 +344,14 @@ function GroupComponent(components) {
     });
 }
 
-GroupComponent.prototype = new Component();
+GroupComponent.prototype = Object.create(Component.prototype);
+GroupComponent.prototype.constructor = GroupComponent;
+GroupComponent.prototype.getAsText = function() {
+    return "<GROUP " + SequenceCodec.encodeToString(this.components, false) + ">";
+};
+GroupComponent.prototype.getSignText = function() {
+    return SequenceCodec.encodeToString(this.components, true);
+};
 
 // ComponentInfo
 // ==============

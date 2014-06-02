@@ -14,9 +14,11 @@ body {
     background-repeat: no-repeat, no-repeat, repeat-x;
     background-position: top left, top right, top left;
     text-align:center;
-    font-family:Arial;
+    font-family:PIDvl;
     color:white;
-    font-size:80px;
+    font-size:72px;
+    padding-top: 10px;
+    box-sizing: border-box;
 }
 #links {
     position:absolute;
@@ -183,7 +185,7 @@ body {
 	text-shadow:1px 1px 0px #000000;
 }
 .button:hover {
-	background-image: linear-gradient(#1f181f 5%, #474747 100% );
+	background-image: linear-gradient(#888888 5%, #333333 100% );
 }
 .button:active {
 	position:relative;
@@ -272,7 +274,7 @@ body {
 	border: 1px solid #9c9891;
 }
 .button-toolbox:hover, .button-component:hover {
-    background-image: linear-gradient(#423d37 5%, #a6a19a 100% );
+    background-image: linear-gradient(#c8c2b9 5%, #7a7165 100% );
 }
 .button-toolbox {
 	margin-left: 12px;
@@ -303,7 +305,7 @@ body {
 	background-image: linear-gradient(#ff0026 5%, #662022 100% );
 }
 .button-color-bg-r:hover {
-	background-image: linear-gradient(#662022 5%, #ff0026 100% );
+	background-image: linear-gradient(#ff7388 5%, #ba3a3e 100% );
 }
 .button-color-bg-b {
 	background-image: linear-gradient(#575757 5%, #000000 100% );
@@ -311,19 +313,19 @@ body {
 	text-shadow:1px 1px 0px #575757;
 }
 .button-color-bg-b:hover {
-	background-image: linear-gradient(#000000 5%, #575757 100% );
+	background-image: linear-gradient(#8c8c8c 5%, #222222 100% );
 }
 .button-color-bg-y {
 	background: linear-gradient(#fff700 5%, #c4c418 100% );
 }
 .button-color-bg-y:hover {
-	background-image: linear-gradient(#c4c418 5%, #fff700 100% );
+	background-image: linear-gradient(#fffb83 5%, #e6e642 100% );
 }
 .button-color-bg-g {
 	background-image: linear-gradient(#26ff00 5%, #217a2a 100% );
 }
 .button-color-bg-g:hover {
-	background-image: linear-gradient(#217a2a 5%, #26ff00 100% );
+	background-image: linear-gradient(#beffb3 5%, #69d374 100% );
 }
 	
 .button-seq {										/*Button fuer Sequenzliste*/

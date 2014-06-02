@@ -1,22 +1,44 @@
 "use strict";
 
+
 $(document).ready(function() {
-/*  function TestDingsi() {
-    var a = null;
-    this.doA = function() { a = 5; };
-    this.getA = function(){ return a; };
+/* 
+
+  function A() {
+      var priv;
+      
+      this.read = function() {
+          console.log("priv is " + priv);
+      };
+      
+      this.changePriv = function() {
+          console.log("changePriv()");
+          priv = 5;
+      };
   }
-  
-  var blubb = new TestDingsi();
-  var blubb2 = new TestDingsi();
-  console.log(blubb.getA());
-    console.log(blubb2.getA());
-  blubb.doA();
-  console.log(blubb.getA());
-    console.log(blubb2.getA());*/
-//  var blubb = SequenceCodec.decodeFromString("test<LEFT>asdefdings<COLOR r>bldings<COLOR r>bladings<COLOR r>bladings<COLOR r>bladings<COLOR r>bladings<COLOR r>bladings<COLOR r>bladings<COLOR r>blaa");
-//  console.log(blubb);
-//  console.log(SequenceCodec.encodeToString(blubb));
+  A.prototype.read2 = function() {
+      console.log("priv is " + priv);
+  };
+
+  function B() {
+      A.call(this);
+      
+      var superChangePriv = this.changePriv;
+      this.changePriv = function() {
+          superChangePriv.apply(this);
+      };
+  }
+  B.prototype = Object.create(A.prototype);
+  B.prototype.constructor = B;
+
+  var t = new B();
+  var t2 = new B();
+  t.read();
+  t2.read();
+  t.changePriv();
+  t.read();
+  t2.read();
+  */
   function checkStr(str) {
     var components = SequenceCodec.decodeFromString(str);
     var newstr = SequenceCodec.encodeToString(components, false);
@@ -25,7 +47,7 @@ $(document).ready(function() {
     }
   }
   
-  checkStr("<RIGHT>");
+  /*checkStr("<RIGHT>");
   checkStr("test<LEFT>asdefdings<COLOR r>bld");
   checkStr("test<LEFT>");
   checkStr("test<LEFT>aaa<COLOR g>");
@@ -36,7 +58,8 @@ $(document).ready(function() {
   checkStr("\\>");
   checkStr("\\\\<LEFT>");
   checkStr("a\<LEFT>\\>");
-  checkStr("a<LEFT>\\<");
+  checkStr("a<LEFT>\\<");*/
   
   SequenceControl.loadSequenceFromText('<GROUP <COLOR y><BGCOLOR b><LEFT>bla><COLOR r>test');
+  //SequenceControl.loadSequenceFromText('<COLOR r>');
 });
