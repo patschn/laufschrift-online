@@ -32,7 +32,7 @@ bool SWP::CLauflicht::OeffneRS232()
     else
     {
         m_debugfile << "Verbindung erfolgreich aufgebaut!" << std::endl;
-        m_debugfile << "Farbe: " << m_iColors[2];
+        m_debugfile << "Farbe: " << m_iColors[2] << std::endl;
     }
 
     return true;    //Port erfolgreich geöffnet
@@ -49,26 +49,20 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
         m_debugfile << line;        //In Debugdatei schreiben
         sBefehl.sOriginal = line;   //String der Website
     }
-    m_debugfile << std::endl;
+    m_debugfile << std::endl << std::endl;
 }
 
 void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 {
     //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
-    sBefehl.sKonvertiert = LauflichtCodetabelle.find("<INIT>")->second;
-    sBefehl.sKonvertiert = LauflichtCodetabelle.find("<INIT>")->second;
-    m_debugfile << "Initialisierungssequenz: ";
-    m_debugfile << LauflichtCodetabelle.find("<INIT>")->second;
-    m_debugfile << std::endl;
+    sBefehl.sKonvertiert += 170;//LauflichtCodetabelle.find("<INIT>")->second;
 
     //Sequenzstart signalisieren
-    m_debugfile << "Startsequenz: " << LauflichtCodetabelle.find("<START>")->second << std::endl;
-    sBefehl.sKonvertiert = LauflichtCodetabelle.find("<START>")->second;
+    sBefehl.sKonvertiert += 187;//LauflichtCodetabelle.find("<START>")->second;
 
     //Programmwahl im Lauflicht (für die Website wird immer Programm A benutzt
-    m_debugfile << "Programmwahl: " << LauflichtCodetabelle.find("<PROGRAM->")->second << LauflichtCodetabelle.find("A")->second << std::endl;
-    sBefehl.sKonvertiert = LauflichtCodetabelle.find("<PROGRAM->")->second;
-    sBefehl.sKonvertiert = LauflichtCodetabelle.find("A")->second;
+    sBefehl.sKonvertiert += 175;//LauflichtCodetabelle.find("<PROGRAM->")->second;
+    sBefehl.sKonvertiert += 55;//LauflichtCodetabelle.find("A")->second;
 
     //Temporäre Variable zur Verarbeitung anlegen
     std::string sTemp = "";
@@ -92,14 +86,12 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 //Farbe in Tabelle nachschauen und Variablen aktualisieren
                 m_iColors[1] = LauflichtCodetabelle.find(sTemp)->second;
                 m_iColors[2] = m_iColors[0] + m_iColors[1];
-                sBefehl.sKonvertiert += m_iColors[2];
             }
             else if(sTemp == "<COLOR b>" || sTemp == "<COLOR r>" || sTemp == "<COLOR g>" || sTemp == "<COLOR y>")
             {
                 //Farbe in Tabelle nachschauen und Variablen aktualisieren
                 m_iColors[0] = LauflichtCodetabelle.find(sTemp)->second;
                 m_iColors[2] = m_iColors[0] + m_iColors[1];
-                sBefehl.sKonvertiert += m_iColors[2];
             }
             else if(sTemp.find("WAIT") != std::string::npos)
             {
@@ -117,9 +109,7 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             {
                 //Befehl in der Codetabelle nachschauen und konvertieren:
                 sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;
-                m_debugfile << "Befehl: " << LauflichtCodetabelle.find(sTemp)->second << std::endl;
-                sBefehl.sKonvertiert += m_iColors[2];
-                m_debugfile << "Farbe: " << m_iColors[2] << std::endl;
+                sBefehl.sKonvertiert += 3;//m_iColors[2];
             }
         }//if(sBefehl.sOriginal[i] == '<')...
         else    //Wenn kein Befehl gefunden wurde, dann muss es normaler Text sein
@@ -127,30 +117,31 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             //Bei Zeichen kommt erst die Farbe, anschließend das Zeichen
             sTemp = sBefehl.sOriginal[i];
             sBefehl.sKonvertiert += m_iColors[2];                               //Farbe
-            m_debugfile << "Farbe: " << m_iColors[2] << std::endl;
             sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;   //Zeichen
-            m_debugfile << "Zeichen: " << LauflichtCodetabelle.find(sTemp)->second << std::endl;
         }
         sTemp = ""; //Temporären String leeren
 
     }//for(unsigned int i = 0;i < sBefehl.sOriginal.length();i++)...
-
-    //Endsequenz
-    sBefehl.sKonvertiert += 191;
+//    sBefehl.sKonvertiert += 129;
+//    m_debugfile << "nach 129: " << sBefehl.sKonvertiert << std::endl;
+//    sBefehl.sKonvertiert += 03;
+//    sBefehl.sKonvertiert += 03;
+//    sBefehl.sKonvertiert += 84;
+//
+//    //Endsequenz
+    sBefehl.sKonvertiert += LauflichtCodetabelle.find("<END>")->second;
     sBefehl.sKonvertiert += 177;
-    m_debugfile << "Endsequenz: " << "191" << " " << "171" << std::endl;
 
-    m_debugfile << "Konvertiert:" << std::endl;
-    m_debugfile << sBefehl.sKonvertiert;        //Konvertierte Sequenz in Datei schreiben
+    m_debugfile << "Endstring: " << sBefehl.sKonvertiert << std::endl;
 }
 
 void SWP::CLauflicht::SendeString(stSequenz sBefehl)
 {
-    m_debugfile << "Sende Bytes" << std::endl;
 
 	for(unsigned int i = 0; i < sBefehl.sKonvertiert.length();i++)
 	{
 		RS232_SendByte(m_iComPort, sBefehl.sKonvertiert[i]);
+		m_debugfile << "sende......" << sBefehl.sKonvertiert[i] << std::endl;
 	}
 }
 
@@ -175,7 +166,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
                                                 //wobei 1 = schnell und 9 = langsam
     LauflichtCodetabelle["<SPEED>"] = 160;      //Geschwindigkeit der Anzeige muss von einer Zahl von 1-9 gefolgt werden,
                                                 //wobei 1 = schnell und 9 = langsam
-    //LauflichtCodetabelle["<END>"] = ;         //Programm-Ende
+    LauflichtCodetabelle["<END>"] = 191;           //Programm-Ende
 
     //Einführungsbefehle
     LauflichtCodetabelle["<LEFT>"] = 128;       //Text scrollt nach links

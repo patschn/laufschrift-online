@@ -9,6 +9,8 @@
 int main(int argc, char *argv[])
 {
     SWP::stSequenz Sequenz;
+    Sequenz.sOriginal = "";
+    Sequenz.sKonvertiert = "";
     SWP::CLauflicht Lauflicht;
 
     //Sequenz erhalten
