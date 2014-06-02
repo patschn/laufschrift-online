@@ -122,13 +122,7 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
         sTemp = ""; //Temporären String leeren
 
     }//for(unsigned int i = 0;i < sBefehl.sOriginal.length();i++)...
-//    sBefehl.sKonvertiert += 129;
-//    m_debugfile << "nach 129: " << sBefehl.sKonvertiert << std::endl;
-//    sBefehl.sKonvertiert += 03;
-//    sBefehl.sKonvertiert += 03;
-//    sBefehl.sKonvertiert += 84;
-//
-//    //Endsequenz
+    //Endsequenz
     sBefehl.sKonvertiert += LauflichtCodetabelle.find("<END>")->second;
     sBefehl.sKonvertiert += 177;
 
