@@ -168,13 +168,10 @@ body {
 
 
 
-
-
-
 .button {
 	background-image: linear-gradient(#474747 5%, #1f181f 100% );
 	display: block;
-    	color:#ffffff;
+    color:#ffffff;
 	font-size:17px;
 	height:40px;
 	line-height:40px;
@@ -185,8 +182,9 @@ body {
 	text-shadow:1px 1px 0px #000000;
 }
 .button:hover {
-	background-image: linear-gradient(#888888 5%, #333333 100% );
-}
+	background-image: linear-gradient(#1f181f 5%, #474747 100% );
+	}
+	
 .button:active {
 	position:relative;
 	top:1px;
@@ -269,12 +267,12 @@ body {
 	text-decoration:none;
 	text-align:center;
 	text-shadow:1px 1px 1px #000000;
-	background-image: linear-gradient(#a6a19a 5%, #423d37 100% );
+	background-image: linear-gradient(#a6a6a6 5%, #2e2e2e 100% );
 	box-shadow: inset 0px 1px 0px 0px #787168;
-	border: 1px solid #9c9891;
+	border: 1px solid black;
 }
 .button-toolbox:hover, .button-component:hover {
-    background-image: linear-gradient(#c8c2b9 5%, #7a7165 100% );
+    background-image: linear-gradient(#2e2e2e 5%, #a6a6a6 100% );
 }
 .button-toolbox {
 	margin-left: 12px;
