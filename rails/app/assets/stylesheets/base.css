@@ -517,185 +517,75 @@ body {
  	background-image: url(favicon.ico) ;
 }
 
-.tooltip-LEFT:hover:after{
-	content:         "Von rechts nach links";
+
+.tooltip {
+    display: none;
+}
+.tool:hover .tooltip {
 	position:        absolute;
+	display: block;
    	bottom:          20em;
    	left: 			 0em;
    	width:           100%;
    	color:           white;
-   	background-image:url(background.jpg);
+   	/*background-image:url(background.jpg);*/
+   	background-color: rgba(137.0,137.0,137.0,200.0);
    	border:          1px solid #575757;
+}
+
+.tooltip-LEFT:hover:after{
+	content:         "Von rechts nach links";
 } 
 .tooltip-RIGHT:hover:after{
 	content:         "Von links nach rechts";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-UP:hover:after{
 	content:         "Von unten nach oben";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-DOWN:hover:after{
 	content:         "Von oben nach unten";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-DOFF:hover:after{
 	content:         "Zeichen erscheinen rechts und bewegen sich einzeln nach links";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-DOBIG:hover:after{
 	content:         "Große Zeichen erscheinen rechts und bewegen sich einzeln nach links, werden dabei klein";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-FLASH:hover:after{
 	content:         "Mitteilung blinkt";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-JUMP:hover:after{
 	content:         "Mitteilung erscheint sofort";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-OPENMID:hover:after{
 	content:         "Mitteilung erscheint in der Mitte und breitet sich nacheinander zu den Seiten aus";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 }
 .tooltip-OPENRIGHT:hover:after{
 	content:         "Mitteilung erscheint einzeln von links nach rechts";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-RAINBOW:hover:after{
 	content:         "Mitteilung erscheint in Regenbogenfarben";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-RANDOM:hover:after{
 	content:         "Zufälliger Effekt";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-SHIFTMID:hover:after{
 	content:         "Mitteilung bewegt sich von der Mitte gleichmäßig zu beiden Seiten";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-SNOW:hover:after{
 	content:         "Mitteilung erscheint in Einzelpunkten auf der Anzeige";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-CLOSEMID:hover:after{
 	content:         "Mitteilung verschwindet von beiden Seiten einzeln zur Mitte hin";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-CLOSERIGHT:hover:after{
 	content:         "Mitteilung verschwindet einzeln von links nach rechts";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-SQUEEZEMID:hover:after{
 	content:         "Mitteilung bewegt sich von beiden Seiten zur Mitte und verschwindet dort";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 .tooltip-DSNOW:hover:after{
 	content:         "Mitteilung verschwindet nach und nach von der Anzeige";
-	position:        absolute;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	background-image:url(background.jpg);
-   	border:          1px solid #575757;
 } 
 
 input[type=text] {

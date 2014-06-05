@@ -189,6 +189,7 @@ function CommandComponent(command, hasPopover) {
     			}
 	   		    command = newCommand;
 			    updateClasses();
+			    $(that).trigger('change');
 			},
 			enumerable : true
 		}
@@ -406,9 +407,10 @@ function ToolInfo(group, componentInfo, options) {
 	if (options === undefined) {
 		options = {};
 	}
-	if (options.toolType === undefined) {
-	    options.toolType = "button";
-	}
+
+	options = $.extend({}, {
+	    toolType: 'button'
+	}, options);
 
 	this.createComponent = function() {
 		var extraArgs = [];
@@ -432,6 +434,11 @@ function ToolInfo(group, componentInfo, options) {
 		elem.data("tool-info", this);
 		if (componentInfo.command) {
 			elem.addClass("tool-command-" + componentInfo.command);
+		}
+		if (options.tooltip !== undefined) {
+		    var tooltip = $('<div class="tooltip"/>');
+		    tooltip.append(options.tooltip);
+		    elem.append(tooltip);
 		}
 		
 		if (options.toolType === 'slider') {
@@ -501,7 +508,8 @@ var ASC333Components = {
 			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation, undefined, { exchangeableInGroup: 'open_animation' }));
 			Toolbox.registerToolInfo(new ToolInfo('open_animation', info,{
 				extraClass: 'open_animation-' + animation,
-				toolText: '<span class="tooltip-'+animation+'">&nbsp;&nbsp;&nbsp;</span>'
+				tooltip: 'Test',
+				//toolText: '<span class="tooltip-'+animation+'">&nbsp;&nbsp;&nbsp;</span>'
 			}));
 		});
 		$.each(closeAnimations, function(i, animation) {
