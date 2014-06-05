@@ -55,6 +55,7 @@ rails/app/assets/images/mittemitte.png -text svneol=unset#image/png
 rails/app/assets/images/mittemitte2.png -text svneol=unset#image/png
 rails/app/assets/images/mitterechts.png -text svneol=unset#image/png
 rails/app/assets/images/mitterechts2.png -text svneol=unset#image/png
+rails/app/assets/images/move.png -text
 rails/app/assets/images/rechts.png -text svneol=unset#image/png
 rails/app/assets/images/toplinks.png -text
 rails/app/assets/images/topmitte.png -text

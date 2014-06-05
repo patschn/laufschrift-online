@@ -140,7 +140,10 @@ var SequenceControl = (function() {
   var decoratedComponentHTML = function(component) {
     var elem = component.getHTMLElement();
     $(component).on("change", updateCommitTextField);
-    var deleteButton = $('<button>Löschen</button>');
+    var moveHandle = $('<div></div>');
+    moveHandle.addClass('component-move-handle');
+    elem.append(moveHandle);
+    var deleteButton = $('<button></button>');
     deleteButton.addClass('component-delete-button');
     elem.append(deleteButton);
     /*deleteButton.button({
@@ -269,7 +272,7 @@ var SequenceControl = (function() {
     sequenceDiv.sortable({
         items: "> div.component",
         revert: false,
-//        handle: ".component",
+        handle: ".component-move-handle",
         // Wenn von der Toolbox Elemente reingezogen werden, müssen sie noch als Komponenten
         // neu erzeugt werden.
         // Es muss sortbeforestop sein, weil es bei sortstop den Helper nicht mehr gibt,

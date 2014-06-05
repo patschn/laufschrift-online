@@ -198,7 +198,7 @@ body {
 	margin: 5px;
 /*	padding: 3px;*/
 	vertical-align: top;
-	cursor: move;
+	/*cursor: move;*/
 	position: relative; /* damit man dann den delete-button auf position: absolute stellen kann */
 }
 
@@ -232,24 +232,34 @@ body {
     margin-top: 13px;
 }
 
-.component-delete-button {
+.component-delete-button, .component-move-handle {
     position: absolute;
-    right: -7px;
     top: -7px;
     display: none;
-    background: url(delete.png) no-repeat top left;
     border: 0;
     color: transparent; /* Text ausblenden */
     width: 16px;
     height: 16px;
 }
 
+.component-delete-button {
+    right: -7px;
+    background: url(delete.png) no-repeat top left;
+}
+
 .component-delete-button:hover {
     background-image: url(delete-hover.png);
 }
 
-.component:hover .component-delete-button {
+.component:hover .component-delete-button, .component:hover .component-move-handle {
     display: block;
+}
+
+.component-move-handle {
+    right: 13px;
+    background: url(move.png) no-repeat top left;
+    background-size: cover;
+    cursor: move;
 }
 
 .tool {
