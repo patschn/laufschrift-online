@@ -436,9 +436,8 @@ function ToolInfo(group, componentInfo, options) {
 			elem.addClass("tool-command-" + componentInfo.command);
 		}
 		if (options.tooltip !== undefined) {
-		    var tooltip = $('<div class="tooltip"/>');
-		    tooltip.append(options.tooltip);
-		    elem.append(tooltip);
+		    elem.attr('title', options.tooltip);
+		    elem.tooltip({ hide: 100, show: 100, tooltipClass: 'tooltip' });
 		}
 		
 		if (options.toolType === 'slider') {
@@ -502,21 +501,40 @@ var ASC333Components = {
 			toolText : 'Text'
 		}));
 
-		var openAnimations = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'DOFF', 'DOBIG', 'FLASH', 'JUMP', 'OPENMID', 'OPENRIGHT', 'RAINBOW', 'RANDOM', 'SHIFTMID', 'SNOW'];
-		var closeAnimations = ['CLOSEMID', 'CLOSERIGHT', 'SQUEEZEMID', 'DSNOW'];
+		var openAnimations = [
+		    [ 'LEFT', "Von rechts nach links" ],
+		    [ 'RIGHT', "Von links nach rechts" ],
+		    [ 'UP', "Von unten nach oben" ],
+		    [ 'DOWN', "Von oben nach unten" ],
+		    [ 'DOFF', "Zeichen erscheinen rechts und bewegen sich einzeln nach links" ],
+		    [ 'DOBIG', "Große Zeichen erscheinen rechts und bewegen sich einzeln nach links, werden dabei klein" ],
+		    [ 'FLASH', "Mitteilung blinkt" ],
+		    [ 'JUMP',  "Mitteilung erscheint sofort" ],
+		    [ 'OPENMID', "Mitteilung erscheint in der Mitte und breitet sich nacheinander zu den Seiten aus" ],
+		    [ 'OPENRIGHT', "Mitteilung erscheint einzeln von links nach rechts" ],
+		    [ 'RAINBOW', "Mitteilung erscheint in Regenbogenfarben" ],
+		    [ 'RANDOM', "Zufälliger Effekt" ],
+		    [ 'SHIFTMID', "Mitteilung bewegt sich von der Mitte gleichmäßig zu beiden Seiten" ],
+		    [ 'SNOW', "Mitteilung erscheint in Einzelpunkten auf der Anzeige" ]
+		];
+		var closeAnimations = [
+		    [ 'CLOSEMID', "Mitteilung verschwindet von beiden Seiten einzeln zur Mitte hin" ],
+		    [ 'CLOSERIGHT', "Mitteilung verschwindet einzeln von links nach rechts" ],
+		    [ 'SQUEEZEMID', "Mitteilung bewegt sich von beiden Seiten zur Mitte und verschwindet dort" ],
+		    [ 'DSNOW', "Mitteilung verschwindet nach und nach von der Anzeige" ]
+		];
 		$.each(openAnimations, function(i, animation) {
-			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation, undefined, { exchangeableInGroup: 'open_animation' }));
+			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation[0], undefined, { exchangeableInGroup: 'open_animation' }));
 			Toolbox.registerToolInfo(new ToolInfo('open_animation', info,{
-				extraClass: 'open_animation-' + animation,
-				tooltip: 'Test',
-				//toolText: '<span class="tooltip-'+animation+'">&nbsp;&nbsp;&nbsp;</span>'
+				extraClass: 'open_animation-' + animation[0],
+				tooltip: animation[1]
 			}));
 		});
 		$.each(closeAnimations, function(i, animation) {
-			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation));
+			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation[0]));
 			Toolbox.registerToolInfo(new ToolInfo('close_animation', info, {
-				extraClass: 'close_animation-' + animation,
-				toolText: '<span class="tooltip-'+animation+'">&nbsp;&nbsp;&nbsp;</span>'
+				extraClass: 'close_animation-' + animation[0],
+				tooltip: animation[1]
 			}));
 		});
 

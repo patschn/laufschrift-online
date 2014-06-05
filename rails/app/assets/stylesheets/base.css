@@ -4,8 +4,20 @@
 }
 body {
     background-image:url(background.jpg);
-    font-family: Arial, Helvetica, sans-serif;
 }
+
+body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.ui-widget {
+	font-size: 14px;
+}
+.ui-widget .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+	font-size: 13px;
+}
+
 #top{
     margin-bottom:10px;
     height:100px;
@@ -265,6 +277,7 @@ body {
 .tool {
 	display: inline-block;
 	cursor: move;
+	position: relative; /* damit man die tooltips auf position: absolute stellen kann */
 }
 .button-toolbox, .button-component {
 	border-radius: 12px;
@@ -517,76 +530,12 @@ body {
  	background-image: url(favicon.ico) ;
 }
 
-
 .tooltip {
-    display: none;
+   	color: white;
+    padding: 5px;
+   	background: hsla(0, 0%, 20%, 0.95);
+    border-color: #777;
 }
-.tool:hover .tooltip {
-	position:        absolute;
-	display: block;
-   	bottom:          20em;
-   	left: 			 0em;
-   	width:           100%;
-   	color:           white;
-   	/*background-image:url(background.jpg);*/
-   	background-color: rgba(137.0,137.0,137.0,200.0);
-   	border:          1px solid #575757;
-}
-
-.tooltip-LEFT:hover:after{
-	content:         "Von rechts nach links";
-} 
-.tooltip-RIGHT:hover:after{
-	content:         "Von links nach rechts";
-} 
-.tooltip-UP:hover:after{
-	content:         "Von unten nach oben";
-} 
-.tooltip-DOWN:hover:after{
-	content:         "Von oben nach unten";
-} 
-.tooltip-DOFF:hover:after{
-	content:         "Zeichen erscheinen rechts und bewegen sich einzeln nach links";
-} 
-.tooltip-DOBIG:hover:after{
-	content:         "Große Zeichen erscheinen rechts und bewegen sich einzeln nach links, werden dabei klein";
-} 
-.tooltip-FLASH:hover:after{
-	content:         "Mitteilung blinkt";
-} 
-.tooltip-JUMP:hover:after{
-	content:         "Mitteilung erscheint sofort";
-} 
-.tooltip-OPENMID:hover:after{
-	content:         "Mitteilung erscheint in der Mitte und breitet sich nacheinander zu den Seiten aus";
-}
-.tooltip-OPENRIGHT:hover:after{
-	content:         "Mitteilung erscheint einzeln von links nach rechts";
-} 
-.tooltip-RAINBOW:hover:after{
-	content:         "Mitteilung erscheint in Regenbogenfarben";
-} 
-.tooltip-RANDOM:hover:after{
-	content:         "Zufälliger Effekt";
-} 
-.tooltip-SHIFTMID:hover:after{
-	content:         "Mitteilung bewegt sich von der Mitte gleichmäßig zu beiden Seiten";
-} 
-.tooltip-SNOW:hover:after{
-	content:         "Mitteilung erscheint in Einzelpunkten auf der Anzeige";
-} 
-.tooltip-CLOSEMID:hover:after{
-	content:         "Mitteilung verschwindet von beiden Seiten einzeln zur Mitte hin";
-} 
-.tooltip-CLOSERIGHT:hover:after{
-	content:         "Mitteilung verschwindet einzeln von links nach rechts";
-} 
-.tooltip-SQUEEZEMID:hover:after{
-	content:         "Mitteilung bewegt sich von beiden Seiten zur Mitte und verschwindet dort";
-} 
-.tooltip-DSNOW:hover:after{
-	content:         "Mitteilung verschwindet nach und nach von der Anzeige";
-} 
 
 input[type=text] {
     background-color: black;
