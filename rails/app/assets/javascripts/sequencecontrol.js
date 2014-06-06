@@ -133,7 +133,8 @@ var SequenceControl = (function() {
   };
   
   var deleteComponent = function(elem) {
-    elem.remove();
+    elem.data('component').destroy();
+//    elem.remove();
     updateCommitTextField();
   };
   
@@ -157,7 +158,9 @@ var SequenceControl = (function() {
   // Lädt einen Sequenz-String
   var loadSequenceFromText = function(text) {
     // Alte Komponenten löschen
-    sequenceDiv.children("div.component").remove();
+    sequenceDiv.children("div.component").each(function(i, component) {
+        $(component).data('component').destroy();
+    });
     var components = SequenceCodec.decodeFromString(text);
     $.each(components, function() {
       var elem = decoratedComponentHTML(this); 

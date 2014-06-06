@@ -34,7 +34,12 @@ var ComponentMapper = ( function() {
 
 function Component(hasPopover) {
 	var htmlElement = null;
+	var popoverElem = null;
 	var that = this;
+	
+	if (hasPopover === undefined) {
+	    hasPopover = true;
+	}
 
 	this.hasHTMLElement = function() {
 		return (htmlElement !== null);
@@ -53,9 +58,16 @@ function Component(hasPopover) {
 		//elem.draggable();
 		return htmlElement;
 	};
+	
+	this.getPopoverElement = function() {
+	    return popoverElem;
+	};
 		
 	// Damit man das Popover noch nachträglich aktivieren kann
 	this.activatePopover = function() {
+	    if (popoverElem !== null) {
+	        return false;
+	    }
 	    if (!that.getPopoverContents) {
 	        return false;
 	    }
@@ -64,19 +76,30 @@ function Component(hasPopover) {
 	    }
     	var containerElem = that.getHTMLElement();
     	var elem = that.getInnerHTMLElement();
-    	if (containerElem.data('popover') ) {
+    	if (elem.data('popover') ) {
     	    return false;
     	}
     	var contents = that.getPopoverContents();
-    	if (contents === []) {
+    	if (contents === undefined || contents.length === 0) {
     	    return false;
     	}
-	    var popover = $('<div></div>');
-	    popover.append(contents);
-    	popover.addClass('popover');
-        elem.append(popover);
-	    elem.popover({ my: 'center top', at: 'center bottom', popover: popover });
+        popoverElem = $('<div></div>');
+	    popoverElem.append(contents);
+    	popoverElem.addClass('popover');
+        //elem.append(popover);
+        $('body').append(popoverElem);
+        elem.addClass('component-with-popover');
+	    elem.popover({ my: 'center top', at: 'center bottom', popover: popoverElem, collision: 'flipfit flipfit' });
 	    return true;
+	};
+	
+	this.destroy = function() {
+	    if (popoverElem !== null) {
+	        popoverElem.remove();
+	    }
+	    if (htmlElement !== null) {
+	        htmlElement.remove();
+	    }
 	};
 }
 Component.prototype.getInnerHTMLElement = function() {
@@ -91,6 +114,12 @@ Component.prototype.getAsText = function() {
 // Normalerweise sollte das gleich sein, außer bei Spezialfällen wie Twitter
 Component.prototype.getSignText = function() {
 	return this.getAsText();
+};
+Component.prototype.getPopover = function() {
+    if (!this.hasHTMLElement()) {
+        return null;
+    }
+    return this.getInnerHTMLElement().data('popover');
 };
 
 
@@ -134,6 +163,10 @@ function TextComponent(text) {
 TextComponent.prototype = Object.create(Component.prototype);
 TextComponent.prototype.constructor = TextComponent;
 TextComponent.prototype.getAsText = function() {
+    // Muss extra codiert werden, damit leere Textelemente nicht rausfallen
+	return "<TEXT " + this.getSignText() + ">";
+};
+TextComponent.prototype.getSignText = function() {
 	return SequenceCodec.escapeText(this.text);
 };
 
@@ -141,6 +174,7 @@ TextComponent.prototype.getAsText = function() {
 function CommandComponent(command, hasPopover) {
 	Component.call(this, hasPopover);
 	
+	var parentMethods = { activatePopover: this.activatePopover };
 	var that = this;
 	var ci;
 	try {
@@ -155,6 +189,9 @@ function CommandComponent(command, hasPopover) {
     };
 
 	this.getPopoverContents = function() {
+	    if (!ci) {
+	        return [];
+	    }
 	    var group = ci.options.exchangeableInGroup;
 	    if (group === undefined) {
 	        return [];
@@ -166,21 +203,29 @@ function CommandComponent(command, hasPopover) {
 	        button.addClass('button-command-' + command);
       	    button.click(function() {
 	            that.command = command;
+	            that.getPopover().hide();
 	        });
 	        return button;
 	    });
+	};
+	
+	this.activatePopover = function() {
+	    if (!parentMethods.activatePopover.apply(that, arguments)) {
+	        return false;
+	    }
+	    that.getPopoverElement().addClass('popover-command-' + command);
+	    var group;
+	    if (ci) {
+	        group = ci.options.exchangeableInGroup;
+	        if (group !== undefined) {
+	            that.getPopoverElement().addClass('popover-group-' + group);
+	        }	    
+	    }
 	};
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
 	    updateClasses();
 		elem.addClass('button-component');
-//		containerElem.addClass("component-handle");
-		if (command === 'BIG' || command === 'NORMAL') {
-		    //elem.append('A');
-		    //elem.addClass('button-component');
-		} else {
-    		elem.append(that.command);
-        }
 	};
 
 	Object.defineProperties(this, {
@@ -191,6 +236,11 @@ function CommandComponent(command, hasPopover) {
 			set : function(newCommand) {
 			    if (that.hasHTMLElement()) {
     			    that.getHTMLElement().removeClass("component-command-" + command);
+    			}
+    			var popoverElem = that.getPopoverElement();
+    			if (popoverElem !== null) {
+    			    popoverElem.removeClass("popover-command-" + command);
+    			    popoverElem.addClass("popover-command-" + newCommand);
     			}
 	   		    command = newCommand;
 			    updateClasses();
@@ -234,6 +284,7 @@ function ColorCommandComponent(command, color, hasPopover) {
 	        button.addClass('button-color-' + colorType + '-' + color);
       	    button.click(function() {
 	            that.color = color;
+	            that.getPopover().hide();
 	        });
 	        return button;
 	    });
@@ -271,35 +322,57 @@ ColorCommandComponent.prototype.getAsText = function() {
 	return "<" + this.command + " " + this.color + ">";
 };
 
-function SliderCommandComponent(command, value) {
-	CommandComponent.call(this, command);
+function SliderCommandComponent(command, value, hasPopover) {
+	CommandComponent.call(this, command, hasPopover);
 
+	var parentMethods = { createInsideHTMLElement: this.createInsideHTMLElement };
 	var that = this;
+	var textContent;
 
 	if (value === undefined) {
 		value = 1;
 	}
-
-	var updateClasses = function() {
-		if (!that.hasHTMLElement()) {
-			return;
-		}
-		var htmlElem = that.getHTMLElement();
-		var type = (command === 'WAIT') ? 'WAIT' : 'SPEED';
-		htmlElem.addClass(type + '-' + value);
-	};
+	
+	this.getPopoverContents = function() {
+        var i;
+        var buttons = [];
+        var button;
+        // Zur Entkopplung der Closure von der Schleife
+        function clickCB(j) {
+            return function() { that.value = j; that.getPopover().hide(); };
+        }
+        
+        for (i = 0; i <= 9; i++) {
+            if (i == 0 && that.command === 'SPEED') {
+                continue;
+            }
+            button = $('<div class="button-component"></div>');
+            button.addClass('button-command-' + this.command);
+            button.append(i);
+      	    button.click(clickCB(i));
+            buttons.push(button);
+        }
+        return buttons;
+    };
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
-		containerElem.addClass("component-command-" + that.command);
-//		containerElem.addClass("component-handle");
-		elem.append(that.command + '&nbsp;' + value + '&nbsp;');
-		updateClasses();
+		parentMethods.createInsideHTMLElement.apply(that, arguments);
+        elem.empty();
+        textContent = $(document.createTextNode(value));
+        elem.append(textContent);
 	};
 
 	Object.defineProperties(this, {
-		slider : {
+		value : {
 			get : function() {
 				return value;
+			},
+			set : function(newValue) {
+                value = newValue;
+			    if (that.hasHTMLElement()) {
+			        textContent = $(document.createTextNode(value)).replaceAll(textContent);
+			    }
+			    $(that).trigger('change');
 			},
 			enumerable : true
 		}
@@ -309,13 +382,13 @@ function SliderCommandComponent(command, value) {
 SliderCommandComponent.prototype = Object.create(CommandComponent.prototype);
 SliderCommandComponent.prototype.constructor = SliderCommandComponent;
 SliderCommandComponent.prototype.getAsText = function() {
-	return "<" + this.command + " " + this.slider + ">";
+	return "<" + this.command + " " + this.value + ">";
 };
-
 
 function GroupComponent(components) {
     Component.call(this);
     
+    var parentMethods = { destroy: this.destroy };
     var that = this;
     
     if (components === undefined) {
@@ -340,6 +413,13 @@ function GroupComponent(components) {
         });
     };
     
+	this.destroy = function() {
+	    $.each(components, function(i, component) {
+	        component.destroy();
+	    });
+	    parentMethods.destroy.apply(that, arguments);
+	};
+    
     Object.defineProperties(this, {
         components : {
             get: function() {
@@ -363,6 +443,10 @@ GroupComponent.prototype.getSignText = function() {
 // ==============
 
 function ComponentInfo(command, factory, options) {
+    if (options === undefined) {
+        options = {};
+    }
+
 	if (factory === undefined) {
 		// Siehe https://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible
 		// Das ruft nur den Konstruktor von CommandComponent auf, übergibt aber sowohl den gespeicherten
@@ -499,9 +583,9 @@ function ToolInfo(group, componentInfo, options) {
 // =============================
 var ASC333Components = {
 	register : function() {
-	    var textComponentInfo = new ComponentInfo(null, function(t) {
+	    var textComponentInfo = ComponentMapper.registerComponentInfo(new ComponentInfo('TEXT', function(t) {
 			return new TextComponent(t);
-		});
+		}));
 		Toolbox.registerToolInfo(new ToolInfo('text', textComponentInfo, {
 			toolText : 'Text'
 		}));
@@ -546,10 +630,10 @@ var ASC333Components = {
 		var colors = { fg: Config.fgColors, bg: Config.bgColors };
 		var colorInfo = {
 			fg : ComponentMapper.registerComponentInfo(new ComponentInfo('COLOR', function(c, p) {
-				return new ColorCommandComponent('COLOR', c, (p === undefined) ? true : p);
+				return new ColorCommandComponent('COLOR', c, p);
 			})),
 			bg : ComponentMapper.registerComponentInfo(new ComponentInfo('BGCOLOR', function(c, p) {
-				return new ColorCommandComponent('BGCOLOR', c, (p === undefined) ? true : p);
+				return new ColorCommandComponent('BGCOLOR', c, p);
 			}))
 		};
 		$.each(['fg', 'bg'], function(i, type) {
@@ -568,9 +652,10 @@ var ASC333Components = {
 			Toolbox.registerToolInfo(new ToolInfo('charwidth', charwidthInfo, { toolText: '' }));
 		});
 
-		Toolbox.registerToolInfo(new ToolInfo('pause', ComponentMapper.registerComponentInfo(new ComponentInfo('WAIT', function(s) {
-			return new SliderCommandComponent('WAIT', s);}))
-		, {
+        var waitInfo = ComponentMapper.registerComponentInfo(new ComponentInfo('WAIT', function(s, p) {
+            return new SliderCommandComponent('WAIT', s, p);
+        }))
+		Toolbox.registerToolInfo(new ToolInfo('pause', waitInfo, {
 		    sliderID: 'wait_slider',
 		    toolType: 'slider',
 		    sliderStep: 1,
@@ -598,10 +683,11 @@ var ASC333Components = {
 		    toolText : 'Standardelement',
 		    overrideFactory: function() {
 		        var components = [
-		            colorInfo.fg.factory(undefined),
-		            colorInfo.bg.factory(undefined),
+		            colorInfo.fg.factory(),
+		            colorInfo.bg.factory(),
 		            ComponentMapper.getComponentInfoForCommand('LEFT').factory(),
-		            textComponentInfo.factory()
+		            textComponentInfo.factory(),
+		            waitInfo.factory()
 		        ];
 		        return groupComponentInfo.factory(components);
 		    }

@@ -211,7 +211,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	box-sizing: border-box;
 /*	padding: 3px;*/
 	vertical-align: top;
-	/*cursor: move;*/
+	cursor: default;
 	position: relative; /* damit man dann den delete-button auf position: absolute stellen kann */
 }
 
@@ -435,7 +435,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 .clock-CLOCK24,.clock-CLOCK24:hover{
 	background-image: url(favicon.ico);
 }
-.tool-command-COLOR, .tool-command-NORMAL, .tool-command-BIG, .component-command-COLOR .button-component, .component-command-BIG .button-component, .component-command-NORMAL .button-component {
+.tool-command-COLOR, .tool-command-NORMAL, .tool-command-BIG, .component-command-COLOR .button-component, .component-command-BIG .button-component, .component-command-NORMAL .button-component, .popover-command-COLOR .button-component {
     font-family: PIDvl;
     font-size: 39px;
     vertical-align: top;
@@ -443,7 +443,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     box-sizing: border-box;
 }
 
-.tool-command-COLOR:before, .tool-command-NORMAL:before, .tool-command-BIG:before, .component-command-COLOR .button-component:before, .component-command-BIG .button-component:before, .component-command-NORMAL .button-component:before {
+.tool-command-COLOR:before, .tool-command-NORMAL:before, .tool-command-BIG:before, .component-command-COLOR .button-component:before, .component-command-BIG .button-component:before, .component-command-NORMAL .button-component:before, .popover-command-COLOR .button-component:before {
     content: "A";
 }
 
@@ -454,6 +454,19 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 .popover {
     position: absolute;
     z-index: 1000;
+    border: 2px solid #aaa;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 5px;
+    border-radius: 9px;
+/*    width: 300px;*/
+}
+
+.popover-command-WAIT, .popover-command-SPEED {
+    width: 205px;
+}
+
+.popover-group-open_animation {
+    width: 287px;
 }
 	
 .button-run {
