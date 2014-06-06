@@ -202,16 +202,23 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	top:1px;
 }	
 
-.component {
+.component, .component-placeholder {
 /*	border: 0.1px solid gray;*/
 	background-color: transparent;
 	display: inline-block;
 	height: 55px;
 	margin: 5px;
+	box-sizing: border-box;
 /*	padding: 3px;*/
 	vertical-align: top;
 	/*cursor: move;*/
 	position: relative; /* damit man dann den delete-button auf position: absolute stellen kann */
+}
+
+.component-placeholder {
+    border: 1px solid white;
+    border-radius: 5px;
+    width: 55px;
 }
 
 .component-inner {

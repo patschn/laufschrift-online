@@ -273,6 +273,9 @@ var SequenceControl = (function() {
         items: "> div.component",
         revert: false,
         handle: ".component-move-handle",
+        tolerance: "pointer",
+        opacity: 0.5, 
+        placeholder: 'component-placeholder',
         // Wenn von der Toolbox Elemente reingezogen werden, müssen sie noch als Komponenten
         // neu erzeugt werden.
         // Es muss sortbeforestop sein, weil es bei sortstop den Helper nicht mehr gibt,

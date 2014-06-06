@@ -32,8 +32,9 @@ var ComponentMapper = ( function() {
 // Component
 // =========
 
-function Component() {
+function Component(hasPopover) {
 	var htmlElement = null;
+	var that = this;
 
 	this.hasHTMLElement = function() {
 		return (htmlElement !== null);
@@ -46,8 +47,36 @@ function Component() {
 		htmlElement = $('<div class="component"><div class="component-inner"></div></div>');
 		htmlElement.data("component", this);
 		this.createInsideHTMLElement(htmlElement, htmlElement.children("div.component-inner"));
+		if (hasPopover) {
+		    that.activatePopover();
+		}
 		//elem.draggable();
 		return htmlElement;
+	};
+		
+	// Damit man das Popover noch nachträglich aktivieren kann
+	this.activatePopover = function() {
+	    if (!that.getPopoverContents) {
+	        return false;
+	    }
+	    if (!hasPopover) {
+	        hasPopover = true;
+	    }
+    	var containerElem = that.getHTMLElement();
+    	var elem = that.getInnerHTMLElement();
+    	if (containerElem.data('popover') ) {
+    	    return false;
+    	}
+    	var contents = that.getPopoverContents();
+    	if (contents === []) {
+    	    return false;
+    	}
+	    var popover = $('<div></div>');
+	    popover.append(contents);
+    	popover.addClass('popover');
+        elem.append(popover);
+	    elem.popover({ my: 'center top', at: 'center bottom', popover: popover });
+	    return true;
 	};
 }
 Component.prototype.getInnerHTMLElement = function() {
@@ -110,7 +139,7 @@ TextComponent.prototype.getAsText = function() {
 
 
 function CommandComponent(command, hasPopover) {
-	Component.call(this);
+	Component.call(this, hasPopover);
 	
 	var that = this;
 	var ci;
@@ -141,27 +170,6 @@ function CommandComponent(command, hasPopover) {
 	        return button;
 	    });
 	};
-	
-	// Damit man das Popover noch nachträglich aktivieren kann
-	this.activatePopover = function() {
-	    if (!hasPopover) {
-	        hasPopover = true;
-	    }
-    	var containerElem = that.getHTMLElement();
-    	if (containerElem.data('popover') ) {
-    	    return false;
-    	}
-    	var contents = that.getPopoverContents();
-    	if (contents === []) {
-    	    return false;
-    	}
-	    var popover = $('<div></div>');
-	    popover.append(contents);
-    	popover.addClass('popover');
-    	containerElem.append(popover);
-	    containerElem.popover({ my: 'center top', at: 'center bottom', popover: popover });
-	    return true;
-	};
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
 	    updateClasses();
@@ -173,9 +181,6 @@ function CommandComponent(command, hasPopover) {
 		} else {
     		elem.append(that.command);
         }
-        if (hasPopover) {
-            activatePopover();
-		}
 	};
 
 	Object.defineProperties(this, {
@@ -325,7 +330,7 @@ function GroupComponent(components) {
 //		containerElem.addClass("component-handle");
         $.each(components, function(i, component) {
             elem.append(component.getHTMLElement());
-            if (component instanceof CommandComponent) {
+            if (component.activatePopover) {
                 component.activatePopover();
             }
             // Änderungen weitergeben
@@ -540,11 +545,11 @@ var ASC333Components = {
 
 		var colors = { fg: Config.fgColors, bg: Config.bgColors };
 		var colorInfo = {
-			fg : ComponentMapper.registerComponentInfo(new ComponentInfo('COLOR', function(c,p) {
-				return new ColorCommandComponent('COLOR', c, p);
+			fg : ComponentMapper.registerComponentInfo(new ComponentInfo('COLOR', function(c, p) {
+				return new ColorCommandComponent('COLOR', c, (p === undefined) ? true : p);
 			})),
-			bg : ComponentMapper.registerComponentInfo(new ComponentInfo('BGCOLOR', function(c,p) {
-				return new ColorCommandComponent('BGCOLOR', c, p);
+			bg : ComponentMapper.registerComponentInfo(new ComponentInfo('BGCOLOR', function(c, p) {
+				return new ColorCommandComponent('BGCOLOR', c, (p === undefined) ? true : p);
 			}))
 		};
 		$.each(['fg', 'bg'], function(i, type) {
