@@ -97,8 +97,8 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     padding-top: 5px;
     cursor: default;
 }
-#sequences li.active {
-    background: #444 !important;
+#sequences li[selected=selected] {
+    background: #444;
     color: white;
 }
 

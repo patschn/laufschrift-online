@@ -105,8 +105,10 @@ var SequenceControl = (function() {
   var currentSequence = null;
   // Referenz zum Debug-Textfeld
   var commitTextField = null;
-  // Referenz zum Sequenz-<select>-Element
+  // Referenz zum Sequenz-<ul>-Element
   var sequenceSelect = null;
+  // Referenz zur listasselect-Instanz für sequenceSelect
+  var sequenceList = null;
   // Referenz zum Sequenz-<div>
   var sequenceDiv = null;
   // Referenz zum Sequenz-Namen-<div>
@@ -116,7 +118,7 @@ var SequenceControl = (function() {
   // Gibt die ID der momentan ausgewählten Sequenz zurück, oder undefined falls
   // nichts ausgewählt ist
   var getSelectedSequenceID = function() {
-    return sequenceSelect.find("option:selected").val();
+    return sequenceList.getSelectedValue();
   };
 
   var componentListFromHTML = function() {
@@ -206,10 +208,10 @@ var SequenceControl = (function() {
     seq.text = currentSaveString();
     seq.title = title;
     seq.create().done(function() {
-        $("<option/>", { value: seq.id, text: seq.title } ).appendTo(sequenceSelect);
-        sequenceSelect.val(seq.id).change();
-        setSequenceName(title);
-        FlashMessage.success("Sequenz gespeichert");
+      sequenceList.appendElement(seq.id, seq.title);
+      sequenceList.selectElementByValue(seq.id);
+      setSequenceName(title);
+      FlashMessage.success("Sequenz gespeichert");
     }).fail(function(e) {
       FlashMessage.error("Speichern fehlgeschlagen: " + e);
     });
@@ -238,7 +240,7 @@ var SequenceControl = (function() {
     if (confirm('Wollen Sie wirklich diese Sequenz löschen?')) {
     destroySequence.load(destroyID).done(function() {
       destroySequence.destroy().done(function() {
-        sequenceSelect.find("option[value=" + destroyID + "]").remove();
+        sequenceList.removeElementByValue(destroyID);
         if (currentSequence.existsOnServer() && currentSequence.id === destroyID) {
           currentSequence = new Sequence();
         }
@@ -270,6 +272,8 @@ var SequenceControl = (function() {
     sequenceSelect = $("#sequences");
     sequenceDiv = $('#sequence-inner');
     sequenceNameDiv = $('#sequence-name');
+    
+    sequenceList = sequenceSelect.listasselect().data('swpListasselect');
     
     setSequenceName('Unbenannte Sequenz');
     
