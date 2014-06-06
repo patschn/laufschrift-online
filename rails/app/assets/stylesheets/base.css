@@ -100,6 +100,10 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 #sequence-name {
     padding-left: 15px;
     padding-top: 15px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 210px;
 }
 #sequence-inner {
     height: 100%;

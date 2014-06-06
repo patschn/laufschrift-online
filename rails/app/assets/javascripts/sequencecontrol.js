@@ -109,6 +109,8 @@ var SequenceControl = (function() {
   var sequenceSelect = null;
   // Referenz zum Sequenz-<div>
   var sequenceDiv = null;
+  // Referenz zum Sequenz-Namen-<div>
+  var sequenceNameDiv = null;
   
   // Hilfsfunktionen
   // Gibt die ID der momentan ausgewählten Sequenz zurück, oder undefined falls
@@ -130,6 +132,10 @@ var SequenceControl = (function() {
   var updateCommitTextField = function() {
     var text = SequenceCodec.encodeToString(componentListFromHTML(), true);
     commitTextField.val(text);
+  };
+  
+  var setSequenceName = function(name) {
+    sequenceNameDiv.text(name);
   };
   
   var deleteComponent = function(elem) {
@@ -184,6 +190,7 @@ var SequenceControl = (function() {
     loadedSequence.load(loadID).done(function() {
       currentSequence = loadedSequence;
       loadSequenceFromText(currentSequence.text);
+      setSequenceName(currentSequence.title);
       FlashMessage.success("Sequenz »" + currentSequence.title + "« geladen");
     }).fail(function(e) {
       FlashMessage.error("Laden fehlgeschlagen: " + e);
@@ -201,6 +208,7 @@ var SequenceControl = (function() {
     seq.create().done(function() {
         $("<option/>", { value: seq.id, text: seq.title } ).appendTo(sequenceSelect);
         sequenceSelect.val(seq.id).change();
+        setSequenceName(title);
         FlashMessage.success("Sequenz gespeichert");
     }).fail(function(e) {
       FlashMessage.error("Speichern fehlgeschlagen: " + e);
@@ -261,6 +269,9 @@ var SequenceControl = (function() {
     commitTextField = $("#commit-text");
     sequenceSelect = $("#sequences");
     sequenceDiv = $('#sequence-inner');
+    sequenceNameDiv = $('#sequence-name');
+    
+    setSequenceName('Unbenannte Sequenz');
     
     function preventDefaultProxy(fun) { return function(e) { fun(); e.preventDefault(); };  }
     $("#sequence-new").click(preventDefaultProxy(createNew));
