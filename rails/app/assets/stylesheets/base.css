@@ -6,7 +6,7 @@ body {
     background-image:url(background.jpg);
 }
 
-body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button, input, select, textarea, button, option {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
 }
@@ -71,13 +71,35 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     position:absolute;
     top:400px;
     left:0px;
-    font-weight:bold;
+/*    font-weight:bold;*/
     color:white;
-    font-family:Arial;
     height: 350px;
     background:url(linksunten.png);
     width: 250px;
     float: left;
+    padding-top: 40px;
+    padding-bottom: 13px;
+    box-sizing: border-box;
+}
+#sequences {
+    height: 100%;
+    width: 246px;
+    list-style-type: none
+}
+#sequences li {
+    height: 27px;
+    display: block;
+    /*line-height: 27px;*/
+    box-sizing: border-box;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-top: 5px;
+    cursor: default;
+}
+#sequences li.active {
+    background: #444 !important;
+    color: white;
 }
 
 #mitte {
