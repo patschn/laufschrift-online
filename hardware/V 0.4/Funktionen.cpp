@@ -93,6 +93,11 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 m_iColors[0] = LauflichtCodetabelle.find(sTemp)->second;
                 m_iColors[2] = m_iColors[0] + m_iColors[1];
             }
+            else if(sTemp == "<CLOCK24>" || sTemp == "<CLOCK12>")
+            {
+                sBefehl.sKonvertiert += 143;    //Clockbefehl
+                sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;   //12h oder 24h Uhr
+            }
             else if(sTemp.find("WAIT") != std::string::npos)
             {
                 sBefehl.sKonvertiert += LauflichtCodetabelle.find("<WAIT>")->second;
@@ -112,8 +117,13 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 sBefehl.sKonvertiert += 3;//m_iColors[2];
             }
         }//if(sBefehl.sOriginal[i] == '<')...
+        else if(sBefehl.sOriginal[i] == ' ')
+        {
+
+        }
         else    //Wenn kein Befehl gefunden wurde, dann muss es normaler Text sein
         {
+            //ToDo.: if('\\'...
             //Bei Zeichen kommt erst die Farbe, anschließend das Zeichen
             sTemp = sBefehl.sOriginal[i];
             sBefehl.sKonvertiert += m_iColors[2];                               //Farbe
@@ -175,10 +185,15 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["<DOBIG>"] = 141;      //Fettschrift scrollt von rechts nach links
     LauflichtCodetabelle["<RANDOM>"] = 163;     //Zufällige Auswahl des Effektes
     LauflichtCodetabelle["<SNOW>"] = 144;       //Schneeeffekt
+    LauflichtCodetabelle["<DSNOW>"] = 145;
 
     //Endbefehle
     LauflichtCodetabelle["<CLOSEMID>"] = 133;   //Text "von außen öffnen"
     LauflichtCodetabelle["<CLOSERIGHT>"] = 135; //Text "von außen öffnen"
+
+    //Clock (Dez.: 143, Arg.) unterscheidet sich im zweiten Argument:
+    LauflichtCodetabelle["<CLOCK24>"] = 7;
+    LauflichtCodetabelle["<CLOCK12>"] = 3;
 
     /*ToDo:
         Clock12
@@ -224,6 +239,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["k"] = 107;  LauflichtCodetabelle["x"] = 120;
     LauflichtCodetabelle["l"] = 108;  LauflichtCodetabelle["y"] = 121;
     LauflichtCodetabelle["m"] = 109;  LauflichtCodetabelle["z"] = 122;
+    LauflichtCodetabelle[" "] = 58;
 
     //Sonderzeichen:
     LauflichtCodetabelle["Ȧ"] = 3;
