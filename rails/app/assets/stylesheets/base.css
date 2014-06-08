@@ -314,7 +314,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	position: relative; /* damit man die tooltips auf position: absolute stellen kann */
 }
 .button-toolbox, .button-component {
-	border-radius: 12px;
+	border-radius: 9px;
 	display:inline-block;
 	color:#ffffff;
 	font-size:17px;
@@ -501,6 +501,10 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 
 .popover-group-open_animation {
+    width: 287px;
+}
+
+.popover-special-characters {
     width: 287px;
 }
 

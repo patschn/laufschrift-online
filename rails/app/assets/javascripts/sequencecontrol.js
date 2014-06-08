@@ -155,11 +155,43 @@ var SequenceControl = (function() {
     var deleteButton = $('<button></button>');
     deleteButton.addClass('component-delete-button');
     elem.append(deleteButton);
-    /*deleteButton.button({
-      icons: { primary: "ui-icon-trash" },
-      text: false
-    });*/
     deleteButton.click(function() { deleteComponent(elem); });
+    if (component instanceof TextComponent) {
+      var specialCharacterButton = $('<span>Spezial</span>');
+      specialCharacterButton.addClass('insert-special-character-button');
+      elem.append(specialCharacterButton);
+      var popoverElem = $('<div></div>');
+      var specialCharacters = [ 'Ω', 'Σ', '¤', 'æ', 'Æ', '£', '🍷', '♪', '🚗', '⛵', '🕓', '♥', '⌂', '◆', '▲', '▶', '▼', '◀', '☉', '⬆', '⬇', '⇦', '⇨', '⌀', '∅' ];
+	    $.each(specialCharacters, function(i, specialCharacter) {
+	      var button = $('<div></div>');
+	      button.addClass('button-toolbox');
+	      button.mousedown(function(e) {
+          // Damit der Fokus auf dem Input-Element bleibt
+          e.preventDefault();
+          
+          //specialCharacterButton.data('popover').hide();
+          
+          var activeElem = $(document.activeElement);
+          // Nur Input-Elemente
+          if (activeElem.prop('tagName').toLowerCase() !== 'input') {
+            return;
+          }
+          // Sonderzeichen einfügen
+          var cPos = activeElem.caret();
+          var oldVal = activeElem.val();
+          activeElem.val(oldVal.substr(0, cPos) + specialCharacter + oldVal.substr(cPos));
+          activeElem.caret(cPos + 1);
+        });
+        button.text(specialCharacter);
+        popoverElem.append(button);
+	    });
+    	popoverElem.addClass('popover');
+    	popoverElem.addClass('popover-special-characters');
+      $('body').append(popoverElem);
+	    specialCharacterButton.popover({ my: 'center top', at: 'center bottom', popover: popoverElem, collision: 'flipfit flipfit' });
+	    specialCharacterButton.mousedown(function(e) { e.preventDefault(); });
+    }
+
     return elem;
   };
   
