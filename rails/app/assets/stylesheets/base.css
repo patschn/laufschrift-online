@@ -84,7 +84,8 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 #sequences {
     height: 100%;
     width: 246px;
-    list-style-type: none
+    list-style-type: none;
+    overflow: auto;
 }
 #sequences li {
     height: 27px;
@@ -324,8 +325,8 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	text-align:center;
 	text-shadow:1px 1px 1px #000000;
 	background-image: linear-gradient(#a6a6a6 5%, #2e2e2e 100% );
-	box-shadow: inset 0px 1px 0px 0px #787168;
-	border: 1px solid black;
+	/*box-shadow: inset 0px 1px 0px 0px #787168;*/
+	/*border: 1px solid black;*/
 }
 .button-toolbox:hover, .button-component:hover {
     background-image: linear-gradient(#2e2e2e 5%, #a6a6a6 100% );
@@ -338,8 +339,10 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     vertical-align: top;
 }
 
-.popover .button-component {
+.popover .button-toolbox {
     cursor: default;
+	margin-left: 2px;
+	margin-bottom: 2px;
 }
 
 .button-color-fg-r {
@@ -363,8 +366,8 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 .button-color-bg-b {
 	background-image: linear-gradient(#575757 5%, #000000 100% );
-	border:1px solid #575757;
-	text-shadow:1px 1px 0px #575757;
+	/*border:1px solid #575757;*/
+/*	text-shadow:1px 1px 0px #575757;*/
 }
 .button-color-bg-b:hover {
 	background-image: linear-gradient(#8c8c8c 5%, #222222 100% );
@@ -467,7 +470,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	background-image: url(clock24_hover.png) ;
 }
 
-.tool-command-COLOR, .tool-command-NORMAL, .tool-command-BIG, .component-command-COLOR .button-component, .component-command-BIG .button-component, .component-command-NORMAL .button-component, .popover-command-COLOR .button-component {
+.tool-command-COLOR, .tool-command-NORMAL, .tool-command-BIG, .component-command-COLOR .button-component, .component-command-BIG .button-component, .component-command-NORMAL .button-component, .popover-command-COLOR .button-toolbox {
     font-family: PIDvl;
     font-size: 39px;
     vertical-align: top;
@@ -475,7 +478,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     box-sizing: border-box;
 }
 
-.tool-command-COLOR:before, .tool-command-NORMAL:before, .tool-command-BIG:before, .component-command-COLOR .button-component:before, .component-command-BIG .button-component:before, .component-command-NORMAL .button-component:before, .popover-command-COLOR .button-component:before {
+.tool-command-COLOR:before, .tool-command-NORMAL:before, .tool-command-BIG:before, .component-command-COLOR .button-component:before, .component-command-BIG .button-component:before, .component-command-NORMAL .button-component:before, .popover-command-COLOR .button-toolbox:before {
     content: "A";
 }
 
@@ -500,7 +503,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 .popover-group-open_animation {
     width: 287px;
 }
-	
+
 .button-run {
 	background-image: linear-gradient(#a6a19a 5%, #423d37 100% );
 	background-color:#a6a19a;
@@ -527,112 +530,112 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	position:relative;
 	top:1px;
 }
-.open_animation-LEFT {
+.button-command-LEFT {
  	background-image: url(left.png) ;
 }
-.open_animation-LEFT:hover{
+.button-command-LEFT:hover{
 	background-image: url(left_hover.png) ;
 }
-.open_animation-RIGHT{ 
+.button-command-RIGHT{ 
  	background-image: url(right.png) ;
 }
-.open_animation-RIGHT:hover{
+.button-command-RIGHT:hover{
 	background-image: url(right_hover.png) ;
 }	
-.open_animation-UP{ 
+.button-command-UP{ 
  	background-image: url(up.png) ;
 }
-.open_animation-UP:hover{
+.button-command-UP:hover{
 	background-image: url(up_hover.png) ;
 }	
-.open_animation-DOWN{ 
+.button-command-DOWN{ 
  	background-image: url(down.png) ;
 }
-.open_animation-DOWN:hover{
+.button-command-DOWN:hover{
 	background-image: url(down_hover.png) ;
 }	
-.open_animation-DOFF{ 
+.button-command-DOFF{ 
  	background-image: url(doff.png) ;
 }
-.open_animation-DOFF:hover{
+.button-command-DOFF:hover{
 	background-image: url(doff_hover.png) ;
 }	
-.open_animation-DOBIG{ 
+.button-command-DOBIG{ 
  	background-image: url(dobig.png) ;
 }	
-.open_animation-DOBIG:hover{
+.button-command-DOBIG:hover{
 	background-image: url(dobig_hover.png) ;
 }	
-.open_animation-FLASH{ 
+.button-command-FLASH{ 
  	background-image: url(flash.png) ;
 }
-.open_animation-FLASH:hover{
+.button-command-FLASH:hover{
 	background-image: url(flash_hover.png) ;
 }	
-.open_animation-JUMP{ 
+.button-command-JUMP{ 
  	background-image: url(jump.png) ;
 }
-.open_animation-JUMP:hover{
+.button-command-JUMP:hover{
 	background-image: url(jump_hover.png) ;
 }	
-.open_animation-OPENMID{
+.button-command-OPENMID{
  	background-image: url(openmid.png) ;
 }
-.open_animation-OPENMID:hover{
+.button-command-OPENMID:hover{
 	background-image: url(openmid_hover.png) ;
 }	
-.open_animation-OPENRIGHT{
+.button-command-OPENRIGHT{
  	background-image: url(openright.png) ;
 }
-.open_animation-OPENRIGHT:hover{
+.button-command-OPENRIGHT:hover{
 	background-image: url(openright_hover.png) ;
 }	
-.open_animation-RAINBOW{ 
+.button-command-RAINBOW{ 
  	background-image: url(rainbow.png) ;
 }
-.open_animation-RAINBOW:hover{
+.button-command-RAINBOW:hover{
 	background-image: url(rainbow_hover.png) ;
 }	
-.open_animation-RANDOM{ 
+.button-command-RANDOM{ 
  	background-image: url(random.png) ;
 }
-.open_animation-RANDOM:hover{
+.button-command-RANDOM:hover{
 	background-image: url(random_hover.png) ;
 }	
-.open_animation-SHIFTMID{
+.button-command-SHIFTMID{
  	background-image: url(shiftmid.png) ;
 }
-.open_animation-SHIFTMID:hover{
+.button-command-SHIFTMID:hover{
 	background-image: url(shiftmid_hover.png) ;
 }	
-.open_animation-SNOW{
+.button-command-SNOW{
  	background-image: url(snow.png) ;
 }	
-.open_animation-SNOW:hover{
+.button-command-SNOW:hover{
 	background-image: url(snow_hover.png) ;
 }	
-.close_animation-CLOSEMID{ 
+.button-command-CLOSEMID{ 
  	background-image: url(closemid.png) ;
 }	
-.close_animation-CLOSEMID:hover{
+.button-command-CLOSEMID:hover{
 	background-image: url(closemid_hover.png) ;
 }	
-.close_animation-CLOSERIGHT{
+.button-command-CLOSERIGHT{
  	background-image: url(closeright.png) ;
 }	
-.close_animation-CLOSERIGHT:hover{
+.button-command-CLOSERIGHT:hover{
 	background-image: url(closeright_hover.png) ;
 }	
-.close_animation-SQUEEZEMID{ 
+.button-command-SQUEEZEMID{ 
  	background-image: url(squeezemid.png) ;
 }	
-.close_animation-SQUEEZEMID:hover{
+.button-command-SQUEEZEMID:hover{
 	background-image: url(squeezemid_hover.png) ;
 }	
-.close_animation-DSNOW{ 
+.button-command-DSNOW{ 
  	background-image: url(dsnow.png) ;	
 }
-.close_animation-DSNOW:hover{
+.button-command-DSNOW:hover{
 	background-image: url(dsnow_hover.png) ;
 }	
 

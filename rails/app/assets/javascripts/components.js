@@ -186,6 +186,7 @@ function CommandComponent(command, hasPopover) {
             return;
         }
         that.getHTMLElement().addClass("component-command-" + command);
+        that.getInnerHTMLElement().addClass("button-command-" + command);
     };
 
 	this.getPopoverContents = function() {
@@ -198,9 +199,8 @@ function CommandComponent(command, hasPopover) {
 	    }
 	    var tools = Toolbox.getToolInfosForGroup(group);
 	    return $.map(tools, function(tool) {
-	        var button = $('<div class="button-component"></div>');
+	        var button = tool.createToolHTMLElement();
 	        var command = tool.componentInfo.command;
-	        button.addClass('button-command-' + command);
       	    button.click(function() {
 	            that.command = command;
 	            that.getPopover().hide();
@@ -236,6 +236,7 @@ function CommandComponent(command, hasPopover) {
 			set : function(newCommand) {
 			    if (that.hasHTMLElement()) {
     			    that.getHTMLElement().removeClass("component-command-" + command);
+    			    that.getInnerHTMLElement().removeClass("button-command-" + command);
     			}
     			var popoverElem = that.getPopoverElement();
     			if (popoverElem !== null) {
@@ -280,7 +281,7 @@ function ColorCommandComponent(command, color, hasPopover) {
 	this.getPopoverContents = function() {
 	    var colors = (colorType === 'fg') ? Config.fgColors : Config.bgColors;
     	return $.map(colors, function(color) {
-	        var button = $('<div class="button-component"></div>');
+	        var button = $('<div class="button-toolbox"></div>');
 	        button.addClass('button-color-' + colorType + '-' + color);
       	    button.click(function() {
 	            that.color = color;
@@ -346,7 +347,7 @@ function SliderCommandComponent(command, value, hasPopover) {
             if (i == 0 && that.command === 'SPEED') {
                 continue;
             }
-            button = $('<div class="button-component"></div>');
+            button = $('<div class="button-toolbox"></div>');
             button.addClass('button-command-' + this.command);
             button.append(i);
       	    button.click(clickCB(i));
@@ -514,7 +515,7 @@ function ToolInfo(group, componentInfo, options) {
 	};
 
 	this.createToolHTMLElement = function() {
-		var text = componentInfo.command;
+		var text = '';//componentInfo.command;
 		if (options.toolText !== undefined) {
 			text = options.toolText;
 		}
@@ -552,6 +553,9 @@ function ToolInfo(group, componentInfo, options) {
 
 		    if (options.toolType === "button") {
         		elem.addClass("button-toolbox");
+        		if (componentInfo.command) {
+            		elem.addClass("button-command-" + componentInfo.command);
+                }
         	}
         }
         
@@ -614,15 +618,13 @@ var ASC333Components = {
 		];
 		$.each(openAnimations, function(i, animation) {
 			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation[0], undefined, { exchangeableInGroup: 'open_animation' }));
-			Toolbox.registerToolInfo(new ToolInfo('open_animation', info,{
-				extraClass: 'open_animation-' + animation[0],
+			Toolbox.registerToolInfo(new ToolInfo('open_animation', info, {
 				tooltip: animation[1]
 			}));
 		});
 		$.each(closeAnimations, function(i, animation) {
-			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation[0]));
+			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation[0], undefined, { exchangeableInGroup: 'close_animation' } ));
 			Toolbox.registerToolInfo(new ToolInfo('close_animation', info, {
-				extraClass: 'close_animation-' + animation[0],
 				tooltip: animation[1]
 			}));
 		});
