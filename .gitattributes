@@ -39,13 +39,37 @@ rails/Rakefile -text
 rails/app/assets/images/.keep -text
 rails/app/assets/images/PIDvl[!!-~]bold.ttf -text svneol=unset#application/x-font-ttf
 rails/app/assets/images/PIDvl.ttf -text svneol=unset#application/x-font-ttf
+rails/app/assets/images/autocenter.png -text
+rails/app/assets/images/autocenter_hover.png -text
 rails/app/assets/images/background.jpg -text
 rails/app/assets/images/bug.png -text
+rails/app/assets/images/clock12.png -text
+rails/app/assets/images/clock12_hover.png -text
+rails/app/assets/images/clock24.png -text
+rails/app/assets/images/clock24_hover.png -text
+rails/app/assets/images/closemid.png -text
+rails/app/assets/images/closemid_hover.png -text
+rails/app/assets/images/closeright.png -text
+rails/app/assets/images/closeright_hover.png -text
 rails/app/assets/images/debuglinks.png -text
 rails/app/assets/images/debugmitte.png -text
 rails/app/assets/images/debugrechts.png -text
 rails/app/assets/images/delete-hover.png -text svneol=unset#image/png
 rails/app/assets/images/delete.png -text svneol=unset#image/png
+rails/app/assets/images/dobig.png -text
+rails/app/assets/images/dobig_hover.png -text
+rails/app/assets/images/doff.png -text
+rails/app/assets/images/doff_hover.png -text
+rails/app/assets/images/down.png -text
+rails/app/assets/images/down_hover.png -text
+rails/app/assets/images/dsnow.png -text
+rails/app/assets/images/dsnow_hover.png -text
+rails/app/assets/images/flash.png -text
+rails/app/assets/images/flash_hover.png -text
+rails/app/assets/images/jump.png -text
+rails/app/assets/images/jump_hover.png -text
+rails/app/assets/images/left.png -text
+rails/app/assets/images/left_hover.png -text
 rails/app/assets/images/linksoben.png -text svneol=unset#image/png
 rails/app/assets/images/linksunten.png -text svneol=unset#image/png
 rails/app/assets/images/mitte.png -text svneol=unset#image/png
@@ -56,10 +80,28 @@ rails/app/assets/images/mittemitte2.png -text svneol=unset#image/png
 rails/app/assets/images/mitterechts.png -text svneol=unset#image/png
 rails/app/assets/images/mitterechts2.png -text svneol=unset#image/png
 rails/app/assets/images/move.png -text
+rails/app/assets/images/openmid.png -text
+rails/app/assets/images/openmid_hover.png -text
+rails/app/assets/images/openright.png -text
+rails/app/assets/images/openright_hover.png -text
+rails/app/assets/images/rainbow.png -text
+rails/app/assets/images/rainbow_hover.png -text
+rails/app/assets/images/random.png -text
+rails/app/assets/images/random_hover.png -text
 rails/app/assets/images/rechts.png -text svneol=unset#image/png
+rails/app/assets/images/right.png -text
+rails/app/assets/images/right_hover.png -text
+rails/app/assets/images/shiftmid.png -text
+rails/app/assets/images/shiftmid_hover.png -text
+rails/app/assets/images/snow.png -text
+rails/app/assets/images/snow_hover.png -text
+rails/app/assets/images/squeezemid.png -text
+rails/app/assets/images/squeezemid_hover.png -text
 rails/app/assets/images/toplinks.png -text
 rails/app/assets/images/topmitte.png -text
 rails/app/assets/images/toprechts.png -text
+rails/app/assets/images/up.png -text
+rails/app/assets/images/up_hover.png -text
 rails/app/assets/javascripts/application.js -text
 rails/app/assets/javascripts/components.js -text
 rails/app/assets/javascripts/config.js.erb -text

@@ -454,13 +454,19 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 .tool-slider-lower-limit {
     text-align: right;
 }
-.clock-CLOCK12,.clock-CLOCK12:hover{
-	background-image: url(favicon.ico);
+.clock-CLOCK12{
+	background-image: url(clock12.png);
+}
+.clock-CLOCK12:hover{
+	background-image: url(clock12_hover.png);
+}	
+.clock-CLOCK24{
+	background-image: url(clock24.png) ;
+}	
+.clock-CLOCK24:hover{	
+	background-image: url(clock24_hover.png) ;
 }
 
-.clock-CLOCK24,.clock-CLOCK24:hover{
-	background-image: url(favicon.ico);
-}
 .tool-command-COLOR, .tool-command-NORMAL, .tool-command-BIG, .component-command-COLOR .button-component, .component-command-BIG .button-component, .component-command-NORMAL .button-component, .popover-command-COLOR .button-component {
     font-family: PIDvl;
     font-size: 39px;
@@ -521,60 +527,114 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	position:relative;
 	top:1px;
 }
-.open_animation-LEFT, .open_animation-LEFT:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-LEFT {
+ 	background-image: url(left.png) ;
 }
-.open_animation-RIGHT, .open_animation-RIGHT:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-LEFT:hover{
+	background-image: url(left_hover.png) ;
 }
-.open_animation-UP, .open_animation-UP:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-RIGHT{ 
+ 	background-image: url(right.png) ;
 }
-.open_animation-DOWN, .open_animation-DOWN:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-RIGHT:hover{
+	background-image: url(right_hover.png) ;
+}	
+.open_animation-UP{ 
+ 	background-image: url(up.png) ;
 }
-.open_animation-DOFF, .open_animation-DOFF:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-UP:hover{
+	background-image: url(up_hover.png) ;
+}	
+.open_animation-DOWN{ 
+ 	background-image: url(down.png) ;
 }
-.open_animation-DOBIG, .open_animation-DOBIG:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-DOWN:hover{
+	background-image: url(down_hover.png) ;
+}	
+.open_animation-DOFF{ 
+ 	background-image: url(doff.png) ;
 }
-.open_animation-FLASH, .open_animation-FLASH:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-DOFF:hover{
+	background-image: url(doff_hover.png) ;
+}	
+.open_animation-DOBIG{ 
+ 	background-image: url(dobig.png) ;
+}	
+.open_animation-DOBIG:hover{
+	background-image: url(dobig_hover.png) ;
+}	
+.open_animation-FLASH{ 
+ 	background-image: url(flash.png) ;
 }
-.open_animation-JUMP, .open_animation-JUMP:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-FLASH:hover{
+	background-image: url(flash_hover.png) ;
+}	
+.open_animation-JUMP{ 
+ 	background-image: url(jump.png) ;
 }
-.open_animation-OPENMID, .open_animation-OPENMID:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-JUMP:hover{
+	background-image: url(jump_hover.png) ;
+}	
+.open_animation-OPENMID{
+ 	background-image: url(openmid.png) ;
 }
-.open_animation-OPENRIGHT, .open_animation-OPENRIGHT:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-OPENMID:hover{
+	background-image: url(openmid_hover.png) ;
+}	
+.open_animation-OPENRIGHT{
+ 	background-image: url(openright.png) ;
 }
-.open_animation-RAINBOW, .open_animation-RAINBOW:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-OPENRIGHT:hover{
+	background-image: url(openright_hover.png) ;
+}	
+.open_animation-RAINBOW{ 
+ 	background-image: url(rainbow.png) ;
 }
-.open_animation-RANDOM, .open_animation-RANDOM:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-RAINBOW:hover{
+	background-image: url(rainbow_hover.png) ;
+}	
+.open_animation-RANDOM{ 
+ 	background-image: url(random.png) ;
 }
-.open_animation-SHIFTMID, .open_animation-SHIFTMID:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-RANDOM:hover{
+	background-image: url(random_hover.png) ;
+}	
+.open_animation-SHIFTMID{
+ 	background-image: url(shiftmid.png) ;
 }
-.open_animation-SNOW, .open_animation-SNOW:hover{
- 	background-image: url(favicon.ico) ;
+.open_animation-SHIFTMID:hover{
+	background-image: url(shiftmid_hover.png) ;
+}	
+.open_animation-SNOW{
+ 	background-image: url(snow.png) ;
+}	
+.open_animation-SNOW:hover{
+	background-image: url(snow_hover.png) ;
+}	
+.close_animation-CLOSEMID{ 
+ 	background-image: url(closemid.png) ;
+}	
+.close_animation-CLOSEMID:hover{
+	background-image: url(closemid_hover.png) ;
+}	
+.close_animation-CLOSERIGHT{
+ 	background-image: url(closeright.png) ;
+}	
+.close_animation-CLOSERIGHT:hover{
+	background-image: url(closeright_hover.png) ;
+}	
+.close_animation-SQUEEZEMID{ 
+ 	background-image: url(squeezemid.png) ;
+}	
+.close_animation-SQUEEZEMID:hover{
+	background-image: url(squeezemid_hover.png) ;
+}	
+.close_animation-DSNOW{ 
+ 	background-image: url(dsnow.png) ;	
 }
-.close_animation-CLOSEMID, .close_animation-CLOSEMID:hover{
- 	background-image: url(favicon.ico) ;
-}
-.close_animation-CLOSERIGHT, .close_animation-CLOSERIGHT:hover{
- 	background-image: url(favicon.ico) ;
-}
-.close_animation-SQUEEZEMID, .close_animation-SQUEEZEMID:hover{
- 	background-image: url(favicon.ico) ;
-}
-.close_animation-DSNOW, .close_animation-DSNOW:hover{
- 	background-image: url(favicon.ico) ;
-}
+.close_animation-DSNOW:hover{
+	background-image: url(dsnow_hover.png) ;
+}	
 
 .tooltip {
    	color: white;
