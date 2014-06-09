@@ -457,16 +457,16 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 .tool-slider-lower-limit {
     text-align: right;
 }
-.clock-CLOCK12{
+.button-command-CLOCK12{
 	background-image: url(clock12.png);
 }
-.clock-CLOCK12:hover{
+.button-command-CLOCK12:hover{
 	background-image: url(clock12_hover.png);
 }	
-.clock-CLOCK24{
+.button-command-CLOCK24{
 	background-image: url(clock24.png) ;
 }	
-.clock-CLOCK24:hover{	
+.button-command-CLOCK24:hover{	
 	background-image: url(clock24_hover.png) ;
 }
 
