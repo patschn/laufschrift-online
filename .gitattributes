@@ -42,6 +42,8 @@ rails/app/assets/images/PIDvl.ttf -text svneol=unset#application/x-font-ttf
 rails/app/assets/images/autocenter.png -text
 rails/app/assets/images/autocenter_hover.png -text
 rails/app/assets/images/background.jpg -text
+rails/app/assets/images/break.png -text
+rails/app/assets/images/break_hover.png -text
 rails/app/assets/images/bug.png -text
 rails/app/assets/images/clock12.png -text
 rails/app/assets/images/clock12_hover.png -text
@@ -95,8 +97,12 @@ rails/app/assets/images/shiftmid.png -text
 rails/app/assets/images/shiftmid_hover.png -text
 rails/app/assets/images/snow.png -text
 rails/app/assets/images/snow_hover.png -text
+rails/app/assets/images/speed.png -text
+rails/app/assets/images/speed_hover.png -text
 rails/app/assets/images/squeezemid.png -text
 rails/app/assets/images/squeezemid_hover.png -text
+rails/app/assets/images/timewait.png -text
+rails/app/assets/images/timewait_hover.png -text
 rails/app/assets/images/toplinks.png -text
 rails/app/assets/images/topmitte.png -text
 rails/app/assets/images/toprechts.png -text
