@@ -180,7 +180,7 @@ var SequenceControl = (function() {
           var cPos = activeElem.caret();
           var oldVal = activeElem.val();
           activeElem.val(oldVal.substr(0, cPos) + specialCharacter + oldVal.substr(cPos));
-          activeElem.caret(cPos + 1);
+          activeElem.caret(cPos + specialCharacter.length);
         });
         button.text(specialCharacter);
         popoverElem.append(button);

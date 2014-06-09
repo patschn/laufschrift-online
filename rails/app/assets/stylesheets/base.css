@@ -7,7 +7,7 @@ body {
 }
 
 body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button, input, select, textarea, button, option {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif, Symbola;
     font-size: 14px;
 }
 

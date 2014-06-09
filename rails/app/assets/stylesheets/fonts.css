@@ -7,3 +7,7 @@
     font-family: "PIDvl bold";
     src: url('PIDvl bold.ttf') format('truetype');
 }
+@font-face {
+    font-family: Symbola;
+    src: url(Symbola.ttf) format('truetype');
+}
