@@ -190,6 +190,9 @@ rails/vendor/assets/javascripts/achtung/LICENSE.txt -text
 rails/vendor/assets/javascripts/achtung/ui.achtung-min.js -text
 rails/vendor/assets/javascripts/achtung/ui.achtung.js -text
 rails/vendor/assets/javascripts/achtung/version.txt -text
+rails/vendor/assets/javascripts/caret/jquery.caret.js -text
+rails/vendor/assets/javascripts/caret/license.txt -text
+rails/vendor/assets/javascripts/caret/readme.md -text
 rails/vendor/assets/stylesheets/.keep -text
 rails/vendor/assets/stylesheets/achtung/ui.achtung-min.css -text
 rails/vendor/assets/stylesheets/achtung/ui.achtung.css -text
