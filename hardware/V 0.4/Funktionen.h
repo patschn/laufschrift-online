@@ -91,6 +91,12 @@ namespace SWP
                 Damit kann nachgeprüft werden, was wie (und ob etwas überhaupt) konvertiert wurde.
             */
             std::ofstream m_debugfile;
+            int iLetters;
+
+            /**
+            Die Anzahl an Zeichen, die die Laufschrift überhauüt anzeigen kann
+            */
+
     };
 }
 

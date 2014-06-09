@@ -1,4 +1,4 @@
-/*
+﻿/*
     Softwareprojekt - Lauflicht Online
 
     Funktionen.cpp - Implementiert die Funktionen zur Ansteuerung der Headerdatei Funktionen.h
@@ -18,6 +18,7 @@ SWP::CLauflicht::CLauflicht()
     m_iColors[0] = 3;
     m_iColors[1] = 0;
     m_iColors[2] = m_iColors[0] + m_iColors[1];
+    iLetters = 14;
 }
 
 bool SWP::CLauflicht::OeffneRS232()
@@ -110,6 +111,53 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 char c = sTemp[sTemp.find(' ') + 1];
                 sBefehl.sKonvertiert += LauflichtCodetabelle.find(&c)->second;
             }
+            else if(sTemp == "<LEFT>") //Da Left bei der Laufschrift ein nichtzuerwartendes Verhalten besitzt, muss dies Softwaretechnisch überarbeitet werden
+            {
+				std:int k =0; //Anzahl der anzuzeigenden Zeichen
+                std::string sTemp2 = ""; //Temporärer String zur Speicherung einzelner Zeichen zur Konvertierung
+                std::string sTemp3 = ""; //Temporärer String zur Speicherung der konvertierten Zeichenkette
+				std::string sTemp4 = ""; //Temporärer String zum Setzen der Leerzeichen
+				int y = 0; //Zählvariable
+				int n = 0; //Anzahl der Leerzeichen
+                bool x =true; //True, solange Noch kein Ende gefunden wurde
+				while (x = true || i < sBefehl.sOriginal.length())
+                {
+                if (sBefehl.sOriginal[i] == '<')
+                {
+					for (;sBefehl.sOriginal[i] != '>'; i++)
+                    {
+                        sTemp2 += sBefehl.sOriginal[i];
+                        i++;
+                    }
+					sTemp2 += ">";
+					if(sTemp2 != "<BGCOLOR b>" || sTemp2 != "<BGCOLOR r>" || sTemp2 != "<BGCOLOR g>" || sTemp2 != "<BGCOLOR y>" || sTemp2 != "<COLOR b>" || sTemp2 != "<COLOR r>" || sTemp2 != "<COLOR g>" || sTemp2 != "<COLOR y>" || sTemp2 != "<WAIT>" || sTemp2 != "<SPEED>") //Todo: Er erkennt die Befehle, kann aber nix mit denen anfangen --> Die Komvertertierung von Color und Co muss geändert werden dass die hier verarbeitet werden können
+                    {
+                        n= iLetters - k;
+						while (y!=n)
+                        {
+							sTemp4[y] = '58';
+                            y++;
+                        }
+                        sBefehl.sKonvertiert += sTemp4 + sTemp3;
+                        x = false;
+                    }
+                    else
+                    {
+                       sTemp3 += LauflichtCodetabelle.find(sTemp2)->second;
+                       sTemp3 += 3;//m_iColors[2];
+                    }
+                }
+                else
+                {
+                    sTemp2 = sBefehl.sOriginal[i];
+                    sTemp3 += m_iColors[2];
+                    sTemp3 += LauflichtCodetabelle.find(sTemp2)->second;
+                    sTemp2 = "";
+					i++;
+                    k++;
+                }
+                }
+            }
             else
             {
                 //Befehl in der Codetabelle nachschauen und konvertieren:
@@ -117,10 +165,13 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 sBefehl.sKonvertiert += 3;//m_iColors[2];
             }
         }//if(sBefehl.sOriginal[i] == '<')...
-        else if(sBefehl.sOriginal[i] == ' ')
-        {
-
-        }
+		else if (sBefehl.sOriginal[i] == '\\')
+		{
+			sTemp = '\\' + sBefehl.sOriginal[i+1];
+			sBefehl.sKonvertiert += m_iColors[2];
+			sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;
+			i++;
+		}
         else    //Wenn kein Befehl gefunden wurde, dann muss es normaler Text sein
         {
             //ToDo.: if('\\'...
@@ -296,7 +347,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["<COLOR g>"] = 2;   //Grün
     LauflichtCodetabelle["<COLOR y>"] = 3;   //Gelb
 
-    //Hintergrundfarben:
+    //Hintergrundfarben:Unicode UTF-8
     LauflichtCodetabelle["<BGCOLOR b>"] = 0;   //Schwarz
     LauflichtCodetabelle["<BGCOLOR r>"] = 4;   //Rot
     LauflichtCodetabelle["<BGCOLOR g>"] = 8;   //Grün
