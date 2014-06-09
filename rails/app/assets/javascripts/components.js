@@ -129,6 +129,7 @@ function TextComponent(text) {
 	if (text === undefined) {
 		text = "";
 	}
+	text = SequenceCodec.unescapeText(text);
 	var inputElem = null;
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
@@ -168,6 +169,9 @@ TextComponent.prototype.getAsText = function() {
 };
 TextComponent.prototype.getSignText = function() {
 	return SequenceCodec.escapeText(this.text);
+};
+TextComponent.prototype.insertText = function(position, text) {
+    this.text = this.text.substr(0, position) + text + this.text.substr(position);
 };
 
 

@@ -70,7 +70,7 @@ var SequenceCodec = {
         break;
       }
       
-      text = this.unescapeText(str.slice(lastSuccessfulIndex, openIndex));
+      text = str.slice(lastSuccessfulIndex, openIndex);
       commandWithArgs = str.slice(openIndex + 1, closeIndex);
       argSeparatorIndex = commandWithArgs.indexOf(' ');
       if (argSeparatorIndex === -1) {
@@ -90,7 +90,7 @@ var SequenceCodec = {
       components.push(commandComponent);
       lastSuccessfulIndex = closeIndex + 1;
     }
-    var lastText = this.unescapeText(str.substr(lastSuccessfulIndex));
+    var lastText = str.substr(lastSuccessfulIndex);
     if (lastText.length > 0) {
       console.log("- adding text: '" + lastText + "'");
       components.push(new TextComponent(lastText));
@@ -168,7 +168,7 @@ var SequenceControl = (function() {
 	      button.mousedown(function(e) {
           // Damit der Fokus auf dem Input-Element bleibt
           e.preventDefault();
-          
+               
           //specialCharacterButton.data('popover').hide();
           
           var activeElem = $(document.activeElement);
@@ -176,10 +176,17 @@ var SequenceControl = (function() {
           if (activeElem.prop('tagName').toLowerCase() !== 'input') {
             return;
           }
+          
+          // Component-Instanz suchen. parentsUntil gibt das Element, das den Match
+          // auslöst, nicht mit zurück, also muss man nochmal parent() machen
+          var component = activeElem.parentsUntil('.component').last().parent().data('component');
+          if (!component instanceof TextComponent) {
+            return;
+          }
+          
           // Sonderzeichen einfügen
           var cPos = activeElem.caret();
-          var oldVal = activeElem.val();
-          activeElem.val(oldVal.substr(0, cPos) + specialCharacter + oldVal.substr(cPos));
+          component.insertText(cPos, specialCharacter);
           activeElem.caret(cPos + specialCharacter.length);
         });
         button.text(specialCharacter);
