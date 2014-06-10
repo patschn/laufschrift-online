@@ -111,7 +111,7 @@ Component.prototype.createInsideHTMLElement = function() {
 Component.prototype.getAsText = function() {
     throw new Error("Pure virtual function");
 };
-// Normalerweise sollte das gleich sein, außer bei Spezialfällen wie Twitter
+// Normalerweise sollte das gleich getAsText() sein, außer bei Spezialfällen wie Twitter
 Component.prototype.getSignText = function() {
 	return this.getAsText();
 };
@@ -124,7 +124,7 @@ Component.prototype.getPopover = function() {
 
 
 function TextComponent(text) {
-	Component.call(this);
+	Component.call(this, false);
 
 	if (text === undefined) {
 		text = "";
@@ -134,7 +134,6 @@ function TextComponent(text) {
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
 		containerElem.addClass("component-text");
-//		containerElem.addClass("component-handle");
 		inputElem = $('<input type="text" />');
 		inputElem.val(text);
 		var that = this;
@@ -155,7 +154,8 @@ function TextComponent(text) {
 				if (inputElem) {
 					inputElem.val(newtext);
 				}
-			},
+    			$(this).trigger('change');
+		    },
 			enumerable : true
 		}
 	});
@@ -225,6 +225,7 @@ function CommandComponent(command, hasPopover) {
 	            that.getPopoverElement().addClass('popover-group-' + group);
 	        }	    
 	    }
+	    return true;
 	};
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
@@ -298,8 +299,6 @@ function ColorCommandComponent(command, color, hasPopover) {
 	this.createInsideHTMLElement = function(containerElem, elem) {
 		parentMethods.createInsideHTMLElement.apply(that, arguments);
 		elem.empty();
-//		containerElem.removeClass("component-handle");
-//		elem.addClass("component-handle");
 		updateClasses();
 	};
 
@@ -390,6 +389,15 @@ SliderCommandComponent.prototype.getAsText = function() {
 	return "<" + this.command + " " + this.value + ">";
 };
 
+function LinebreakComponent() {
+    CommandComponent.call(this, 'LINEBREAK', false);
+}
+LinebreakComponent.prototype = Object.create(CommandComponent.prototype);
+LinebreakComponent.prototype.constructor = LinebreakComponent;
+LinebreakComponent.prototype.getSignText = function() {
+    return "";
+}
+
 function GroupComponent(components) {
     Component.call(this);
     
@@ -405,7 +413,6 @@ function GroupComponent(components) {
     
     this.createInsideHTMLElement = function(containerElem, elem) {
         containerElem.addClass("component-group");
-//		containerElem.addClass("component-handle");
         $.each(components, function(i, component) {
             elem.append(component.getHTMLElement());
             if (component.activatePopover) {
@@ -502,6 +509,7 @@ function ToolInfo(group, componentInfo, options) {
 		options = {};
 	}
 
+    // Standardargumente
 	options = $.extend({}, {
 	    toolType: 'button'
 	}, options);
@@ -566,8 +574,6 @@ function ToolInfo(group, componentInfo, options) {
 		if (options.extraClass !== undefined) {
 			elem.addClass(options.extraClass);
 		}
-		// connectToSortable: '#', helper: 'clone' oder function()
-		//elem.draggable();
 		return elem;
 	};
 
@@ -583,6 +589,12 @@ function ToolInfo(group, componentInfo, options) {
 				return componentInfo;
 			},
 			enumerable : true
+		},
+		options: {
+		    get : function() {
+		        return options;
+		    },
+		    enumerable : true
 		}
 	});
 }
@@ -699,10 +711,16 @@ var ASC333Components = {
 		    }
 		}));
 		
+		var linebreakComponentInfo = new ComponentInfo('LINEBREAK', function() { return new LinebreakComponent(); });
+		ComponentMapper.registerComponentInfo(linebreakComponentInfo);
+        Toolbox.registerToolInfo(new ToolInfo('text', linebreakComponentInfo, {
+            toolText : 'Umbruch'
+        }));
+		
 		var clocks = ['CLOCK12', 'CLOCK24'];
 		$.each(clocks, function(i, clock) {
 			var clockInfo = ComponentMapper.registerComponentInfo(new ComponentInfo(clock));
-			Toolbox.registerToolInfo(new ToolInfo('clock', clockInfo, { extraClass: 'clock-'+clock, toolText: '' }));
+			Toolbox.registerToolInfo(new ToolInfo('clock', clockInfo));
 		});
 	}
 };

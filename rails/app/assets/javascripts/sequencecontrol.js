@@ -136,6 +136,17 @@ var SequenceControl = (function() {
     commitTextField.val(text);
   };
   
+  var updateLinebreaks = function() {
+    sequenceDiv.children('br').remove();
+    $.each(componentListFromHTML(), function(i, component) {
+      if (component.command) { console.log(component.command); }
+      if (component instanceof CommandComponent && component.command === 'LINEBREAK') {
+        console.log(component.getHTMLElement());
+        component.getHTMLElement().after($('<br/>'));
+      }
+    });
+  };
+  
   var setSequenceName = function(name) {
     sequenceNameDiv.text(name);
   };
@@ -205,8 +216,8 @@ var SequenceControl = (function() {
   // Lädt einen Sequenz-String
   var loadSequenceFromText = function(text) {
     // Alte Komponenten löschen
-    sequenceDiv.children("div.component").each(function(i, component) {
-        $(component).data('component').destroy();
+    $.each(componentListFromHTML(), function(i, component) {
+        component.destroy();
     });
     var components = SequenceCodec.decodeFromString(text);
     $.each(components, function() {
@@ -214,11 +225,13 @@ var SequenceControl = (function() {
       sequenceDiv.append(elem);
     });
     updateCommitTextField();
+    updateLinebreaks();
   };
 
   // Event-Handler
   var createNew = function() {
     loadSequenceFromText("");
+    setSequenceName('Unbenannte Sequenz');
     currentSequence = new Sequence();
   };
 
@@ -340,6 +353,7 @@ var SequenceControl = (function() {
         beforeStop: replaceDraggableWithNewComponent,
         stop: updateCommitTextField
     });
+    sequenceDiv.on('sortstop', updateLinebreaks);
     // Workaround-Hilfselement wieder töten
     workaroundHelper.remove();
   };
