@@ -131,6 +131,7 @@ function TextComponent(text) {
 	}
 	text = SequenceCodec.unescapeText(text);
 	var inputElem = null;
+	var disableOnCreate = false;
 
 	this.createInsideHTMLElement = function(containerElem, elem) {
 		containerElem.addClass("component-text");
@@ -142,11 +143,30 @@ function TextComponent(text) {
 			$(this).trigger('change');
 		}, this));
 		elem.append(inputElem);
+		if (disableOnCreate) {
+		    this.disable();
+		}
 	};
 	
 	this.caret = function() {
 	    // Weitergabe an die jQuery-Funktion
 	    return $.fn.caret.apply(inputElem, arguments);	
+	};
+	
+	this.disable = function() {
+	    if (inputElem) {
+	        inputElem.prop("disabled", true);
+	    } else {
+    	    disableOnCreate = true;
+    	}
+	};
+	
+	this.enable = function() {
+	    if (inputElem) {
+    	    inputElem.prop("disabled", false);
+    	} else {
+    	    disableOnCreate = false;
+    	}
 	};
 
 	Object.defineProperties(this, {
@@ -533,7 +553,7 @@ function ToolInfo(group, componentInfo, options) {
 		if (options.overrideFactory !== undefined) {
 		    factoryToUse = options.overrideFactory;
 		}
-		return factoryToUse.apply(componentInfo, extraArgs);
+		return factoryToUse.apply(this, extraArgs);
 	};
 
 	this.createToolHTMLElement = function() {
@@ -573,8 +593,10 @@ function ToolInfo(group, componentInfo, options) {
 		    });
 		    sliderContainer.append(sliderButton);
 		    elem.append(sliderContainer);
+        } else if (options.toolType === 'htmlElement') {
+            elem.append(options.toolHTMLElement);
         } else {
-		    elem.append(text);
+            elem.append(text);
 
 		    if (options.toolType === "button") {
         		elem.addClass("button-toolbox");
@@ -694,7 +716,7 @@ var ASC333Components = {
 		    sliderRange: [1, 9],
 		    sliderInitialValue: 5,
 		    sliderLabels: ['1s', '9s'],
-			overrideFactory : function() { return this.factory($('#wait_slider').val()); }
+			overrideFactory : function() { return this.componentInfo.factory($('#wait_slider').val()); }
 		}));
 
 		Toolbox.registerToolInfo(new ToolInfo('speed', ComponentMapper.registerComponentInfo(new ComponentInfo('SPEED', function(s) {
@@ -706,22 +728,26 @@ var ASC333Components = {
 			sliderRange: [1, 9],
 			sliderInitialValue: 5,
 			sliderLabels: ['schnell', 'langsam'],
-			overrideFactory : function() { return this.factory($('#speed_slider').val()); }
+			overrideFactory : function() { return this.componentInfo.factory($('#speed_slider').val()); }
 		}));
 
 		var groupComponentInfo = new ComponentInfo('GROUP', function(c) { return new GroupComponent(c); });
 		ComponentMapper.registerComponentInfo(groupComponentInfo);
+		var toolboxGroupTextComponent = textComponentInfo.factory();
+		toolboxGroupTextComponent.disable();
+        var toolboxGroupComponent = groupComponentInfo.factory([
+            colorInfo.fg.factory(),
+            colorInfo.bg.factory(),
+            ComponentMapper.getComponentInfoForCommand('LEFT').factory(),
+            toolboxGroupTextComponent,
+            waitInfo.factory()
+        ]);
 		Toolbox.registerToolInfo(new ToolInfo('standard', groupComponentInfo, {
 		   // toolText : 'Standardelement',
+		    toolType: 'htmlElement',
+		    toolHTMLElement: toolboxGroupComponent.getHTMLElement(),
 		    overrideFactory: function() {
-		        var components = [
-		            colorInfo.fg.factory(),
-		            colorInfo.bg.factory(),
-		            ComponentMapper.getComponentInfoForCommand('LEFT').factory(),
-		            textComponentInfo.factory(),
-		            waitInfo.factory()
-		        ];
-		        return groupComponentInfo.factory(components);
+		        return SequenceCodec.decodeFromString(SequenceCodec.encodeToString([toolboxGroupComponent], false))[0];
 		    }
 		}));
 		
