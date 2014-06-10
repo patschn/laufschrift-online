@@ -98,6 +98,8 @@ rails/app/assets/images/shiftmid.png -text
 rails/app/assets/images/shiftmid_hover.png -text
 rails/app/assets/images/snow.png -text
 rails/app/assets/images/snow_hover.png -text
+rails/app/assets/images/special-character.png -text svneol=unset#image/png
+rails/app/assets/images/special-character_hover.png -text svneol=unset#image/png
 rails/app/assets/images/speed.png -text
 rails/app/assets/images/speed_hover.png -text
 rails/app/assets/images/squeezemid.png -text

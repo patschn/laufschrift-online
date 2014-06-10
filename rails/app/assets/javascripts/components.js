@@ -143,6 +143,11 @@ function TextComponent(text) {
 		}, this));
 		elem.append(inputElem);
 	};
+	
+	this.caret = function() {
+	    // Weitergabe an die jQuery-Funktion
+	    return $.fn.caret.apply(inputElem, arguments);	
+	};
 
 	Object.defineProperties(this, {
 		text : {
@@ -172,6 +177,11 @@ TextComponent.prototype.getSignText = function() {
 };
 TextComponent.prototype.insertText = function(position, text) {
     this.text = this.text.substr(0, position) + text + this.text.substr(position);
+};
+TextComponent.prototype.insertTextAtCursor = function(text) {
+    var cPos = this.caret();
+    this.insertText(cPos, text);
+    this.caret(cPos + text.length);
 };
 
 
@@ -555,6 +565,9 @@ function ToolInfo(group, componentInfo, options) {
 		    sliderContainer.append($('<span class="tool-slider-upper-limit"/>').append(options.sliderLabels[1]));
 		    var sliderButton = $('<div class="button-toolbox"/>');
 		    sliderButton.append(options.sliderInitialValue);
+		    if (componentInfo.command) {
+    		    sliderButton.addClass("button-command-" + componentInfo.command);
+    		}
 		    sliderElem.on("change", function() {
 		       sliderButton.text($(this).val());
 		    });
@@ -607,7 +620,7 @@ var ASC333Components = {
 			return new TextComponent(t);
 		}));
 		Toolbox.registerToolInfo(new ToolInfo('text', textComponentInfo, {
-			toolText : 'Text'
+			//toolText : 'Text'
 		}));
 
 		var openAnimations = [
@@ -630,7 +643,8 @@ var ASC333Components = {
 		    [ 'CLOSEMID', "Mitteilung verschwindet von beiden Seiten einzeln zur Mitte hin" ],
 		    [ 'CLOSERIGHT', "Mitteilung verschwindet einzeln von links nach rechts" ],
 		    [ 'SQUEEZEMID', "Mitteilung bewegt sich von beiden Seiten zur Mitte und verschwindet dort" ],
-		    [ 'DSNOW', "Mitteilung verschwindet nach und nach von der Anzeige" ]
+		    [ 'DSNOW', "Mitteilung verschwindet nach und nach von der Anzeige" ],
+		    [ 'AUTOCENTER', "Text seit dem letzten Anfangsbefehl wird automatisch zentriert" ]
 		];
 		$.each(openAnimations, function(i, animation) {
 			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation[0], undefined, { exchangeableInGroup: 'open_animation' }));
@@ -698,7 +712,7 @@ var ASC333Components = {
 		var groupComponentInfo = new ComponentInfo('GROUP', function(c) { return new GroupComponent(c); });
 		ComponentMapper.registerComponentInfo(groupComponentInfo);
 		Toolbox.registerToolInfo(new ToolInfo('standard', groupComponentInfo, {
-		    toolText : 'Standardelement',
+		   // toolText : 'Standardelement',
 		    overrideFactory: function() {
 		        var components = [
 		            colorInfo.fg.factory(),
@@ -714,7 +728,8 @@ var ASC333Components = {
 		var linebreakComponentInfo = new ComponentInfo('LINEBREAK', function() { return new LinebreakComponent(); });
 		ComponentMapper.registerComponentInfo(linebreakComponentInfo);
         Toolbox.registerToolInfo(new ToolInfo('linebreak', linebreakComponentInfo, {
-            toolText : 'Umbruch'
+            //toolText : 'Umbruch'
+            tooltip: 'In der Sequenzliste zur besseren Übersicht einen Zeilenumbruch einfügen. Dies hat keine Auswirkung auf die Anzeige auf der Laufschrift!'
         }));
 		
 		var clocks = ['CLOCK12', 'CLOCK24'];

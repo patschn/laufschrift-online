@@ -155,6 +155,74 @@ var SequenceControl = (function() {
     updateCommitTextField();
   };
   
+  var specialCharacterPopover = null;
+  var specialCharacterPopoverComponent = null;
+  
+  var specialCharacterButtonClicked = function(e) {
+    // Damit der Fokus auf dem Input-Element bleibt
+    e.preventDefault();
+         
+    //specialCharacterButton.data('popover').hide();
+    
+    /*var activeElem = $(document.activeElement);
+    // Nur Input-Elemente
+    if (activeElem.prop('tagName').toLowerCase() !== 'input') {
+      return;
+      
+    // Component-Instanz suchen. parentsUntil gibt das Element, das den Match
+    // auslöst, nicht mit zurück, also muss man nochmal parent() machen
+    var component = activeElem.parentsUntil('.component').last().parent().data('component');
+
+    }*/
+    
+    var component = specialCharacterPopoverComponent;
+    if (component instanceof GroupComponent) {
+      // Text-Komponente innerhalb der Gruppe raussuchen
+      component = $.grep(component.components, function(c) {
+        return (c instanceof TextComponent);
+      })[0];
+    }
+    if (component === null || !(component instanceof TextComponent)) {
+      return;
+    }
+    
+    // Sonderzeichen einfügen
+    component.insertTextAtCursor(e.data);
+  };
+  
+  var addSpecialCharacterPopover = function(component) {
+    var specialCharacterButton = $('<button></button>');
+    specialCharacterButton.addClass('component-special-character-button');
+    component.getHTMLElement().append(specialCharacterButton);
+    // Nur ein Popover-Element für alle Buttons verwenden
+    if (specialCharacterPopover === null) {
+      specialCharacterPopover = $('<div></div>');
+      $.each(Config.specialCharacters, function(i, specialCharacter) {
+        var button = $('<div></div>');
+        button.addClass('button-toolbox');
+        button.mousedown(specialCharacter, specialCharacterButtonClicked);
+        button.text(specialCharacter);
+        specialCharacterPopover.append(button);
+      });
+    	specialCharacterPopover.addClass('popover');
+    	specialCharacterPopover.addClass('popover-special-characters');
+      $('body').append(specialCharacterPopover);
+    }
+    specialCharacterButton.popover({ my: 'center top', at: 'center bottom', popover: specialCharacterPopover, collision: 'flipfit flipfit' });
+    // Referenz setzen, damit beim Einfügen klar ist für welche Komponente
+    // das Ganze eigentlich ist
+    specialCharacterButton.on('popover-show', function() {
+      specialCharacterPopoverComponent = component;
+    });
+    // Referenz aufräumen
+    specialCharacterButton.on('popover-hide', function() {
+      specialCharacterPopoverComponent = null;
+    });
+    // Fokuswechsel verhindern, damit der Cursor im Textfeld an seiner
+    // Position bleibt
+    specialCharacterButton.mousedown(function(e) { e.preventDefault(); });
+  };
+  
   var decoratedComponentHTML = function(component) {
     var elem = component.getHTMLElement();
     $(component).on("change", updateCommitTextField);
@@ -165,49 +233,9 @@ var SequenceControl = (function() {
     deleteButton.addClass('component-delete-button');
     elem.append(deleteButton);
     deleteButton.click(function() { deleteComponent(elem); });
-    if (component instanceof TextComponent) {
-      var specialCharacterButton = $('<span>Spezial</span>');
-      specialCharacterButton.addClass('insert-special-character-button');
-      elem.append(specialCharacterButton);
-      var popoverElem = $('<div></div>');
-      var specialCharacters = [ 'Ω', 'Σ', '¤', 'æ', 'Æ', '£', '🍷', '♪', '🚗', '⛵', '🕓', '♥', '⌂', '◆', '▲', '▶', '▼', '◀', '☉', '⬆', '⬇', '⇦', '⇨', '⌀', '∅' ];
-	    $.each(specialCharacters, function(i, specialCharacter) {
-	      var button = $('<div></div>');
-	      button.addClass('button-toolbox');
-	      button.mousedown(function(e) {
-          // Damit der Fokus auf dem Input-Element bleibt
-          e.preventDefault();
-               
-          //specialCharacterButton.data('popover').hide();
-          
-          var activeElem = $(document.activeElement);
-          // Nur Input-Elemente
-          if (activeElem.prop('tagName').toLowerCase() !== 'input') {
-            return;
-          }
-          
-          // Component-Instanz suchen. parentsUntil gibt das Element, das den Match
-          // auslöst, nicht mit zurück, also muss man nochmal parent() machen
-          var component = activeElem.parentsUntil('.component').last().parent().data('component');
-          if (!component instanceof TextComponent) {
-            return;
-          }
-          
-          // Sonderzeichen einfügen
-          var cPos = activeElem.caret();
-          component.insertText(cPos, specialCharacter);
-          activeElem.caret(cPos + specialCharacter.length);
-        });
-        button.text(specialCharacter);
-        popoverElem.append(button);
-	    });
-    	popoverElem.addClass('popover');
-    	popoverElem.addClass('popover-special-characters');
-      $('body').append(popoverElem);
-	    specialCharacterButton.popover({ my: 'center top', at: 'center bottom', popover: popoverElem, collision: 'flipfit flipfit' });
-	    specialCharacterButton.mousedown(function(e) { e.preventDefault(); });
+    if (component instanceof TextComponent || component instanceof GroupComponent) {
+      addSpecialCharacterPopover(component);
     }
-
     return elem;
   };
   

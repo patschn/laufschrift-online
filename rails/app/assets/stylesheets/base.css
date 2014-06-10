@@ -278,12 +278,11 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     margin-top: 13px;
 }
 
-.component-delete-button, .component-move-handle {
+.component-delete-button, .component-move-handle, .component-special-character-button {
     position: absolute;
     top: -7px;
     display: none;
     border: 0;
-    color: transparent; /* Text ausblenden */
     width: 16px;
     height: 16px;
 }
@@ -297,7 +296,18 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     background-image: url(delete-hover.png);
 }
 
-.component:hover .component-delete-button, .component:hover .component-move-handle {
+.component-special-character-button {
+    bottom: 2px;
+    top: auto;
+    right: -7px;
+    background: url(special-character.png) no-repeat top left;
+}
+
+.component-special-character-button:hover {
+    background-image: url(special-character_hover.png);
+}
+
+.component:hover .component-delete-button, .component:hover .component-move-handle, .component:hover .component-special-character-button {
     display: block;
 }
 
@@ -460,12 +470,17 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 
 .tool-slider-lower-limit, .tool-slider-upper-limit {
-    display: inline-block;
+    display: block;
 }
 
 .tool-slider-upper-limit {
-    width: 100%;
+    width: 140px;
     text-align: right;
+}
+
+.tool-slider .button-toolbox {
+    margin-left: 150px;
+    margin-top: -30px;
 }
 
 .tool-slider input[type=range] {
@@ -484,6 +499,19 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }	
 .button-command-CLOCK24:hover{	
 	background-image: url(clock24_hover.png) ;
+}
+
+.button-command-WAIT {
+    background-image: url(timewait.png);
+}
+.button-command-WAIT:hover {
+    background-image: url(timewait_hover.png);
+}
+.button-command-SPEED {
+    background-image: url(speed.png);
+}
+.button-command-SPEED:hover {
+    background-image: url(speed_hover.png);
 }
 
 .tool-command-COLOR, .tool-command-NORMAL, .tool-command-BIG, .component-command-COLOR .button-component, .component-command-BIG .button-component, .component-command-NORMAL .button-component, .popover-command-COLOR .button-toolbox {
