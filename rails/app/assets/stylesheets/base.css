@@ -313,6 +313,13 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	cursor: move;
 	position: relative; /* damit man die tooltips auf position: absolute stellen kann */
 }
+
+.tool-group-text, .tool-group-charwidth, .tool-group-bgcolor, .tool-group-fgcolor, .tool-group-pause, .tool-group-speed, .tool-group-clock, .tool-group-linebreak {
+    display: inline-block;
+    vertical-align: top;
+    width: 204px;
+}
+
 .button-toolbox, .button-component {
 	border-radius: 9px;
 	display:inline-block;
@@ -332,8 +339,8 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     background-image: linear-gradient(#2e2e2e 5%, #a6a6a6 100% );
 }
 .button-toolbox {
-	margin-left: 12px;
-	margin-bottom: 12px;    
+	margin-left: 6px;
+	margin-bottom: 6px;    
 }
 .button-component {
     vertical-align: top;
@@ -444,19 +451,28 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     margin-left: 20px;
 }
 
+.tool-slider {
+    line-height: 0;
+}
+
 .tool-slider > * {
     vertical-align: middle;
 }
 
 .tool-slider-lower-limit, .tool-slider-upper-limit {
-    padding: 0 10px;
-    min-width: 50px;
     display: inline-block;
 }
 
-.tool-slider-lower-limit {
+.tool-slider-upper-limit {
+    width: 100%;
     text-align: right;
 }
+
+.tool-slider input[type=range] {
+    display: block;
+    width: 140px;
+}
+
 .button-command-CLOCK12{
 	background-image: url(clock12.png);
 }

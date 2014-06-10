@@ -139,9 +139,7 @@ var SequenceControl = (function() {
   var updateLinebreaks = function() {
     sequenceDiv.children('br').remove();
     $.each(componentListFromHTML(), function(i, component) {
-      if (component.command) { console.log(component.command); }
-      if (component instanceof CommandComponent && component.command === 'LINEBREAK') {
-        console.log(component.getHTMLElement());
+      if (component instanceof LinebreakComponent) {
         component.getHTMLElement().after($('<br/>'));
       }
     });

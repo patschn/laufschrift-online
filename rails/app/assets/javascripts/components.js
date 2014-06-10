@@ -550,8 +550,8 @@ function ToolInfo(group, componentInfo, options) {
 		    sliderElem.attr("value", options.sliderInitialValue);
 		    sliderElem.attr("id", options.sliderID);
 		    var sliderContainer = $('<div class="tool-slider"/>');
-		    sliderContainer.append($('<span class="tool-slider-lower-limit"/>').append(options.sliderLabels[0]));
 		    sliderContainer.append(sliderElem);
+		    sliderContainer.append($('<span class="tool-slider-lower-limit"/>').append(options.sliderLabels[0]));
 		    sliderContainer.append($('<span class="tool-slider-upper-limit"/>').append(options.sliderLabels[1]));
 		    var sliderButton = $('<div class="button-toolbox"/>');
 		    sliderButton.append(options.sliderInitialValue);
@@ -656,7 +656,7 @@ var ASC333Components = {
 		};
 		$.each(['fg', 'bg'], function(i, type) {
 			$.each(colors[type], function(j, color) {
-				Toolbox.registerToolInfo(new ToolInfo('color', colorInfo[type], {
+				Toolbox.registerToolInfo(new ToolInfo(type + 'color', colorInfo[type], {
 					extraClass : 'button-color-' + type + '-' + color,
 					factoryArguments : [color],
 					toolText : ''
@@ -697,7 +697,7 @@ var ASC333Components = {
 
 		var groupComponentInfo = new ComponentInfo('GROUP', function(c) { return new GroupComponent(c); });
 		ComponentMapper.registerComponentInfo(groupComponentInfo);
-		Toolbox.registerToolInfo(new ToolInfo('text', groupComponentInfo, {
+		Toolbox.registerToolInfo(new ToolInfo('standard', groupComponentInfo, {
 		    toolText : 'Standardelement',
 		    overrideFactory: function() {
 		        var components = [
@@ -713,7 +713,7 @@ var ASC333Components = {
 		
 		var linebreakComponentInfo = new ComponentInfo('LINEBREAK', function() { return new LinebreakComponent(); });
 		ComponentMapper.registerComponentInfo(linebreakComponentInfo);
-        Toolbox.registerToolInfo(new ToolInfo('text', linebreakComponentInfo, {
+        Toolbox.registerToolInfo(new ToolInfo('linebreak', linebreakComponentInfo, {
             toolText : 'Umbruch'
         }));
 		
