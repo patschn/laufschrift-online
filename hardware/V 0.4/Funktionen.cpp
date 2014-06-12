@@ -7,6 +7,7 @@
 #include "Funktionen.h" //Funktionsprototypen
 #include "rs232.h"      //Bibliothek von http://www.teuniz.net/RS-232/
 #include <iostream>
+#include <ctime>
 
 SWP::CLauflicht::CLauflicht()
 {
@@ -56,9 +57,12 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 {
     //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
-    sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
-    sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
-    sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
+	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
+	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
+	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
+	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
+	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
+	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
 
     //Sequenzstart signalisieren
     sBefehl.sKonvertiert += LauflichtCodetabelle.find("<START>")->second;
@@ -95,14 +99,14 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             if(sTemp == "<BGCOLOR b>" || sTemp == "<BGCOLOR r>" || sTemp == "<BGCOLOR g>" || sTemp == "<BGCOLOR y>")
             {
                 //Farbe in Tabelle nachschauen und Variablen aktualisieren
-                m_iColors[1] = LauflichtCodetabelle.find(sTemp)->second;
-                m_iColors[2] = m_iColors[0] + m_iColors[1];
+                m_iColors[COLOR_BG] = LauflichtCodetabelle.find(sTemp)->second;
+                m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
             }
             else if(sTemp == "<COLOR b>" || sTemp == "<COLOR r>" || sTemp == "<COLOR g>" || sTemp == "<COLOR y>")
             {
                 //Farbe in Tabelle nachschauen und Variablen aktualisieren
-                m_iColors[0] = LauflichtCodetabelle.find(sTemp)->second;
-                m_iColors[2] = m_iColors[0] + m_iColors[1];
+                m_iColors[COLOR_FG] = LauflichtCodetabelle.find(sTemp)->second;
+                m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
             }
             else if(sTemp == "<CLOCK24>" || sTemp == "<CLOCK12>")
             {
@@ -167,7 +171,7 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     }//for(unsigned int i = 0;i < sBefehl.sOriginal.length();i++)...
 
     //Flags prüfen
-    if(m_bFlagLeft == true)
+    if(m_bFlagLeft == true)	//Left kommt in der Sequenz vor
     {
         for(;m_iLetters <= 14; m_iLetters++)
         {
@@ -179,8 +183,6 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     //Endsequenz
     sBefehl.sKonvertiert += LauflichtCodetabelle.find("<END>")->second;
     sBefehl.sKonvertiert += 177;
-
-
 
     m_debugfile << "Endstring: " << sBefehl.sKonvertiert << std::endl;
 }
@@ -232,6 +234,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["<RANDOM>"] = 163;     //Zufällige Auswahl des Effektes
     LauflichtCodetabelle["<SNOW>"] = 144;       //Schneeeffekt
     LauflichtCodetabelle["<DSNOW>"] = 145;
+    LauflichtCodetabelle["<SHIFTMID>"] = 136;	//Text öffnet sich in der Mitte
 
     //Endbefehle
     LauflichtCodetabelle["<CLOSEMID>"] = 133;   //Text "von außen öffnen"
@@ -240,6 +243,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     //Clock (Dez.: 143, Arg.) unterscheidet sich im zweiten Argument:
     LauflichtCodetabelle["<CLOCK24>"] = 7;
     LauflichtCodetabelle["<CLOCK12>"] = 3;
+    LauflichtCodetabelle["<SQUEEZEMID>"] = 137;
 
     /*Squeezemid*/
 
@@ -345,6 +349,28 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["<BGCOLOR r>"] = 4;   //Rot
     LauflichtCodetabelle["<BGCOLOR g>"] = 8;   //Grün
     LauflichtCodetabelle["<BGCOLOR y>"] = 12;  //Gelb
+}
+
+std::string SWP::CLauflicht::GetClock(std::string sClock)
+{
+    time_t tTime = time(0);
+    struct tm now;
+    now = *localtime(&tTime);  //Aktuelle Zeit einlesen
+    char buf[20];
+    memset(buf,0,sizeof(buf));
+
+    if(sClock == "<CLOCK24>")
+    {
+        strftime(buf,sizeof(buf),"%d%m%Y%H%M%S",&now);  //Uhrzeit im passenden Format kopieren
+        std::string sLocaltime(buf);
+        return sLocaltime;
+    }
+    else
+    {
+        strftime(buf,sizeof(buf),"anjdf",&now);  //Uhrzeit im passenden Format kopieren
+        std::string sLocaltime(buf);
+        return sLocaltime;
+    }
 }
 
 std::map<std::string,int> SWP::CLauflicht::LauflichtCodetabelle;

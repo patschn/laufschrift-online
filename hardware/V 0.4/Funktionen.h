@@ -12,6 +12,10 @@
 #ifndef _FUNKTIONEN_HPP
 #define _FUNKTIONEN_HPP
 
+#define COLOR_FG 0
+#define COLOR_BG 1
+#define COLOR_FB 2
+
 namespace SWP
 {
     //stSequenz: Enthält sowohl die Original, als auch die konvertierte Sequenz
@@ -67,6 +71,11 @@ namespace SWP
             void InitialisiereTabelle();
 
             /**
+                GetClock(std::string sClock):
+            */
+            std::string GetClock(std::string sClock);
+
+            /**
                 LauflichtCodetabelle:
                 Beinhält sämtliche Codes als Dezimalzahl, die dann zum Lauflicht gesendet werden können
             */
@@ -80,9 +89,9 @@ namespace SWP
             int m_iComPort;
 
             /**
-                m_iColors[0]: Vordergrundfarbe
-                m_iColors[1]: Hintergrundfarbe
-                m_iColors[2]: Berechnete Farbenkombination (Addition aus Vorder-/Hintergrundfarbe)
+                m_iColors[COLOR_FG]: Vordergrundfarbe
+                m_iColors[COLOR_BG]: Hintergrundfarbe
+                m_iColors[COLOR_FB]: Berechnete Farbenkombination (Addition aus Vorder-/Hintergrundfarbe)
             */
             int m_iColors[3];
 
