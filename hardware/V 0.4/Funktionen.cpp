@@ -1,4 +1,4 @@
-﻿/*
+/*
     Softwareprojekt - Lauflicht Online
 
     Funktionen.cpp - Implementiert die Funktionen zur Ansteuerung der Headerdatei Funktionen.h
@@ -18,7 +18,8 @@ SWP::CLauflicht::CLauflicht()
     m_iColors[0] = 3;
     m_iColors[1] = 0;
     m_iColors[2] = m_iColors[0] + m_iColors[1];
-    iLetters = 14;
+    m_iLetters = 0;
+    m_bFlagLeft = false;
 }
 
 bool SWP::CLauflicht::OeffneRS232()
@@ -26,14 +27,13 @@ bool SWP::CLauflicht::OeffneRS232()
     //Port öffnen, Baudrate: 2400 - ROOT RECHTE BENÖTIGT!
     if(RS232_OpenComport(m_iComPort,2400) == 1)   //Rückgabe von 1 signalisiert Fehler
     {
-        std::cerr << "Fehler beim Öffnen des Com-Ports....Rechte?" << std::endl;
+        std::cerr << "Fehler beim Öffnen des Com-Ports!" << std::endl;
 
         return false;
     }
     else
     {
         m_debugfile << "Verbindung erfolgreich aufgebaut!" << std::endl;
-        m_debugfile << "Farbe: " << m_iColors[2] << std::endl;
     }
 
     return true;    //Port erfolgreich geöffnet
@@ -56,14 +56,16 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 {
     //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
-    sBefehl.sKonvertiert += 170;//LauflichtCodetabelle.find("<INIT>")->second;
+    sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
+    sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
+    sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
 
     //Sequenzstart signalisieren
-    sBefehl.sKonvertiert += 187;//LauflichtCodetabelle.find("<START>")->second;
+    sBefehl.sKonvertiert += LauflichtCodetabelle.find("<START>")->second;
 
     //Programmwahl im Lauflicht (für die Website wird immer Programm A benutzt
-    sBefehl.sKonvertiert += 175;//LauflichtCodetabelle.find("<PROGRAM->")->second;
-    sBefehl.sKonvertiert += 55;//LauflichtCodetabelle.find("A")->second;
+    sBefehl.sKonvertiert += LauflichtCodetabelle.find("<PROGRAM->")->second;
+    sBefehl.sKonvertiert += LauflichtCodetabelle.find("A")->second;
 
     //Temporäre Variable zur Verarbeitung anlegen
     std::string sTemp = "";
@@ -80,6 +82,14 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 
             sTemp += '>';   //Da bei '>' die Schleife abgebrochen wird, muss das Zeichen für das Ende des Befehls
                             //hinzugefügt werden
+
+            //AUTOCENTER::
+            //if(sTemp == "<AUTOCENTER>")...
+
+            if(sTemp == "<LEFT>")   //Da Left einfach den String aneinanderkettet, muss der Befehl separat behandelt werden
+            {
+                m_bFlagLeft = true;
+            }
 
             //Prüfen, ob Farbe vorliegt
             if(sTemp == "<BGCOLOR b>" || sTemp == "<BGCOLOR r>" || sTemp == "<BGCOLOR g>" || sTemp == "<BGCOLOR y>")
@@ -101,62 +111,19 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             }
             else if(sTemp.find("WAIT") != std::string::npos)
             {
-                sBefehl.sKonvertiert += LauflichtCodetabelle.find("<WAIT>")->second;
-                char c = sTemp[sTemp.find(' ') + 1];
-                sBefehl.sKonvertiert += LauflichtCodetabelle.find(&c)->second;
+
+                char c = sTemp[sTemp.find(' ') + 1];    //Sekundenanzahl speichern
+                if(c != '0')  //Falls Sekunden != 0, dann WAIT ignorieren
+                {
+                    sBefehl.sKonvertiert += LauflichtCodetabelle.find("<WAIT>")->second;
+                    sBefehl.sKonvertiert += c;//LauflichtCodetabelle.find(&c)->second;
+                }
             }
             else if(sTemp.find("SPEED") != std::string::npos)
             {
                 sBefehl.sKonvertiert += LauflichtCodetabelle.find("<SPEED>")->second;
                 char c = sTemp[sTemp.find(' ') + 1];
                 sBefehl.sKonvertiert += LauflichtCodetabelle.find(&c)->second;
-            }
-            else if(sTemp == "<LEFT>") //Da Left bei der Laufschrift ein nichtzuerwartendes Verhalten besitzt, muss dies Softwaretechnisch überarbeitet werden
-            {
-				std:int k =0; //Anzahl der anzuzeigenden Zeichen
-                std::string sTemp2 = ""; //Temporärer String zur Speicherung einzelner Zeichen zur Konvertierung
-                std::string sTemp3 = ""; //Temporärer String zur Speicherung der konvertierten Zeichenkette
-				std::string sTemp4 = ""; //Temporärer String zum Setzen der Leerzeichen
-				int y = 0; //Zählvariable
-				int n = 0; //Anzahl der Leerzeichen
-                bool x =true; //True, solange Noch kein Ende gefunden wurde
-				while (x = true || i < sBefehl.sOriginal.length())
-                {
-                if (sBefehl.sOriginal[i] == '<')
-                {
-					for (;sBefehl.sOriginal[i] != '>'; i++)
-                    {
-                        sTemp2 += sBefehl.sOriginal[i];
-                        i++;
-                    }
-					sTemp2 += ">";
-					if(sTemp2 != "<BGCOLOR b>" || sTemp2 != "<BGCOLOR r>" || sTemp2 != "<BGCOLOR g>" || sTemp2 != "<BGCOLOR y>" || sTemp2 != "<COLOR b>" || sTemp2 != "<COLOR r>" || sTemp2 != "<COLOR g>" || sTemp2 != "<COLOR y>" || sTemp2 != "<WAIT>" || sTemp2 != "<SPEED>") //Todo: Er erkennt die Befehle, kann aber nix mit denen anfangen --> Die Komvertertierung von Color und Co muss geändert werden dass die hier verarbeitet werden können
-                    {
-                        n= iLetters - k;
-						while (y!=n)
-                        {
-							sTemp4[y] = '58';
-                            y++;
-                        }
-                        sBefehl.sKonvertiert += sTemp4 + sTemp3;
-                        x = false;
-                    }
-                    else
-                    {
-                       sTemp3 += LauflichtCodetabelle.find(sTemp2)->second;
-                       sTemp3 += 3;//m_iColors[2];
-                    }
-                }
-                else
-                {
-                    sTemp2 = sBefehl.sOriginal[i];
-                    sTemp3 += m_iColors[2];
-                    sTemp3 += LauflichtCodetabelle.find(sTemp2)->second;
-                    sTemp2 = "";
-					i++;
-                    k++;
-                }
-                }
             }
             else
             {
@@ -165,34 +132,61 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 sBefehl.sKonvertiert += 3;//m_iColors[2];
             }
         }//if(sBefehl.sOriginal[i] == '<')...
-		else if (sBefehl.sOriginal[i] == '\\')
-		{
-			sTemp = '\\' + sBefehl.sOriginal[i+1];
-			sBefehl.sKonvertiert += m_iColors[2];
-			sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;
-			i++;
-		}
         else    //Wenn kein Befehl gefunden wurde, dann muss es normaler Text sein
         {
-            //ToDo.: if('\\'...
-            //Bei Zeichen kommt erst die Farbe, anschließend das Zeichen
             sTemp = sBefehl.sOriginal[i];
-            sBefehl.sKonvertiert += m_iColors[2];                               //Farbe
-            sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;   //Zeichen
-        }
+            m_debugfile << "Aktuelles Zeichen normal: " << sTemp << std::endl;
+
+            //Bei Zeichen kommt erst die Farbe, anschließend das Zeichen
+            if(sTemp == "\\")   //Escapezeichen
+            {
+                //i++;    //Wegen Escapezeichen muss weitergeschaltet werden
+                sTemp = sBefehl.sOriginal[i]; //Nächstes Zeichen abholen
+
+                if(sTemp == "\\") //Dieses Zeichen gibt es nur als Grafik
+                {
+                    sBefehl.sKonvertiert += LauflichtCodetabelle.find("<GRAPH>")->second;
+                    sBefehl.sKonvertiert += 4;
+
+                    i++;
+                }
+            }
+            else
+            {
+                //Wenn es kein \ ist, dann ist es ein normales Zeichen
+                sBefehl.sKonvertiert += m_iColors[2];                               //Farbe
+                sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;   //Zeichen
+
+                m_debugfile << "Aktuelles Zeichen konvertiert: " << LauflichtCodetabelle.find(sTemp)->second;   //Zeichen << std::endl;
+            }
+            m_iLetters++;
+        }//else normaler Text
+
         sTemp = ""; //Temporären String leeren
 
     }//for(unsigned int i = 0;i < sBefehl.sOriginal.length();i++)...
+
+    //Flags prüfen
+    if(m_bFlagLeft == true)
+    {
+        for(;m_iLetters <= 14; m_iLetters++)
+        {
+            sBefehl.sKonvertiert += m_iColors[2];
+            sBefehl.sKonvertiert += LauflichtCodetabelle.find(" ")->second;
+        }
+    }
+
     //Endsequenz
     sBefehl.sKonvertiert += LauflichtCodetabelle.find("<END>")->second;
     sBefehl.sKonvertiert += 177;
+
+
 
     m_debugfile << "Endstring: " << sBefehl.sKonvertiert << std::endl;
 }
 
 void SWP::CLauflicht::SendeString(stSequenz sBefehl)
 {
-
 	for(unsigned int i = 0; i < sBefehl.sKonvertiert.length();i++)
 	{
 		RS232_SendByte(m_iComPort, sBefehl.sKonvertiert[i]);
@@ -222,6 +216,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["<SPEED>"] = 160;      //Geschwindigkeit der Anzeige muss von einer Zahl von 1-9 gefolgt werden,
                                                 //wobei 1 = schnell und 9 = langsam
     LauflichtCodetabelle["<END>"] = 191;           //Programm-Ende
+    LauflichtCodetabelle["<GRAPH>"] = 16;
 
     //Einführungsbefehle
     LauflichtCodetabelle["<LEFT>"] = 128;       //Text scrollt nach links
@@ -246,12 +241,8 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["<CLOCK24>"] = 7;
     LauflichtCodetabelle["<CLOCK12>"] = 3;
 
-    /*ToDo:
-        Clock12
-        Clock24
-        Squeezemid
-        dsnow
-    */
+    /*Squeezemid*/
+
     LauflichtCodetabelle["0"] = 48;
     LauflichtCodetabelle["1"] = 49;
     LauflichtCodetabelle["2"] = 50;
@@ -302,7 +293,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["ø"] = 16;
     LauflichtCodetabelle["ȧ"] = 19;
     LauflichtCodetabelle["§"] = 20;
-    LauflichtCodetabelle["卍"] = 22; //Hakenkreuz
+    LauflichtCodetabelle["æ"] = 22;
     LauflichtCodetabelle["Σ"] = 23;
 
     LauflichtCodetabelle[":"] = 32;
@@ -340,6 +331,8 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["ñ"] = 125;    //ACHTUNG: Ähnlich 124
     LauflichtCodetabelle["Ä"] = 126;
     LauflichtCodetabelle["ä"] = 127;
+    LauflichtCodetabelle["<"] = 95;
+    LauflichtCodetabelle[">"] = 62;
 
     //Vordergrundfarben:
     LauflichtCodetabelle["<COLOR b>"] = 0;   //Schwarz
@@ -347,7 +340,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["<COLOR g>"] = 2;   //Grün
     LauflichtCodetabelle["<COLOR y>"] = 3;   //Gelb
 
-    //Hintergrundfarben:Unicode UTF-8
+    //Hintergrundfarben:
     LauflichtCodetabelle["<BGCOLOR b>"] = 0;   //Schwarz
     LauflichtCodetabelle["<BGCOLOR r>"] = 4;   //Rot
     LauflichtCodetabelle["<BGCOLOR g>"] = 8;   //Grün

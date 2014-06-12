@@ -86,17 +86,15 @@ namespace SWP
             */
             int m_iColors[3];
 
+            int m_iLetters;
+
+            bool m_bFlagLeft;
+
             /*
                 Dient zu Debuggingzwecken:
                 Damit kann nachgeprüft werden, was wie (und ob etwas überhaupt) konvertiert wurde.
             */
             std::ofstream m_debugfile;
-            int iLetters;
-
-            /**
-            Die Anzahl an Zeichen, die die Laufschrift überhauüt anzeigen kann
-            */
-
     };
 }
 
