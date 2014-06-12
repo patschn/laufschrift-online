@@ -25,11 +25,6 @@ hardware/V[!!-~]0.3/rs232.c -text
 hardware/V[!!-~]0.3/rs232.h -text
 hardware/V[!!-~]0.4/Funktionen.cpp -text
 hardware/V[!!-~]0.4/Funktionen.h -text
-hardware/V[!!-~]0.4/LauflichtTestprogramm.cbp -text
-hardware/V[!!-~]0.4/LauflichtTestprogramm.depend -text
-hardware/V[!!-~]0.4/LauflichtTestprogramm.layout -text
-hardware/V[!!-~]0.4/bin/Debug/laufschrift_steuerung -text
-hardware/V[!!-~]0.4/debug.txt -text
 hardware/V[!!-~]0.4/main.cpp -text
 hardware/V[!!-~]0.4/rs232.c -text
 hardware/V[!!-~]0.4/rs232.h -text
