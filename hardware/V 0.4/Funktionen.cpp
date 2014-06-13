@@ -16,16 +16,16 @@ SWP::CLauflicht::CLauflicht()
 
     //Com-Port festlegen:
     m_iComPort = 22;    //22 = ttyAMA0
-    m_iColors[0] = 3;
-    m_iColors[1] = 0;
-    m_iColors[2] = m_iColors[0] + m_iColors[1];
+    m_iColors[COLOR_FG] = 3;
+    m_iColors[COLOR_BG] = 0;
+    m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
     m_iLetters = 0;
     m_bFlagLeft = false;
 }
 
 bool SWP::CLauflicht::OeffneRS232()
 {
-    //Port öffnen, Baudrate: 2400 - ROOT RECHTE BENÖTIGT!
+    //Port öffnen, Baudrate: 2400 - tty-Rechte benötigt!
     if(RS232_OpenComport(m_iComPort,2400) == 1)   //Rückgabe von 1 signalisiert Fehler
     {
         std::cerr << "Fehler beim Öffnen des Com-Ports!" << std::endl;
@@ -46,6 +46,8 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
     m_debugfile << "Originalstring:" << std::endl;
 
     //String speichern:
+    std::flush(std::cout);
+
     for(std::string line; std::getline(std::cin, line);)
     {
         m_debugfile << line;        //In Debugdatei schreiben
@@ -57,10 +59,6 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 {
     //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
-	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
-	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
-	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
-	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
 	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
 	sBefehl.sKonvertiert += LauflichtCodetabelle.find("<INIT>")->second;
 
@@ -159,10 +157,11 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             else
             {
                 //Wenn es kein \ ist, dann ist es ein normales Zeichen
+            	if(sBefehl.sOriginal[i] == 'ü'){m_debugfile << "Ü entdeckt!" << std::endl;}
                 sBefehl.sKonvertiert += m_iColors[2];                               //Farbe
                 sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;   //Zeichen
 
-                m_debugfile << "Aktuelles Zeichen konvertiert: " << LauflichtCodetabelle.find(sTemp)->second;   //Zeichen << std::endl;
+                m_debugfile << "Aktuelles Zeichen konvertiert: " << LauflichtCodetabelle.find(sTemp)->second << std::endl;
             }
             m_iLetters++;
         }//else normaler Text
