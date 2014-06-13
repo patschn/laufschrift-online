@@ -74,7 +74,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 /*    font-weight:bold;*/
     color:white;
     height: 350px;
-    background:url(linksunten.png);
+    background:url(seqlist.png);
     width: 250px;
     float: left;
     padding-top: 40px;
@@ -207,8 +207,8 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 
 
 
-.button {
-	background-image: linear-gradient(#474747 5%, #1f181f 100% );
+.button {		/*Sequenzbutton*/
+	background-image: url(seqbut.png);
 	display: block;
     color:#ffffff;
 	font-size:17px;
@@ -221,7 +221,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	text-shadow:1px 1px 0px #000000;
 }
 .button:hover {
-	background-image: linear-gradient(#1f181f 5%, #474747 100% );
+	background-image:  url(seqbut_hover.png);
 	}
 	
 .button:active {
@@ -341,12 +341,12 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	text-decoration:none;
 	text-align:center;
 	text-shadow:1px 1px 1px #000000;
-	background-image: linear-gradient(#a6a6a6 5%, #2e2e2e 100% );
+	background-image: url(but.png);
 	/*box-shadow: inset 0px 1px 0px 0px #787168;*/
 	/*border: 1px solid black;*/
 }
 .button-toolbox:hover, .button-component:hover {
-    background-image: linear-gradient(#2e2e2e 5%, #a6a6a6 100% );
+    background-image: url(but_hover.png);
 }
 .button-toolbox {
 	margin-left: 6px;
@@ -376,30 +376,28 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 
 .button-color-bg-r {
-	background-image: linear-gradient(#ff0026 5%, #662022 100% );
+	background-image: url(redbg.png);
 }
 .button-color-bg-r:hover {
-	background-image: linear-gradient(#ff7388 5%, #ba3a3e 100% );
+	background-image: url(redbg_hover.png);
 }
 .button-color-bg-b {
-	background-image: linear-gradient(#575757 5%, #000000 100% );
-	/*border:1px solid #575757;*/
-/*	text-shadow:1px 1px 0px #575757;*/
+	background-image: url(blackbg.png);
 }
 .button-color-bg-b:hover {
-	background-image: linear-gradient(#8c8c8c 5%, #222222 100% );
+	background-image: url(blackbg_hover.png);
 }
 .button-color-bg-y {
-	background: linear-gradient(#fff700 5%, #c4c418 100% );
+	background: url(yellowbg.png);
 }
 .button-color-bg-y:hover {
-	background-image: linear-gradient(#fffb83 5%, #e6e642 100% );
+	background-image:url(yellowbg_hover.png);
 }
 .button-color-bg-g {
-	background-image: linear-gradient(#26ff00 5%, #217a2a 100% );
+	background-image: url(greenbg.png);
 }
 .button-color-bg-g:hover {
-	background-image: linear-gradient(#beffb3 5%, #69d374 100% );
+	background-image: url(greenbg_hover.png);
 }
 	
 .button-seq {										/*Button fuer Sequenzliste*/
@@ -685,8 +683,19 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 .button-command-DSNOW:hover{
 	background-image: url(dsnow_hover.png) ;
+}
+.button-command-AUTOCENTER{ 
+ 	background-image: url(autocenter.png) ;	
+}
+.button-command-AUTOCENTER:hover{
+	background-image: url(autocenter_hover.png) ;
 }	
-
+.button-command-LINEBREAK{ 
+ 	background-image: url(linebreak.png) ;	
+}
+.button-command-LINEBREAK:hover{
+	background-image: url(linebreak_hover.png) ;
+}
 .tooltip {
    	color: white;
     padding: 5px;

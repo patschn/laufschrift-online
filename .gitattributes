@@ -38,9 +38,13 @@ rails/app/assets/images/Symbola.ttf -text svneol=unset#application/x-font-ttf
 rails/app/assets/images/autocenter.png -text
 rails/app/assets/images/autocenter_hover.png -text
 rails/app/assets/images/background.jpg -text
+rails/app/assets/images/blackbg.png -text
+rails/app/assets/images/blackbg_hover.png -text
 rails/app/assets/images/break.png -text
 rails/app/assets/images/break_hover.png -text
 rails/app/assets/images/bug.png -text
+rails/app/assets/images/but.png -text
+rails/app/assets/images/but_hover.png -text
 rails/app/assets/images/clock12.png -text
 rails/app/assets/images/clock12_hover.png -text
 rails/app/assets/images/clock24.png -text
@@ -64,10 +68,14 @@ rails/app/assets/images/dsnow.png -text
 rails/app/assets/images/dsnow_hover.png -text
 rails/app/assets/images/flash.png -text
 rails/app/assets/images/flash_hover.png -text
+rails/app/assets/images/greenbg.png -text
+rails/app/assets/images/greenbg_hover.png -text
 rails/app/assets/images/jump.png -text
 rails/app/assets/images/jump_hover.png -text
 rails/app/assets/images/left.png -text
 rails/app/assets/images/left_hover.png -text
+rails/app/assets/images/linebreak.png -text
+rails/app/assets/images/linebreak_hover.png -text
 rails/app/assets/images/linksoben.png -text svneol=unset#image/png
 rails/app/assets/images/linksunten.png -text svneol=unset#image/png
 rails/app/assets/images/mitte.png -text svneol=unset#image/png
@@ -87,8 +95,13 @@ rails/app/assets/images/rainbow_hover.png -text
 rails/app/assets/images/random.png -text
 rails/app/assets/images/random_hover.png -text
 rails/app/assets/images/rechts.png -text svneol=unset#image/png
+rails/app/assets/images/redbg.png -text
+rails/app/assets/images/redbg_hover.png -text
 rails/app/assets/images/right.png -text
 rails/app/assets/images/right_hover.png -text
+rails/app/assets/images/seqbut.png -text
+rails/app/assets/images/seqbut_hover.png -text
+rails/app/assets/images/seqlist.png -text
 rails/app/assets/images/shiftmid.png -text
 rails/app/assets/images/shiftmid_hover.png -text
 rails/app/assets/images/snow.png -text
@@ -106,6 +119,8 @@ rails/app/assets/images/topmitte.png -text
 rails/app/assets/images/toprechts.png -text
 rails/app/assets/images/up.png -text
 rails/app/assets/images/up_hover.png -text
+rails/app/assets/images/yellowbg.png -text
+rails/app/assets/images/yellowbg_hover.png -text
 rails/app/assets/javascripts/application.js -text
 rails/app/assets/javascripts/components.js -text
 rails/app/assets/javascripts/config.js.erb -text
