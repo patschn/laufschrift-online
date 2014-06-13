@@ -112,6 +112,7 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             {
                 sBefehl.sKonvertiert += 143;    //Clockbefehl
                 sBefehl.sKonvertiert += LauflichtCodetabelle.find(sTemp)->second;   //12h oder 24h Uhr
+                sBefehl.sKonvertiert += GetClock(sTemp);
             }
             else if(sTemp.find("WAIT") != std::string::npos)
             {
@@ -245,8 +246,6 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle["<CLOCK12>"] = 3;
     LauflichtCodetabelle["<SQUEEZEMID>"] = 137;
 
-    /*Squeezemid*/
-
     LauflichtCodetabelle["0"] = 48;
     LauflichtCodetabelle["1"] = 49;
     LauflichtCodetabelle["2"] = 50;
@@ -362,15 +361,14 @@ std::string SWP::CLauflicht::GetClock(std::string sClock)
     if(sClock == "<CLOCK24>")
     {
         strftime(buf,sizeof(buf),"%d%m%Y%H%M%S",&now);  //Uhrzeit im passenden Format kopieren
-        std::string sLocaltime(buf);
-        return sLocaltime;
     }
     else
     {
-        strftime(buf,sizeof(buf),"anjdf",&now);  //Uhrzeit im passenden Format kopieren
-        std::string sLocaltime(buf);
-        return sLocaltime;
+        strftime(buf,sizeof(buf),"%d%m%Y%I%M%S",&now);  //Uhrzeit im passenden Format kopieren
     }
+    std::string sLocaltime(buf);
+
+    return sLocaltime;
 }
 
 std::map<std::string,int> SWP::CLauflicht::LauflichtCodetabelle;
