@@ -90,6 +90,7 @@ rails/app/assets/images/openmid.png -text
 rails/app/assets/images/openmid_hover.png -text
 rails/app/assets/images/openright.png -text
 rails/app/assets/images/openright_hover.png -text
+rails/app/assets/images/playbutton.png -text
 rails/app/assets/images/rainbow.png -text
 rails/app/assets/images/rainbow_hover.png -text
 rails/app/assets/images/random.png -text
@@ -99,6 +100,7 @@ rails/app/assets/images/redbg.png -text
 rails/app/assets/images/redbg_hover.png -text
 rails/app/assets/images/right.png -text
 rails/app/assets/images/right_hover.png -text
+rails/app/assets/images/seq.png -text
 rails/app/assets/images/seqbut.png -text
 rails/app/assets/images/seqbut_hover.png -text
 rails/app/assets/images/seqlist.png -text
@@ -112,6 +114,8 @@ rails/app/assets/images/speed.png -text
 rails/app/assets/images/speed_hover.png -text
 rails/app/assets/images/squeezemid.png -text
 rails/app/assets/images/squeezemid_hover.png -text
+rails/app/assets/images/textelement.png -text
+rails/app/assets/images/textelement_hover.png -text
 rails/app/assets/images/timewait.png -text
 rails/app/assets/images/timewait_hover.png -text
 rails/app/assets/images/toplinks.png -text

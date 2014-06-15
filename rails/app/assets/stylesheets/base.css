@@ -194,7 +194,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     position:absolute;
     top:140px;
     right:10px;								
-    margin:20px;;
+    margin:20px;
     height:730px;
     background: transparent;
     width: 430px;
@@ -204,10 +204,24 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     font-size:12px;
     text-align:left;
 }
+#sequences{									/*Sequenzliste(links unten)*/
+				
+		list-style:none;
+				
+		}
+#sequences li {
+				
+		background-image: url(seq.png);
+		background-repeat:no-repeat;
+		background-position:10px;
+		padding-left:40px;
+		
+
+		}
 
 
 
-.button {		/*Sequenzbutton*/
+.button {									/*Sequenzbutton(links oben)*/
 	background-image: url(seqbut.png);
 	display: block;
     color:#ffffff;
@@ -695,6 +709,10 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 .button-command-LINEBREAK:hover{
 	background-image: url(linebreak_hover.png) ;
+}
+
+	
+	
 }
 .tooltip {
    	color: white;
