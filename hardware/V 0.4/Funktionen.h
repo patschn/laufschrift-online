@@ -95,9 +95,29 @@ namespace SWP
             */
             int m_iColors[3];
 
+			/**
+			m_iLetters:
+			Anzahl der Zeichen die die Laufschrift anzeigen kann
+			Wird zum zentrieren und auffüllen der Textzeile benötigt
+			*/
+
             int m_iLetters;
 
+			/**
+			m_bFlagLeft:
+			Flag, der anzeigt ob <LEFT> im Befehlsstring vorkommt
+			true: kommt vor, false: kommt nicht vor
+			*/
+
             bool m_bFlagLeft;
+
+			/**
+				m_bFlagAutocenter:
+				Flag, der anzeigt ob <AUTOCENTER> im Befehlsstring vorkommt
+				true: kommt vor, false: kommt nicht vor
+			*/
+
+			bool m_bFlagAutocenter;
 
             /*
                 Dient zu Debuggingzwecken:

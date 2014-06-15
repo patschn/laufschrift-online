@@ -86,8 +86,10 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                             //hinzugefügt werden
 
             //AUTOCENTER::
-            //if(sTemp == "<AUTOCENTER>")...
-
+			if (sTemp == "<AUTOCENTER>")
+			{
+				m_bFlagAutocenter = true;
+			}
             if(sTemp == "<LEFT>")   //Da Left einfach den String aneinanderkettet, muss der Befehl separat behandelt werden
             {
                 m_bFlagLeft = true;
@@ -173,12 +175,61 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     //Flags prüfen
     if(m_bFlagLeft == true)	//Left kommt in der Sequenz vor
     {
-        for(;m_iLetters <= 14; m_iLetters++)
-        {
-            sBefehl.sKonvertiert += m_iColors[2];
-            sBefehl.sKonvertiert += LauflichtCodetabelle.find(" ")->second;
-        }
+		if (m_bFlagAutocenter == false) //Der Text soll nicht zentriert werden
+		{
+			for (; m_iLetters <= 14; m_iLetters++)
+			{
+				sBefehl.sKonvertiert += m_iColors[2];
+				sBefehl.sKonvertiert += LauflichtCodetabelle.find(" ")->second;
+			}
+		}
+		else
+		{
+			int m_iLinks = 0; //Laufindex für Leerzeichen links des Textes
+			int m_iRechts = 0; //Laufindex für Leerzeichen rechts des Textes
+			m_iLetters = 14 - m_iLetters; //Anzahl der Leerzeichen die benötigt werden
+			m_iLetters = m_iLetters / 2; //Anzahl der Leerzeichen die links benötigt werden
+			std::string sTempSpace = ""; //String, um vor und nach dem Befehl Leerzeichen einzufügen
+			for (; m_iLinks <= m_iLetters; m_iLinks++)
+			{
+				sTempSpace += m_iColors[2];
+				sTempSpace += LauflichtCodetabelle.find(" ")->second;
+			}
+			sBefehl.sKonvertiert = sTempSpace + sBefehl.sKonvertiert; //Links Leerzeichen zum normalen Befehl hinzufügen
+			sTempSpace = "";  //Leerzeichen String leeren
+			m_iLetters = 14 - m_iLinks; //Anzahl der Leerzeichen die rechts benötigt werden
+			for (; m_iRechts <= m_iLetters; m_iRechts++)
+			{
+				sTempSpace += m_iColors[2];
+				sTempSpace += LauflichtCodetabelle.find(" ")->second;
+			}
+			sBefehl.sKonvertiert = sBefehl.sKonvertiert + sTempSpace; //Rechts Leerzeichen zum normalen Befehl hinzufügen
+		}
     }
+
+	if (m_bFlagAutocenter == true) //Text soll Zentriert werden
+	{
+		int m_iLinks = 0; //Laufindex für Leerzeichen links des Textes
+		int m_iRechts = 0; //Laufindex für Leerzeichen rechts des Textes
+		m_iLetters = 14 - m_iLetters; //Anzahl der Leerzeichen die benötigt werden
+		m_iLetters = m_iLetters / 2; //Anzahl der Leerzeichen die links benötigt werden
+		std::string sTempSpace = ""; //String, um vor und nach dem Befehl Leerzeichen einzufügen
+		for (; m_iLinks <= m_iLetters; m_iLinks++)
+		{
+			sTempSpace += m_iColors[2];
+			sTempSpace += LauflichtCodetabelle.find(" ")->second;
+		}
+		sBefehl.sKonvertiert = sTempSpace + sBefehl.sKonvertiert; //Links Leerzeichen zum normalen Befehl hinzufügen
+		sTempSpace = "";  //Leerzeichen String leeren
+		m_iLetters = 14 - m_iLinks; //Anzahl der Leerzeichen die rechts benötigt werden
+		for (; m_iRechts <= m_iLetters; m_iRechts++)
+		{
+			sTempSpace += m_iColors[2];
+			sTempSpace += LauflichtCodetabelle.find(" ")->second;
+		}
+		sBefehl.sKonvertiert = sBefehl.sKonvertiert + sTempSpace; //Rechts Leerzeichen zum normalen Befehl hinzufügen
+	}
+
 
     //Endsequenz
     sBefehl.sKonvertiert += LauflichtCodetabelle.find("<END>")->second;
