@@ -97,11 +97,18 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     overflow: hidden;
     padding-top: 5px;
     cursor: default;
+	list-style:none;
+	background-image: url(seq.png);
+	background-repeat:no-repeat;
+	background-position:10px;
+	padding-left:40px;
 }
 #sequences li[selected=selected] {
-    background: #444;
+    background-image: url(seq_select.png);
     color: white;
 }
+
+
 
 #mitte {
     margin-left: 300px;
@@ -204,20 +211,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     font-size:12px;
     text-align:left;
 }
-#sequences{									/*Sequenzliste(links unten)*/
-				
-		list-style:none;
-				
-		}
-#sequences li {
-				
-		background-image: url(seq.png);
-		background-repeat:no-repeat;
-		background-position:10px;
-		padding-left:40px;
-		
 
-		}
 
 
 

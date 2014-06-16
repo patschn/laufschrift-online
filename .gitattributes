@@ -101,6 +101,7 @@ rails/app/assets/images/redbg_hover.png -text
 rails/app/assets/images/right.png -text
 rails/app/assets/images/right_hover.png -text
 rails/app/assets/images/seq.png -text
+rails/app/assets/images/seq_select.png -text
 rails/app/assets/images/seqbut.png -text
 rails/app/assets/images/seqbut_hover.png -text
 rails/app/assets/images/seqlist.png -text
