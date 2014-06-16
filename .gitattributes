@@ -28,6 +28,11 @@ hardware/V[!!-~]0.4/Funktionen.h -text
 hardware/V[!!-~]0.4/main.cpp -text
 hardware/V[!!-~]0.4/rs232.c -text
 hardware/V[!!-~]0.4/rs232.h -text
+hardware/V[!!-~]0.5/Funktionen.cpp -text
+hardware/V[!!-~]0.5/Funktionen.h -text
+hardware/V[!!-~]0.5/main.cpp -text
+hardware/V[!!-~]0.5/rs232.c -text
+hardware/V[!!-~]0.5/rs232.h -text
 rails/Gemfile -text
 rails/README.rdoc -text
 rails/Rakefile -text
