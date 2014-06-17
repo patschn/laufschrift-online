@@ -642,7 +642,8 @@ var ASC333Components = {
 			return new TextComponent(t);
 		}));
 		Toolbox.registerToolInfo(new ToolInfo('text', textComponentInfo, {
-			//toolText : 'Text'
+		    toolType: 'htmlElement',
+		    toolHTMLElement: $('<div/>')
 		}));
 
 		var openAnimations = [
