@@ -183,6 +183,7 @@ rails/config/locales/en.yml -text
 rails/config/routes.rb -text
 rails/config/secrets.yml -text
 rails/db/migrate/20140422153329_create_sequences.rb -text
+rails/db/migrate/20140617113557_add_modifiable_to_sequences.rb -text
 rails/db/schema.rb -text
 rails/db/seeds.rb -text
 rails/laufschrift_steuerung_bsp -text

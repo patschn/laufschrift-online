@@ -8,6 +8,7 @@ function Sequence() {
   var self = this;
   this.title = null;
   this.text = null;
+  this.modifiable = true;
   
   this.existsOnServer = function() {
     return (id !== null);
@@ -22,6 +23,7 @@ function Sequence() {
       id = data.id;
       self.title = data.title;
       self.text = data.text;
+      self.modifiable = data.modifiable;
       dfd.resolve();
     }).fail(function (xhr, status, e) {
       dfd.reject(e);
@@ -54,6 +56,8 @@ function Sequence() {
       data: { sequence: { title: self.title, text: self.text } }
     }).done(function (data, status, xhr) {
       id = data.id;
+      // Neue Sequenzen sind immer bearbeitbar
+      self.modifiable = true;
       dfd.resolve();
     }).fail(function (xhr, status, e) {
       dfd.reject(e);

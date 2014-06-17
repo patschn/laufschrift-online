@@ -301,6 +301,10 @@ var SequenceControl = (function() {
       saveAs();
       return;
     }
+    if (!currentSequence.modifiable) {
+      FlashMessage.error("Demosequenzen können nicht verändert werden");
+      return;
+    }
     currentSequence.text = currentSaveString();
     currentSequence.update().done(function() {
       FlashMessage.success("Sequenz gespeichert");
@@ -317,6 +321,10 @@ var SequenceControl = (function() {
     var destroySequence = new Sequence();
     if (confirm('Wollen Sie wirklich diese Sequenz löschen?')) {
     destroySequence.load(destroyID).done(function() {
+      if (!destroySequence.modifiable) {
+        FlashMessage.error("Demosequenzen können nicht gelöscht werden");
+        return;
+      }
       destroySequence.destroy().done(function() {
         sequenceList.removeElementByValue(destroyID);
         if (currentSequence.existsOnServer() && currentSequence.id === destroyID) {
