@@ -531,12 +531,16 @@ textarea{
 
 .button-command-WAIT {
     background-image: image-url("timewait.png");
+	padding-right: 10px;		
+    box-sizing: border-box;
 }
 .button-command-WAIT:hover {
     background-image: image-url("timewait_hover.png");
 }
 .button-command-SPEED {
     background-image: image-url("speed.png");
+	padding-bottom: 10px;			/* geht seltsamerweise nicht */
+    box-sizing: border-box;
 }
 .button-command-SPEED:hover {
     background-image: image-url("speed_hover.png");
@@ -731,6 +735,11 @@ textarea{
 }
 .button-command-Twitterkomponente:hover{
 	background-image: url(but_twitter.png) ;
+}
+.tool-command-TEXT{
+	background-image: url(textelement.png);
+	width:200px;
+	height:40px;
 }
 
 .tooltip {
