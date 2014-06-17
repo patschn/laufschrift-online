@@ -542,7 +542,9 @@ var ASC333Components = {
 		    toolType: 'htmlElement',
 		    toolHTMLElement: $('<div/>')
 		}));
-
+		var twitter = [
+			[ 'Twitterkomponente' , "Ruft die letzten Tweets ab" ],
+			];
 		var openAnimations = [
 		    [ 'LEFT', "Von rechts nach links" ],
 		    [ 'RIGHT', "Von links nach rechts" ],
@@ -569,6 +571,12 @@ var ASC333Components = {
 		$.each(openAnimations, function(i, animation) {
 			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation[0], undefined, { exchangeableInGroup: 'open_animation' }));
 			Toolbox.registerToolInfo(new ToolInfo('open_animation', info, {
+				tooltip: animation[1]
+			}));
+		});
+		$.each(twitter, function(i, animation) {
+			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation[0], undefined));
+			Toolbox.registerToolInfo(new ToolInfo('twitter', info, {
 				tooltip: animation[1]
 			}));
 		});

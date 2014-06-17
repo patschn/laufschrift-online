@@ -152,6 +152,7 @@ var Toolbox = (function() {
       groupDef("linebreak", "Zeilenumbruch"),
       groupDef("open_animation", "Anfangsanimationen"),
       groupDef("close_animation", "Endanimationen"),
+	  groupDef("twitter", "Twitter"),
     ];
     var toolInfos = getAllToolInfosByGroup();
     $.each(groups, function(i, group) {

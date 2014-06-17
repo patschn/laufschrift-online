@@ -32,6 +32,16 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     padding-top: 10px;
     box-sizing: border-box;
 }
+#help{
+	position:absolute;
+    top:100px;
+    right:10px;
+    margin-left:20px;
+    background: transparent;
+    background-image: url(question.png);
+    width: 32px;
+    height: 32px
+}
 #links {
     position:absolute;
     top:130px;
@@ -715,6 +725,12 @@ textarea{
 .button-command-LINEBREAK:hover{
 	background-image: url(linebreak_hover.png) ;
 }
+.button-command-Twitterkomponente{
+	background-image: url(but_twitter.png) ;
+}
+.button-command-Twitterkomponente:hover{
+	background-image: url(but_twitter.png) ;
+}
 
 	
 	
@@ -736,4 +752,23 @@ input[type=text] {
     border-image-width: 3px;
     border-image-outset: 0;
     border-image-repeat:repeat;
+}
+#footer{
+	position: absolute;
+	top: 1050px; 
+	width: 100%;
+	color: white;
+	text-align: center;
+}
+
+.name{
+	position:absolute;
+	width: 30%;
+	left: 10%;
+}
+
+.trac{
+	position:absolute;
+	left: 60%;
+	width: 30%;
 }
