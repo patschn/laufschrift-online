@@ -51,6 +51,7 @@ rails/app/assets/images/bug.png -text
 rails/app/assets/images/but.png -text
 rails/app/assets/images/but_hover.png -text
 rails/app/assets/images/but_twitter.png -text
+rails/app/assets/images/but_twitter_hover.png -text
 rails/app/assets/images/clock12.png -text
 rails/app/assets/images/clock12_hover.png -text
 rails/app/assets/images/clock24.png -text
