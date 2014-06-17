@@ -1,5 +1,111 @@
 "use strict";
 
+// ToolInfo
+// ========
+
+function ToolInfo(group, componentInfo, options) {
+	if (options === undefined) {
+		options = {};
+	}
+
+    // Standardargumente
+	options = $.extend({}, {
+	    toolType: 'button'
+	}, options);
+
+	this.createComponent = function() {
+		var extraArgs = [];
+		var factoryToUse = componentInfo.factory;
+		if (options.factoryArguments !== undefined) {
+			extraArgs = options.factoryArguments;
+		}
+		if (options.overrideFactory !== undefined) {
+		    factoryToUse = options.overrideFactory;
+		}
+		return factoryToUse.apply(this, extraArgs);
+	};
+
+	this.createToolHTMLElement = function() {
+		var text = '';//componentInfo.command;
+		if (options.toolText !== undefined) {
+			text = options.toolText;
+		}
+		
+		var elem = $('<div class="tool"/>');
+		elem.data("tool-info", this);
+		if (componentInfo.command) {
+			elem.addClass("tool-command-" + componentInfo.command);
+		}
+		if (options.tooltip !== undefined) {
+		    elem.attr('title', options.tooltip);
+		    elem.tooltip({ hide: 100, show: 100, tooltipClass: 'tooltip' });
+		}
+		
+		if (options.toolType === 'slider') {
+		    var sliderElem = $('<input type="range" />');
+		    sliderElem.attr("min", options.sliderRange[0]);
+		    sliderElem.attr("max", options.sliderRange[1]);
+		    sliderElem.attr("step", options.sliderStep);
+		    sliderElem.attr("value", options.sliderInitialValue);
+		    sliderElem.attr("id", options.sliderID);
+		    var sliderContainer = $('<div class="tool-slider"/>');
+		    sliderContainer.append(sliderElem);
+		    sliderContainer.append($('<span class="tool-slider-lower-limit"/>').append(options.sliderLabels[0]));
+		    sliderContainer.append($('<span class="tool-slider-upper-limit"/>').append(options.sliderLabels[1]));
+		    var sliderButton = $('<div class="button-toolbox"/>');
+		    sliderButton.append(options.sliderInitialValue);
+		    if (componentInfo.command) {
+    		    sliderButton.addClass("button-command-" + componentInfo.command);
+    		}
+		    sliderElem.on("change", function() {
+		       sliderButton.text($(this).val());
+		    });
+		    sliderContainer.append(sliderButton);
+		    elem.append(sliderContainer);
+        } else if (options.toolType === 'htmlElement') {
+            elem.append(options.toolHTMLElement);
+        } else {
+            elem.append(text);
+
+		    if (options.toolType === "button") {
+        		elem.addClass("button-toolbox");
+        		if (componentInfo.command) {
+            		elem.addClass("button-command-" + componentInfo.command);
+                }
+        	}
+        }
+        
+		if (options.extraClass !== undefined) {
+			elem.addClass(options.extraClass);
+		}
+		return elem;
+	};
+
+	Object.defineProperties(this, {
+		group : {
+			get : function() {
+				return group;
+			},
+			enumerable : true
+		},
+		componentInfo : {
+			get : function() {
+				return componentInfo;
+			},
+			enumerable : true
+		},
+		options: {
+		    get : function() {
+		        return options;
+		    },
+		    enumerable : true
+		}
+	});
+}
+
+// Toolbox
+// =======
+
 var Toolbox = (function() {
   var toolboxDiv = null;
   var toolInfosByGroup = {};

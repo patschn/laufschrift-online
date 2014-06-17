@@ -16,5 +16,6 @@
 //= require achtung/ui.achtung
 //= require jquery-popover
 //= require caret/jquery.caret
+//= require preload/jquery.preload
 // require turbolinks (disabled, we don't need it)
 //= require_tree .

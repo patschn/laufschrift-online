@@ -61,8 +61,8 @@ rails/app/assets/images/closeright_hover.png -text
 rails/app/assets/images/debuglinks.png -text
 rails/app/assets/images/debugmitte.png -text
 rails/app/assets/images/debugrechts.png -text
-rails/app/assets/images/delete-hover.png -text svneol=unset#image/png
 rails/app/assets/images/delete.png -text svneol=unset#image/png
+rails/app/assets/images/delete_hover.png -text svneol=unset#image/png
 rails/app/assets/images/dobig.png -text
 rails/app/assets/images/dobig_hover.png -text
 rails/app/assets/images/doff.png -text
@@ -217,6 +217,10 @@ rails/vendor/assets/javascripts/achtung/version.txt -text
 rails/vendor/assets/javascripts/caret/jquery.caret.js -text
 rails/vendor/assets/javascripts/caret/license.txt -text
 rails/vendor/assets/javascripts/caret/readme.md -text
+rails/vendor/assets/javascripts/preload/LICENSE -text
+rails/vendor/assets/javascripts/preload/README.txt -text
+rails/vendor/assets/javascripts/preload/changes.txt -text
+rails/vendor/assets/javascripts/preload/jquery.preload.js -text
 rails/vendor/assets/stylesheets/.keep -text
 rails/vendor/assets/stylesheets/achtung/ui.achtung-min.css -text
 rails/vendor/assets/stylesheets/achtung/ui.achtung.css -text

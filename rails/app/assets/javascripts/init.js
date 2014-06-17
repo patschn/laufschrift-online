@@ -17,4 +17,6 @@ $(document).ready(function() {
       }
       FlashMessage.error('Fehler beim Senden an die Laufschrift: ' + errMsg);
     });
+    
+  $.preload(Config.preloadAssets);
 });
