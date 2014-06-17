@@ -1,8 +1,5 @@
 rails/db/*.sqlite3
 rails/db/*.sqlite3-journal
 rails/log/*.log
-rails/public/assets/*.css
-rails/public/assets/*.gz
-rails/public/assets/*.js
-rails/public/assets/*.json
+rails/public/assets/*
 rails/tmp
