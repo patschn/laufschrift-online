@@ -31,10 +31,12 @@
 <div id="mitteoben">
 <div id="sequence-name">Sequenz 1</div></div>
 <div id="mittemitte"><div id="sequence"><div id="sequence-inner"></div></div></div>
-		<div id="debug"><div id="bug"></div><div id="debug-bg"><div id="debug-feld"><%= form_tag({controller: "sign", action:  "commit"}, remote: true, id: "commit-form") do %>
-			<%= text_area_tag(:text, "", id: "commit-text",  size: "100%x1") %>
-			<%= submit_tag("Los") %>
-			<% end %></div></div>
+
+<div id="bug"></div><div id="debug"><div id="debug-bg">
+<div id="debug-feld">
+			<div id="textarea"><%= text_area_tag(:text, "", id: "commit-text") %>
+			</div>
+			</div></div>
 		    
 		</div>
 </div>
