@@ -3,7 +3,7 @@
     margin: 0;
 }
 body {
-    background-image:url(background.jpg);
+    background-image: image-url("background.jpg");
 }
 
 body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button, input, select, textarea, button, option {
@@ -22,7 +22,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     margin-bottom:10px;
     height:100px;
     width:100%;
-    background-image: url(toplinks.png), url(toprechts.png), url(topmitte.png);
+    background-image: image-url("toplinks.png"), image-url("toprechts.png"), image-url("topmitte.png");
     background-repeat: no-repeat, no-repeat, repeat-x;
     background-position: top left, top right, top left;
     text-align:center;
@@ -58,7 +58,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     left:0px;
     height: 350px;
     width: 250px;
-    background:url(linksoben.png);
+    background:image-url("linksoben.png");
     opacity: 0.6;
     background-repeat:repeat-x;
 }
@@ -84,7 +84,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 /*    font-weight:bold;*/
     color:white;
     height: 350px;
-    background:url(seqlist.png);
+    background:image-url("seqlist.png");
     width: 250px;
     float: left;
     padding-top: 40px;
@@ -108,13 +108,13 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     padding-top: 5px;
     cursor: default;
 	list-style:none;
-	background-image: url(seq.png);
+	background-image: image-url("seq.png");
 	background-repeat:no-repeat;
 	background-position:10px;
 	padding-left:40px;
 }
 #sequences li[selected=selected] {
-    background-image: url(seq_select.png);
+    background-image: image-url("seq_select.png");
     color: white;
 }
 
@@ -127,7 +127,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     min-width: 325px;
 }
 #mitteoben {
-    background: url(mittelinks.png) no-repeat;
+    background: image-url("mittelinks.png") no-repeat;
     background-position: top left;
     color: white;
     font-size: 14px;
@@ -155,7 +155,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     box-sizing: border-box;
 }
 #mittemitte {
-    background-image: url(mittelinks2.png), url(mitterechts2.png), url(mittemitte2.png);
+    background-image: image-url("mittelinks2.png"), image-url("mitterechts2.png"), image-url("mittemitte2.png");
     background-repeat: no-repeat, no-repeat, repeat-x;
     background-position: top left, top right, top left;
     padding: 9px;
@@ -166,7 +166,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 #feld{
     height: 900px;
     background-color:yellow;
-    background:url(mitte.png);
+    background:image-url("mitte.png");
     background-repeat:repeat-x;
 }
 
@@ -178,7 +178,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     height: 30px;
 }
 #debug-bg{
-    background-image: url(debuglinks.png), url(debugrechts.png), url(debugmitte.png);
+    background-image: image-url("debuglinks.png"), image-url("debugrechts.png"), image-url("debugmitte.png");
     background-repeat: no-repeat, no-repeat, repeat-x;
     background-position: left,right,left;
 }
@@ -206,7 +206,7 @@ textarea{
     left:330px;		
     width: 64px;		
     height:72px;
-    background: url(bug.png);
+    background: image-url("bug.png");
 }
 
 #toolbox_bg{
@@ -216,7 +216,7 @@ textarea{
     width: 450px;
     float: right;		
     height:750px;
-    background: url(rechts.png); opacity: 0.5;
+    background: image-url("rechts.png"); opacity: 0.5;
     margin-right:20px;	
 }
 
@@ -238,8 +238,8 @@ textarea{
 
 
 
-.button {									/*Sequenzbutton(links oben)*/
-	background-image: url(seqbut.png);
+.button {									/*Sequenzbutton(links oben")*/
+	background-image: image-url("seqbut.png");
 	display: block;
     color:#ffffff;
 	font-size:17px;
@@ -251,7 +251,7 @@ textarea{
 	text-shadow:1px 1px 0px #000000;
 }
 .button:hover {
-	background-image:  url(seqbut_hover.png);
+	background-image:  image-url("seqbut_hover.png");
 	}
 	
 .button:active {
@@ -319,22 +319,22 @@ textarea{
 
 .component-delete-button {
     right: -7px;
-    background: url(delete.png) no-repeat top left;
+    background: image-url("delete.png") no-repeat top left;
 }
 
 .component-delete-button:hover {
-    background-image: url(delete_hover.png);
+    background-image: image-url("delete_hover.png");
 }
 
 .component-special-character-button {
     bottom: 2px;
     top: auto;
     right: -7px;
-    background: url(special-character.png) no-repeat top left;
+    background: image-url("special-character.png") no-repeat top left;
 }
 
 .component-special-character-button:hover {
-    background-image: url(special-character_hover.png);
+    background-image: image-url("special-character_hover.png");
 }
 
 .component:hover .component-delete-button, .component:hover .component-move-handle, .component:hover .component-special-character-button {
@@ -343,7 +343,7 @@ textarea{
 
 .component-move-handle {
     right: 13px;
-    background: url(move.png) no-repeat top left;
+    background: image-url("move.png") no-repeat top left;
     background-size: cover;
     cursor: move;
 }
@@ -370,12 +370,12 @@ textarea{
 	text-decoration:none;
 	text-align:center;
 	text-shadow:1px 1px 1px #000000;
-	background-image: url(but.png);
+	background-image: image-url("but.png");
 	/*box-shadow: inset 0px 1px 0px 0px #787168;*/
 	/*border: 1px solid black;*/
 }
 .button-toolbox:hover, .button-component:hover {
-    background-image: url(but_hover.png);
+    background-image: image-url("but_hover.png");
 }
 .button-toolbox {
 	margin-left: 6px;
@@ -405,28 +405,28 @@ textarea{
 }
 
 .button-color-bg-r {
-	background-image: url(redbg.png);
+	background-image: image-url("redbg.png");
 }
 .button-color-bg-r:hover {
-	background-image: url(redbg_hover.png);
+	background-image: image-url("redbg_hover.png");
 }
 .button-color-bg-b {
-	background-image: url(blackbg.png);
+	background-image: image-url("blackbg.png");
 }
 .button-color-bg-b:hover {
-	background-image: url(blackbg_hover.png);
+	background-image: image-url("blackbg_hover.png");
 }
 .button-color-bg-y {
-	background: url(yellowbg.png);
+	background: image-url("yellowbg.png");
 }
 .button-color-bg-y:hover {
-	background-image:url(yellowbg_hover.png);
+	background-image:image-url("yellowbg_hover.png");
 }
 .button-color-bg-g {
-	background-image: url(greenbg.png);
+	background-image: image-url("greenbg.png");
 }
 .button-color-bg-g:hover {
-	background-image: url(greenbg_hover.png);
+	background-image: image-url("greenbg_hover.png");
 }
 	
 .button-seq {										/*Button fuer Sequenzliste*/
@@ -516,29 +516,29 @@ textarea{
 }
 
 .button-command-CLOCK12{
-	background-image: url(clock12.png);
+	background-image: image-url("clock12.png");
 }
 .button-command-CLOCK12:hover{
-	background-image: url(clock12_hover.png);
+	background-image: image-url("clock12_hover.png");
 }	
 .button-command-CLOCK24{
-	background-image: url(clock24.png) ;
+	background-image: image-url("clock24.png") ;
 }	
 .button-command-CLOCK24:hover{	
-	background-image: url(clock24_hover.png) ;
+	background-image: image-url("clock24_hover.png") ;
 }
 
 .button-command-WAIT {
-    background-image: url(timewait.png);
+    background-image: image-url("timewait.png");
 }
 .button-command-WAIT:hover {
-    background-image: url(timewait_hover.png);
+    background-image: image-url("timewait_hover.png");
 }
 .button-command-SPEED {
-    background-image: url(speed.png);
+    background-image: image-url("speed.png");
 }
 .button-command-SPEED:hover {
-    background-image: url(speed_hover.png);
+    background-image: image-url("speed_hover.png");
 }
 
 .tool-command-COLOR, .tool-command-NORMAL, .tool-command-BIG, .component-command-COLOR .button-component, .component-command-BIG .button-component, .component-command-NORMAL .button-component, .popover-command-COLOR .button-toolbox {
@@ -606,124 +606,124 @@ textarea{
 	top:1px;
 }
 .button-command-LEFT {
- 	background-image: url(left.png) ;
+ 	background-image: image-url("left.png") ;
 }
 .button-command-LEFT:hover{
-	background-image: url(left_hover.png) ;
+	background-image: image-url("left_hover.png") ;
 }
 .button-command-RIGHT{ 
- 	background-image: url(right.png) ;
+ 	background-image: image-url("right.png") ;
 }
 .button-command-RIGHT:hover{
-	background-image: url(right_hover.png) ;
+	background-image: image-url("right_hover.png") ;
 }	
 .button-command-UP{ 
- 	background-image: url(up.png) ;
+ 	background-image: image-url("up.png") ;
 }
 .button-command-UP:hover{
-	background-image: url(up_hover.png) ;
+	background-image: image-url("up_hover.png") ;
 }	
 .button-command-DOWN{ 
- 	background-image: url(down.png) ;
+ 	background-image: image-url("down.png") ;
 }
 .button-command-DOWN:hover{
-	background-image: url(down_hover.png) ;
+	background-image: image-url("down_hover.png") ;
 }	
 .button-command-DOFF{ 
- 	background-image: url(doff.png) ;
+ 	background-image: image-url("doff.png") ;
 }
 .button-command-DOFF:hover{
-	background-image: url(doff_hover.png) ;
+	background-image: image-url("doff_hover.png") ;
 }	
 .button-command-DOBIG{ 
- 	background-image: url(dobig.png) ;
+ 	background-image: image-url("dobig.png") ;
 }	
 .button-command-DOBIG:hover{
-	background-image: url(dobig_hover.png) ;
+	background-image: image-url("dobig_hover.png") ;
 }	
 .button-command-FLASH{ 
- 	background-image: url(flash.png) ;
+ 	background-image: image-url("flash.png") ;
 }
 .button-command-FLASH:hover{
-	background-image: url(flash_hover.png) ;
+	background-image: image-url("flash_hover.png") ;
 }	
 .button-command-JUMP{ 
- 	background-image: url(jump.png) ;
+ 	background-image: image-url("jump.png") ;
 }
 .button-command-JUMP:hover{
-	background-image: url(jump_hover.png) ;
+	background-image: image-url("jump_hover.png") ;
 }	
 .button-command-OPENMID{
- 	background-image: url(openmid.png) ;
+ 	background-image: image-url("openmid.png") ;
 }
 .button-command-OPENMID:hover{
-	background-image: url(openmid_hover.png) ;
+	background-image: image-url("openmid_hover.png") ;
 }	
 .button-command-OPENRIGHT{
- 	background-image: url(openright.png) ;
+ 	background-image: image-url("openright.png") ;
 }
 .button-command-OPENRIGHT:hover{
-	background-image: url(openright_hover.png) ;
+	background-image: image-url("openright_hover.png") ;
 }	
 .button-command-RAINBOW{ 
- 	background-image: url(rainbow.png) ;
+ 	background-image: image-url("rainbow.png") ;
 }
 .button-command-RAINBOW:hover{
-	background-image: url(rainbow_hover.png) ;
+	background-image: image-url("rainbow_hover.png") ;
 }	
 .button-command-RANDOM{ 
- 	background-image: url(random.png) ;
+ 	background-image: image-url("random.png") ;
 }
 .button-command-RANDOM:hover{
-	background-image: url(random_hover.png) ;
+	background-image: image-url("random_hover.png") ;
 }	
 .button-command-SHIFTMID{
- 	background-image: url(shiftmid.png) ;
+ 	background-image: image-url("shiftmid.png") ;
 }
 .button-command-SHIFTMID:hover{
-	background-image: url(shiftmid_hover.png) ;
+	background-image: image-url("shiftmid_hover.png") ;
 }	
 .button-command-SNOW{
- 	background-image: url(snow.png) ;
+ 	background-image: image-url("snow.png") ;
 }	
 .button-command-SNOW:hover{
-	background-image: url(snow_hover.png) ;
+	background-image: image-url("snow_hover.png") ;
 }	
 .button-command-CLOSEMID{ 
- 	background-image: url(closemid.png) ;
+ 	background-image: image-url("closemid.png") ;
 }	
 .button-command-CLOSEMID:hover{
-	background-image: url(closemid_hover.png) ;
+	background-image: image-url("closemid_hover.png") ;
 }	
 .button-command-CLOSERIGHT{
- 	background-image: url(closeright.png) ;
+ 	background-image: image-url("closeright.png") ;
 }	
 .button-command-CLOSERIGHT:hover{
-	background-image: url(closeright_hover.png) ;
+	background-image: image-url("closeright_hover.png") ;
 }	
 .button-command-SQUEEZEMID{ 
- 	background-image: url(squeezemid.png) ;
+ 	background-image: image-url("squeezemid.png") ;
 }	
 .button-command-SQUEEZEMID:hover{
-	background-image: url(squeezemid_hover.png) ;
+	background-image: image-url("squeezemid_hover.png") ;
 }	
 .button-command-DSNOW{ 
- 	background-image: url(dsnow.png) ;	
+ 	background-image: image-url("dsnow.png") ;	
 }
 .button-command-DSNOW:hover{
-	background-image: url(dsnow_hover.png) ;
+	background-image: image-url("dsnow_hover.png") ;
 }
 .button-command-AUTOCENTER{ 
- 	background-image: url(autocenter.png) ;	
+ 	background-image: image-url("autocenter.png") ;	
 }
 .button-command-AUTOCENTER:hover{
-	background-image: url(autocenter_hover.png) ;
+	background-image: image-url("autocenter_hover.png") ;
 }	
 .button-command-LINEBREAK{ 
- 	background-image: url(linebreak.png) ;	
+ 	background-image: image-url("linebreak.png") ;	
 }
 .button-command-LINEBREAK:hover{
-	background-image: url(linebreak_hover.png) ;
+	background-image: image-url("linebreak_hover.png") ;
 }
 .button-command-Twitterkomponente{
 	background-image: url(but_twitter.png) ;
@@ -732,9 +732,6 @@ textarea{
 	background-image: url(but_twitter.png) ;
 }
 
-	
-	
-}
 .tooltip {
    	color: white;
     padding: 5px;
