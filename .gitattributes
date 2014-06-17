@@ -97,6 +97,7 @@ rails/app/assets/images/openmid_hover.png -text
 rails/app/assets/images/openright.png -text
 rails/app/assets/images/openright_hover.png -text
 rails/app/assets/images/playbutton.png -text
+rails/app/assets/images/question.png -text
 rails/app/assets/images/rainbow.png -text
 rails/app/assets/images/rainbow_hover.png -text
 rails/app/assets/images/random.png -text
@@ -143,6 +144,7 @@ rails/app/assets/javascripts/test.js -text
 rails/app/assets/javascripts/toolbox.js -text
 rails/app/assets/javascripts/util.js -text
 rails/app/assets/stylesheets/application.css -text
+rails/app/assets/stylesheets/base.css -text
 rails/app/assets/stylesheets/base.css.scss -text
 rails/app/assets/stylesheets/fonts.css.scss -text
 rails/app/assets/stylesheets/sequences.css.scss -text
