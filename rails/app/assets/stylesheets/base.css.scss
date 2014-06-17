@@ -539,7 +539,8 @@ textarea{
 }
 .button-command-SPEED {
     background-image: image-url("speed.png");
-	padding-bottom: 10px;			/* geht seltsamerweise nicht */
+    line-height: 26px;
+    padding-left: 10px;
     box-sizing: border-box;
 }
 .button-command-SPEED:hover {
