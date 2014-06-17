@@ -23,6 +23,7 @@ SWP::CLauflicht::CLauflicht()
     m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
     m_iLetters = 0;
     m_bFlagLeft = false;
+    m_bFlagBig = false;
     m_bFlagFail = false;
 }
 
@@ -65,7 +66,6 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 {
     //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
 	sBefehl.sKonvertiert += GetCode(L"<INIT>");
-	sBefehl.sKonvertiert += GetCode(L"<INIT>");
 
     //Sequenzstart signalisieren
     sBefehl.sKonvertiert += GetCode(L"<START>");
@@ -99,6 +99,16 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             {
                 m_bFlagLeft = true;
             }
+            if(sTemp == L"<BIG>")
+            {
+            	m_bFlagBig = true;
+            	continue;
+            }
+            if(sTemp == L"<NORMAL>")
+            {
+            	m_bFlagBig = false;
+            	continue;
+            }
 
             //Prüfen, ob Farbe vorliegt
             if(sTemp == L"<BGCOLOR b>" || sTemp == L"<BGCOLOR r>" || sTemp == L"<BGCOLOR g>" || sTemp == L"<BGCOLOR y>")
@@ -121,7 +131,6 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             }
             else if(sTemp.find(L"WAIT") != std::wstring::npos)
             {
-
                 char c = sTemp[sTemp.find(' ') + 1];    //Sekundenanzahl speichern
                 if(c != '0')  //Falls Sekunden != 0, dann WAIT ignorieren
                 {
@@ -149,13 +158,14 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 
             if(sTemp == L"Ω" || sTemp == L"Σ" || sTemp == L"¤" || sTemp == L"æ" ||
                         		sTemp == L"£" || sTemp == L"🍷" || sTemp == L"♪" ||
-                        		sTemp == L"🚗" || sTemp == L"⛵" || sTemp == L"🕓" || sTemp == L"♥" ||
-                        		sTemp == L"⌂" || sTemp == L"◆" || sTemp == L"▲" || sTemp == L"▶" ||
-                        		sTemp == L"▼" || sTemp == L"◀" || sTemp == L"☉" || sTemp == L"⬆" ||
+                        		sTemp == L"🚗" || sTemp == L"⛵" || sTemp == L"🕓" ||
+                        		sTemp == L"♥" || sTemp == L"⌂" || sTemp == L"◆" ||
+                        		sTemp == L"▲" || sTemp == L"▶" || sTemp == L"▼" ||
+                        		sTemp == L"◀" || sTemp == L"☉" || sTemp == L"⬆" ||
                         		sTemp == L"⬇" || sTemp == L"⇦" || sTemp == L"⇨")
 			{
 				sBefehl.sKonvertiert += GetCode(L"<GRAPH>");
-				sBefehl.sKonvertiert += GetCode(sTemp);
+				sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig);
 			}
             //Bei Zeichen kommt erst die Farbe, anschließend das Zeichen
             else if(sTemp == L"\\")   //Escapezeichen
@@ -166,20 +176,19 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 if(sTemp == L"\\") //Dieses Zeichen gibt es nur als Grafik
                 {
                     sBefehl.sKonvertiert += GetCode(L"<GRAPH>");
-                    sBefehl.sKonvertiert += 4;
+                    sBefehl.sKonvertiert += GetCode(L"\\", m_bFlagBig);
                 }
                 else //Für die Zeichen '<', '>'
                 {
-                	sBefehl.sKonvertiert += m_iColors[2];     //Farbe
-                	sBefehl.sKonvertiert += GetCode(sTemp);   //Zeichen
+                	sBefehl.sKonvertiert += m_iColors[COLOR_FB];     //Farbe
+                	sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig);   //Zeichen
                 }
             }
             else
             {
                 //Wenn es kein \ ist, dann ist es ein normales Zeichen
-            	//if(sBefehl.sOriginal[i] == 'ü'){m_debugfile << "Ü entdeckt!" << std::endl;}
-                sBefehl.sKonvertiert += m_iColors[2];                               //Farbe
-                sBefehl.sKonvertiert += GetCode(sTemp);   //Zeichen
+                sBefehl.sKonvertiert += m_iColors[COLOR_FB];     	//Farbe
+                sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig); //Zeichen
 
                 //m_debugfile << "Aktuelles Zeichen konvertiert: " << GetCode(sTemp)->second << std::endl;
             }
@@ -194,7 +203,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     {
 		for (; m_iLetters <= 14; m_iLetters++)
 		{
-			sBefehl.sKonvertiert += m_iColors[2];
+			sBefehl.sKonvertiert += m_iColors[COLOR_FB];
 			sBefehl.sKonvertiert += GetCode(L" ");
 		}
     }
@@ -208,7 +217,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 
 		for (; m_iLinks <= m_iLetters; m_iLinks++)
 		{
-			sTempSpace += m_iColors[2];
+			sTempSpace += m_iColors[COLOR_FB];
 			sTempSpace += GetCode(L" ");
 		}
 		sBefehl.sKonvertiert = sTempSpace + sBefehl.sKonvertiert; //Links Leerzeichen zum normalen Befehl hinzufügen
@@ -216,7 +225,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 		m_iLetters = 14 - m_iLinks; //Anzahl der Leerzeichen die rechts benötigt werden
 		for (; m_iRechts <= m_iLetters; m_iRechts++)
 		{
-			sTempSpace += m_iColors[2];
+			sTempSpace += m_iColors[COLOR_FB];
 			sTempSpace += GetCode(L" ");
 		}
 		sBefehl.sKonvertiert = sBefehl.sKonvertiert + sTempSpace; //Rechts Leerzeichen zum normalen Befehl hinzufügen
@@ -244,8 +253,8 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 		sBefehl.sKonvertiert = sBefehl.sKonvertiert + sTempSpace; //Rechts Leerzeichen zum normalen Befehl hinzufügen
 	}*/
 
-
     //Endsequenz
+    m_bFlagBig = false;
     sBefehl.sKonvertiert += GetCode(L"<END>");
     sBefehl.sKonvertiert += 177;
     sBefehl.sKonvertiert += GetCode(L"<END>");
@@ -305,6 +314,34 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp)
 	}
 }
 
+int SWP::CLauflicht::GetCode(std::wstring wTemp, bool bFlagBig)
+{
+	//Iterator anlegen, um die Codetabelle zu durchsuchen
+	std::map<std::wstring,int>::iterator it;
+
+	//Code suchen
+	it = LauflichtCodetabelle.find(wTemp);
+
+	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
+	if(it == LauflichtCodetabelle.end())
+	{
+		std::cerr << "Fehler beim Konvertieren!" << std::endl;
+		m_bFlagFail = true;
+		return 0;
+	}
+	else
+	{
+		if(bFlagBig == false)	//Keine breiten Buchstaben
+		{
+			return it->second;
+		}
+		else
+		{
+			return it->second + 128;
+		}
+	}
+}
+
 std::string SWP::CLauflicht::GetClock(std::string sClock)
 {
     time_t tTime = time(0);
@@ -315,11 +352,11 @@ std::string SWP::CLauflicht::GetClock(std::string sClock)
 
     if(sClock == "<CLOCK24>")
     {
-        strftime(buf,sizeof(buf),"%d%m%Y%H%M%S",&now);  //Uhrzeit im passenden Format kopieren
+        strftime(buf,sizeof(buf),"%Y%m%d%H%M%S",&now);  //Uhrzeit im passenden Format kopieren
     }
     else
     {
-        strftime(buf,sizeof(buf),"%d%m%Y%I%M%S",&now);  //Uhrzeit im passenden Format kopieren
+        strftime(buf,sizeof(buf),"%Y%m%d%I%M%S",&now);  //Uhrzeit im passenden Format kopieren
     }
     std::string sLocaltime(buf);
 
@@ -441,6 +478,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
 
 
 
+    LauflichtCodetabelle[L"ö"] = 31;
     LauflichtCodetabelle[L":"] = 32;
     LauflichtCodetabelle[L"!"] = 33;
     LauflichtCodetabelle[L"/"] = 47;

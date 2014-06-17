@@ -72,9 +72,16 @@ namespace SWP
 
             /**
 				GetCode(std::string wTemp):
-				Sucht den passenden Code aus der LauflichtCodetabelle.
+				Sucht den passenden Zeichencode aus der LauflichtCodetabelle.
              */
             int GetCode(std::wstring wTemp);
+
+            /**
+				GetCode(std::string wTemp, bool bFlagBig):
+				Sucht den passenden Zeichencode aus der LauflichtCodetabelle.
+				Hierbei wird der Befehl <BIG> berücksichtigt
+            */
+            int GetCode(std::wstring wTemp, bool bFlagBig);
 
             /**
                 GetClock(std::string sClock):
