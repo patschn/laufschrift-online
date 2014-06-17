@@ -42,7 +42,7 @@ namespace SWP
                 Konvertiert den Befehl, der von der Website an die Software weitergegeben
                 wurde, in eine für das Gerät verständliche Sequenz
             */
-            void KonvertiereString(stSequenz &sBefehl);
+            bool KonvertiereString(stSequenz &sBefehl);
 
             /**
                 void LeseString(stSequenz &sBefehl): Liest einen String von der Website ein.
@@ -132,6 +132,12 @@ namespace SWP
              */
 
             bool m_bFlagBig;
+
+            /**
+            	m_bFlagFail:
+            	Flag, der anzeigt ob der Konvertierungsvorgang erfolgreich war
+             */
+            bool m_bFlagFail;
             /*
                 Dient zu Debuggingzwecken:
                 Damit kann nachgeprüft werden, was wie (und ob etwas überhaupt) konvertiert wurde.
