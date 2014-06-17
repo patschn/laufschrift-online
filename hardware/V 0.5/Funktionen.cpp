@@ -11,13 +11,10 @@
 
 SWP::CLauflicht::CLauflicht()
 {
-	std::locale::global(std::locale(""));
-
     //Codetabelle initialisieren
     InitialisiereTabelle();
 
     std::cin.clear();
-    std::flush(std::cout);
 
     //Com-Port festlegen:
     m_iComPort = 22;    //22 = ttyAMA0
@@ -47,6 +44,9 @@ bool SWP::CLauflicht::OeffneRS232()
 
 void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 {
+    std::locale::global(std::locale(""));
+    std::wcin.clear();
+
     m_debugfile.open("debug.txt");
     m_debugfile << "Originalstring:" << std::endl;
 
@@ -54,7 +54,7 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 
     for(std::wstring line; std::getline(std::wcin, line);)
     {
-        m_debugfile << line;      	//In Debugdatei schreiben
+        m_debugfile << line << std::endl;      	//In Debugdatei schreiben
         sBefehl.sOriginal = line;   //String der Website
     }
     m_debugfile << std::endl << std::endl;
@@ -90,10 +90,10 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                             //hinzugefügt werden
 
             //AUTOCENTER::
-			if (sTemp == L"<AUTOCENTER>")
-			{
-				m_bFlagAutocenter = true;
-			}
+            if (sTemp == L"<AUTOCENTER>")
+            {
+                    m_bFlagAutocenter = true;
+            }
             if(sTemp == L"<LEFT>")   //Da Left einfach den String aneinanderkettet, muss der Befehl separat behandelt werden
             {
                 m_bFlagLeft = true;
@@ -105,6 +105,17 @@ void SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 //Farbe in Tabelle nachschauen und Variablen aktualisieren
                 m_iColors[COLOR_BG] = GetCode(sTemp);
                 m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
+            }
+            else if(sTemp == L"Ω" || sTemp == L"Σ" || sTemp == L"¤" || sTemp == L"æ" ||
+            		sTemp == L"Æ" || sTemp == L"£" || sTemp == L"🍷" || sTemp == L"♪" ||
+            		sTemp == L"🚗" || sTemp == L"⛵" || sTemp == L"🕓" || sTemp == L"♥" ||
+            		sTemp == L"⌂" || sTemp == L"◆" || sTemp == L"▲" || sTemp == L"▶" ||
+            		sTemp == L"▼" || sTemp == L"◀" || sTemp == L"☉" || sTemp == L"⬆" ||
+            		sTemp == L"⬇" || sTemp == L"⇦" || sTemp == L"⇨" || sTemp == L"⌀" ||
+            		sTemp == L"∅")
+            {
+                sBefehl.sKonvertiert += GetCode(L"<GRAPH>");
+                sBefehl.sKonvertiert += GetCode(sTemp);
             }
             else if(sTemp == L"<COLOR b>" || sTemp == L"<COLOR r>" || sTemp == L"<COLOR g>" || sTemp == L"<COLOR y>")
             {
@@ -261,6 +272,49 @@ void SWP::CLauflicht::SchliesseRS232()
     m_debugfile.close();
 }
 
+
+
+int SWP::CLauflicht::GetCode(std::wstring wTemp)
+{
+	//Iterator anlegen, um die Codetabelle zu durchsuchen
+	std::map<std::wstring,int>::iterator it;
+
+	//Code suchen
+	it = LauflichtCodetabelle.find(wTemp);
+
+	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
+	if(it == LauflichtCodetabelle.end())
+	{
+		std::cerr << "Fehler beim Konvertieren!" << std::endl;
+		return 0;
+	}
+	else
+	{
+		return it->second;
+	}
+}
+
+std::string SWP::CLauflicht::GetClock(std::string sClock)
+{
+    time_t tTime = time(0);
+    struct tm now;
+    now = *localtime(&tTime);  //Aktuelle Zeit einlesen
+    char buf[20];
+    memset(buf,0,sizeof(buf));
+
+    if(sClock == "<CLOCK24>")
+    {
+        strftime(buf,sizeof(buf),"%d%m%Y%H%M%S",&now);  //Uhrzeit im passenden Format kopieren
+    }
+    else
+    {
+        strftime(buf,sizeof(buf),"%d%m%Y%I%M%S",&now);  //Uhrzeit im passenden Format kopieren
+    }
+    std::string sLocaltime(buf);
+
+    return sLocaltime;
+}
+
 void SWP::CLauflicht::InitialisiereTabelle()
 {
     //Verwendet wird die Liste, die auf http://sigma.haufe.org/index.php?content=funktionen zu finden ist,
@@ -291,7 +345,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"<RANDOM>"] = 163;     //Zufällige Auswahl des Effektes
     LauflichtCodetabelle[L"<SNOW>"] = 144;       //Schneeeffekt
     LauflichtCodetabelle[L"<DSNOW>"] = 145;
-    LauflichtCodetabelle[L"<SHIFTMID>"] = 136;	//Text öffnet sich in der Mitte
+    LauflichtCodetabelle[L"<SHIFTMID>"] = 136;  //Text öffnet sich in der Mitte
 
     //Endbefehle
     LauflichtCodetabelle[L"<CLOSEMID>"] = 133;   //Text "von außen öffnen"
@@ -343,10 +397,28 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L" "] = 58;
 
     //Sonderzeichen:
+    LauflichtCodetabelle[L"◆"] = 1;
+    LauflichtCodetabelle[L"⌂"] = 2;
     LauflichtCodetabelle[L"Ȧ"] = 3;
+    LauflichtCodetabelle[L"\\"] = 4;
+    LauflichtCodetabelle[L"⬆"] = 5;
+    LauflichtCodetabelle[L"⬇"] = 65;//47;
     LauflichtCodetabelle[L"£"] = 6;
     LauflichtCodetabelle[L"¤"] = 7;
     LauflichtCodetabelle[L"Ω"] = 8;
+    LauflichtCodetabelle[L"⇦"] = 9;
+    LauflichtCodetabelle[L"⇨"] = 10;
+    LauflichtCodetabelle[L"🚗"] = 11;   //Auto
+    LauflichtCodetabelle[L"♪"] = 12;
+    LauflichtCodetabelle[L"☉"] = 13;
+    LauflichtCodetabelle[L"🕓"] = 17;   //Uhr
+    LauflichtCodetabelle[L"⛵"] = 28;
+    LauflichtCodetabelle[L"♥"] = 33;
+
+    LauflichtCodetabelle[L"'"] = 0; //Hochkomma
+    LauflichtCodetabelle[L"´"] = 0; //Hochkomma
+    LauflichtCodetabelle[L"`"] = 0; //Hochkomma
+
     LauflichtCodetabelle[L"Ö"] = 15;
 
     LauflichtCodetabelle[L"∅"] = 59;
@@ -354,6 +426,9 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"§"] = 20;
     LauflichtCodetabelle[L"æ"] = 22;
     LauflichtCodetabelle[L"Σ"] = 23;
+    LauflichtCodetabelle[L"🍷"] = 24;   //Weinglas
+
+
 
     LauflichtCodetabelle[L":"] = 32;
     LauflichtCodetabelle[L"!"] = 33;
@@ -392,6 +467,16 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"<"] = 95;
     LauflichtCodetabelle[L">"] = 62;
 
+    //Grafiken
+    LauflichtCodetabelle[L"▲"] = 25;
+    LauflichtCodetabelle[L"▶"] = 44;
+    LauflichtCodetabelle[L"◀"] = 45;
+    LauflichtCodetabelle[L"▼"] = 46;
+
+    LauflichtCodetabelle[L"▲"] = 25;
+    LauflichtCodetabelle[L"▲"] = 25;
+
+
     //Vordergrundfarben:
     LauflichtCodetabelle[L"<COLOR b>"] = 0;   //Schwarz
     LauflichtCodetabelle[L"<COLOR r>"] = 1;   //Rot
@@ -403,47 +488,6 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"<BGCOLOR r>"] = 4;   //Rot
     LauflichtCodetabelle[L"<BGCOLOR g>"] = 8;   //Grün
     LauflichtCodetabelle[L"<BGCOLOR y>"] = 12;  //Gelb
-}
-
-int SWP::CLauflicht::GetCode(std::wstring wTemp)
-{
-	//Iterator anlegen, um die Codetabelle zu durchsuchen
-	std::map<std::wstring,int>::iterator it;
-
-	//Code suchen
-	it = LauflichtCodetabelle.find(wTemp);
-
-	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
-	if(it == LauflichtCodetabelle.end())
-	{
-		std::cerr << "Fehler beim Konvertieren!" << std::endl;
-		return 0;
-	}
-	else
-	{
-		return it->second;
-	}
-}
-
-std::string SWP::CLauflicht::GetClock(std::string sClock)
-{
-    time_t tTime = time(0);
-    struct tm now;
-    now = *localtime(&tTime);  //Aktuelle Zeit einlesen
-    char buf[20];
-    memset(buf,0,sizeof(buf));
-
-    if(sClock == "<CLOCK24>")
-    {
-        strftime(buf,sizeof(buf),"%d%m%Y%H%M%S",&now);  //Uhrzeit im passenden Format kopieren
-    }
-    else
-    {
-        strftime(buf,sizeof(buf),"%d%m%Y%I%M%S",&now);  //Uhrzeit im passenden Format kopieren
-    }
-    std::string sLocaltime(buf);
-
-    return sLocaltime;
 }
 
 std::map<std::wstring,int> SWP::CLauflicht::LauflichtCodetabelle;

@@ -118,14 +118,20 @@ namespace SWP
 
             bool m_bFlagLeft;
 
-			/**
-				m_bFlagAutocenter:
-				Flag, der anzeigt ob <AUTOCENTER> im Befehlsstring vorkommt
-				true: kommt vor, false: kommt nicht vor
-			*/
+            /**
+                    m_bFlagAutocenter:
+                    Flag, der anzeigt ob <AUTOCENTER> im Befehlsstring vorkommt
+                    true: kommt vor, false: kommt nicht vor
+            */
 
-			bool m_bFlagAutocenter;
+            bool m_bFlagAutocenter;
 
+            /**
+                    m_bFlagBig:
+                    Flag, der anzeigt ob <BIG> im Befehlsstring vorkommt
+             */
+
+            bool m_bFlagBig;
             /*
                 Dient zu Debuggingzwecken:
                 Damit kann nachgeprüft werden, was wie (und ob etwas überhaupt) konvertiert wurde.
