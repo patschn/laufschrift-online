@@ -369,7 +369,7 @@ var SequenceControl = (function() {
     $("#sequence-save").click(preventDefaultProxy(save));
     $("#sequence-save-as").click(preventDefaultProxy(saveAs));
     $("#sequence-delete").click(preventDefaultProxy(destroy));
-    $("#play").click(preventDefaultProxy(playClicked));
+    $("#run-button").click(preventDefaultProxy(playClicked));
    
     // Workaround für http://bugs.jqueryui.com/ticket/7498
     var workaroundHelper = $('<div id="sequence-init-helper" class="component"></div>');

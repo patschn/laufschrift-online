@@ -150,8 +150,6 @@ rails/app/assets/javascripts/util.js -text
 rails/app/assets/stylesheets/application.css -text
 rails/app/assets/stylesheets/base.css.scss -text
 rails/app/assets/stylesheets/fonts.css.scss -text
-rails/app/assets/stylesheets/sequences.css.scss -text
-rails/app/assets/stylesheets/sign.css.scss -text
 rails/app/controllers/application_controller.rb -text
 rails/app/controllers/concerns/.keep -text
 rails/app/controllers/sequences_controller.rb -text

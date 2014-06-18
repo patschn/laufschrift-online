@@ -249,7 +249,9 @@ textarea{
 .playbutton:hover{
     background-image:  image-url("playhover.png");
 }
-
+.playbutton:focus {
+    outline: 0;
+}
 
 
 .button {									/*Sequenzbutton(links oben")*/
@@ -745,22 +747,20 @@ textarea{
 	background-image: image-url("linebreak_hover.png") ;
 }
 .button-command-Twitterkomponente{
-	background-image: url(but_twitter.png) ;
+	background-image: image-url("but_twitter.png") ;
 	
 }
 .button-command-Twitterkomponente:hover{
-	background-image: url(but_twitter_hover.png) ;
+	background-image: image-url("but_twitter_hover.png");
 	
 }
 .tool-command-TEXT{
-	background-image: url(textelement.png);
+	background-image: image-url("textelement.png");
 	width:200px;
 	height:40px;
 }
 .tool-command-TEXT:hover{
-	background-image: url(textelement_hover.png);
-	width:200px;
-	height:40px;
+	background-image: image-url("textelement_hover.png");
 }
 
 .tooltip {
