@@ -8,6 +8,7 @@
 #include "rs232.h"      //Bibliothek von http://www.teuniz.net/RS-232/
 #include <iostream>
 #include <ctime>
+#include <unistd.h>		//Für usleep()
 
 SWP::CLauflicht::CLauflicht()
 {
@@ -17,7 +18,7 @@ SWP::CLauflicht::CLauflicht()
     std::cin.clear();
 
     //Com-Port festlegen:
-    m_iComPort = 22;    //22 = ttyAMA0
+    m_iComPort = 22;    //22 = ttyAMA0 laut teunizbibliothek
     m_iColors[COLOR_FG] = 3;
     m_iColors[COLOR_BG] = 0;
     m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
@@ -30,7 +31,7 @@ SWP::CLauflicht::CLauflicht()
 bool SWP::CLauflicht::OeffneRS232()
 {
     //Port öffnen, Baudrate: 2400 - tty-Rechte benötigt!
-    if(RS232_OpenComport(m_iComPort,2400) == 1)   //Rückgabe von 1 signalisiert Fehler
+    if(RS232_OpenComport(m_iComPort,2400) == 1)
     {
         std::cerr << "Fehler beim Öffnen des Com-Ports!" << std::endl;
 
@@ -56,45 +57,82 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 
     for(std::wstring line; std::getline(std::wcin, line);)
     {
-        m_debugfile << line << std::endl;      	//In Debugdatei schreiben
+        //m_debugfile << line << std::endl;      	//In Debugdatei schreiben
         sBefehl.sOriginal = line;   //String der Website
     }
-    m_debugfile << std::endl << std::endl;
+    //m_debugfile << std::endl << std::endl;
 }
 
 bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 {
-    //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
-	sBefehl.sKonvertiert += GetCode(L"<INIT>");
+	std::ofstream dfileend;
 
-    //Sequenzstart signalisieren
-    sBefehl.sKonvertiert += GetCode(L"<START>");
+	dfileend.open("debugend.txt");
+	int iAutocenterlastpos = 0;
 
-    //Programmwahl im Lauflicht (für die Website wird immer Programm A benutzt
-    sBefehl.sKonvertiert += GetCode(L"<PROGRAM->");
-    sBefehl.sKonvertiert += GetCode(L"A");
-
-    //Temporäre Variable zur Verarbeitung anlegen
-    std::wstring sTemp = L"";
+	//Temporäre Variable zur Verarbeitung anlegen
+    std::wstring sTemp;
 
     //Start der Konvertierung - der fertige Befehl wird in sBefehl.sKonvertiert gespeichert
     for(unsigned int i = 0;i < sBefehl.sOriginal.length() && m_bFlagFail == false;i++)
     {
+    	sTemp = L"";
+
         if(sBefehl.sOriginal[i] == '<') //Befehlsanfang wurde gefunden
         {
             for(;sBefehl.sOriginal[i] != '>';i++)   //Den kompletten Befehl einlesen
             {
-                sTemp += sBefehl.sOriginal[i];  //Zeichen in temporären String speichern
+                sTemp += sBefehl.sOriginal[i];
             }
 
             sTemp += '>';   //Da bei '>' die Schleife abgebrochen wird, muss das Zeichen für das Ende des Befehls
                             //hinzugefügt werden
-
-            //AUTOCENTER::
+            m_debugfile << "Konvertiere: " << sTemp << std::endl;
+            /*if(sTemp == L"<RAINBOW>")
+            {
+            	m_iColors[COLOR_FB] = 32;
+            	continue;
+            }
             if (sTemp == L"<AUTOCENTER>")
             {
-                m_bFlagAutocenter = true;
-            }
+            	sTemp = L"";
+            	i = 0;
+            	for(int x = iAutocenterlastpos;x < sBefehl.sOriginal.find(L"<AUTOCENTER>");x++)
+            	{
+            		if(sBefehl.sOriginal[x] == '<')
+            		{
+            			for(;sBefehl.sOriginal[x] != '>';x++){}
+            		}
+            		else
+            		{
+
+            		}
+            	}
+
+            	iAutocenterlastpos = sBefehl.sOriginal.find(L"<AUTOCENTER>");
+            	/*Bisherigen String zentrieren
+            	int ispaces = 0;
+
+            	dfileend << "m_iLetters" << m_iLetters << std::endl;
+            	if(m_iLetters < 14)
+            	{
+            		std::string sasdf;
+            		ispaces = (14 - m_iLetters)/2;
+            		dfileend << "Anzahl Leerstellen" << ispaces << std::endl;
+            		for(int i = 0;i < ispaces ;i++)
+            		{
+            			sasdf += m_iColors[COLOR_FB];
+            			sasdf += GetCode(L" ");
+            		}
+            		sasdf += sBefehl.sKonvertiert;
+            		for(int i = 0;i < ispaces ;i++)
+					{
+						sBefehl.sKonvertiert += m_iColors[COLOR_FB];
+						sBefehl.sKonvertiert += GetCode(L" ");
+					}
+            	}*//*
+            	continue;
+            }*/
             if(sTemp == L"<LEFT>")   //Da Left einfach den String aneinanderkettet, muss der Befehl separat behandelt werden
             {
                 m_bFlagLeft = true;
@@ -116,23 +154,26 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 //Farbe in Tabelle nachschauen und Variablen aktualisieren
                 m_iColors[COLOR_BG] = GetCode(sTemp);
                 m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
+                dfileend << "Hintergrundfarbe geändert: " << m_iColors[COLOR_BG] << std::endl;
+                dfileend << "Farbe: " << m_iColors[COLOR_FB] << std::endl;
             }
             else if(sTemp == L"<COLOR b>" || sTemp == L"<COLOR r>" || sTemp == L"<COLOR g>" || sTemp == L"<COLOR y>")
             {
                 //Farbe in Tabelle nachschauen und Variablen aktualisieren
                 m_iColors[COLOR_FG] = GetCode(sTemp);
                 m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
+                dfileend << "Vordergrundfarbe geändert: " << m_iColors[COLOR_FG] << std::endl;
+                dfileend << "Farbe: " << m_iColors[COLOR_FB] << std::endl;
             }
             else if(sTemp == L"<CLOCK24>" || sTemp == L"<CLOCK12>")
             {
-                sBefehl.sKonvertiert += 143;    //Clockbefehl
-                sBefehl.sKonvertiert += GetCode(sTemp);   //12h oder 24h Uhr
-                //sBefehl.sKonvertiert += GetClock(sTemp);
+                sBefehl.sKonvertiert += 143;    		//Clockbefehl
+                sBefehl.sKonvertiert += GetCode(sTemp); //12h oder 24h Uhr
             }
             else if(sTemp.find(L"WAIT") != std::wstring::npos)
             {
                 char c = sTemp[sTemp.find(' ') + 1];    //Sekundenanzahl speichern
-                if(c != '0')  //Falls Sekunden != 0, dann WAIT ignorieren
+                if(c != '0')  							//Falls Sekunden != 0, dann WAIT ignorieren
                 {
                     sBefehl.sKonvertiert += GetCode(L"<WAIT>");
                     sBefehl.sKonvertiert += c;//GetCode(L&c);
@@ -146,15 +187,18 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             }
             else
             {
+            	m_debugfile << "Befehl konvertieren..." << std::endl;
                 //Befehl in der Codetabelle nachschauen und konvertieren:
                 sBefehl.sKonvertiert += GetCode(sTemp);
-                sBefehl.sKonvertiert += 3;//m_iColors[2];
+                sBefehl.sKonvertiert += 3;	//Befehl nur bestimmte Farben!
+                dfileend << "Befehl::Farbe:: " << m_iColors[COLOR_FB] << std::endl;
             }
         }//if(sBefehl.sOriginal[i] == '<')...
         else    //Wenn kein Befehl gefunden wurde, dann muss es normaler Text sein
         {
             sTemp = sBefehl.sOriginal[i];
-            //m_debugfile << "Aktuelles Zeichen normal: " << sTemp << std::endl;
+
+            m_debugfile << "Zeichen konvertieren: " << sTemp << std::endl;
 
             if(sTemp == L"Ω" || sTemp == L"Σ" || sTemp == L"¤" || sTemp == L"æ" ||
                         		sTemp == L"£" || sTemp == L"🍷" || sTemp == L"♪" ||
@@ -189,84 +233,56 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 //Wenn es kein \ ist, dann ist es ein normales Zeichen
                 sBefehl.sKonvertiert += m_iColors[COLOR_FB];     	//Farbe
                 sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig); //Zeichen
-
+                dfileend << "Befehl::Zeichen:: " << m_iColors[COLOR_FB] << std::endl;
                 //m_debugfile << "Aktuelles Zeichen konvertiert: " << GetCode(sTemp)->second << std::endl;
             }
             m_iLetters++;
-        }//else normaler Text
-        sTemp = L""; //Temporären String leeren
-    }//for(unsigned int i = 0;i < sBefehl.sOriginal.length();i++)...
+        }
+        //m_debugfile << sBefehl.sKonvertiert << std::endl;
+    }
 
 
     //Flags prüfen
-    if(m_bFlagLeft == true && m_bFlagAutocenter == false)	//Left kommt in der Sequenz vor
+    /*if(m_bFlagLeft == true)// && m_bFlagAutocenter == false)	//Left kommt in der Sequenz vor
     {
 		for (; m_iLetters <= 14; m_iLetters++)
 		{
 			sBefehl.sKonvertiert += m_iColors[COLOR_FB];
 			sBefehl.sKonvertiert += GetCode(L" ");
 		}
-    }
-	else
-	{
-		int m_iLinks = 0;	//Laufindex für Leerzeichen links des Textes
-		int m_iRechts = 0; 	//Laufindex für Leerzeichen rechts des Textes
-		m_iLetters = 14 - m_iLetters; //Anzahl der Leerzeichen die benötigt werden
-		m_iLetters /= 2; //Anzahl der Leerzeichen die links benötigt werden
-		std::string sTempSpace = ""; //String, um vor und nach dem Befehl Leerzeichen einzufügen
+    }*/
 
-		for (; m_iLinks <= m_iLetters; m_iLinks++)
-		{
-			sTempSpace += m_iColors[COLOR_FB];
-			sTempSpace += GetCode(L" ");
-		}
-		sBefehl.sKonvertiert = sTempSpace + sBefehl.sKonvertiert; //Links Leerzeichen zum normalen Befehl hinzufügen
-		sTempSpace = "";  //Leerzeichen String leeren
-		m_iLetters = 14 - m_iLinks; //Anzahl der Leerzeichen die rechts benötigt werden
-		for (; m_iRechts <= m_iLetters; m_iRechts++)
-		{
-			sTempSpace += m_iColors[COLOR_FB];
-			sTempSpace += GetCode(L" ");
-		}
-		sBefehl.sKonvertiert = sBefehl.sKonvertiert + sTempSpace; //Rechts Leerzeichen zum normalen Befehl hinzufügen
-	}
-	/*if (m_bFlagAutocenter == true) //Text soll Zentriert werden
-	{
-		int m_iLinks = 0; //Laufindex für Leerzeichen links des Textes
-		int m_iRechts = 0; //Laufindex für Leerzeichen rechts des Textes
-		m_iLetters = 14 - m_iLetters; //Anzahl der Leerzeichen die benötigt werden
-		m_iLetters = m_iLetters / 2; //Anzahl der Leerzeichen die links benötigt werden
-		std::string sTempSpace = ""; //String, um vor und nach dem Befehl Leerzeichen einzufügen
-		for (; m_iLinks <= m_iLetters; m_iLinks++)
-		{
-			sTempSpace += m_iColors[2];
-			sTempSpace += GetCode(L" ");
-		}
-		sBefehl.sKonvertiert = sTempSpace + sBefehl.sKonvertiert; //Links Leerzeichen zum normalen Befehl hinzufügen
-		sTempSpace = "";  //Leerzeichen String leeren
-		m_iLetters = 14 - m_iLinks; //Anzahl der Leerzeichen die rechts benötigt werden
-		for (; m_iRechts <= m_iLetters; m_iRechts++)
-		{
-			sTempSpace += m_iColors[2];
-			sTempSpace += GetCode(L" ");
-		}
-		sBefehl.sKonvertiert = sBefehl.sKonvertiert + sTempSpace; //Rechts Leerzeichen zum normalen Befehl hinzufügen
-	}*/
+    //Start- und Endsequenz
+    std::string SKonvertiertTemp;
 
-    //Endsequenz
-    m_bFlagBig = false;
+    //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
+    SKonvertiertTemp += GetCode(L"<INIT>");
+
+	//Sequenzstart signalisieren
+    SKonvertiertTemp += GetCode(L"<START>");
+
+	//Programmwahl im Lauflicht (für die Website wird immer Programm A benutzt
+    SKonvertiertTemp += GetCode(L"<PROGRAM->");
+    SKonvertiertTemp += GetCode(L"A");
+
+    SKonvertiertTemp += sBefehl.sKonvertiert;
+    sBefehl.sKonvertiert = SKonvertiertTemp;
+
     sBefehl.sKonvertiert += GetCode(L"<END>");
     sBefehl.sKonvertiert += 177;
     sBefehl.sKonvertiert += GetCode(L"<END>");
 
     //m_debugfile << "Endstring: " << sBefehl.sKonvertiert << std::endl;
 
+    dfileend << "Endstring: " << std::endl;
+	dfileend << sBefehl.sKonvertiert << std::endl;
+	dfileend.close();
 
     if(m_bFlagFail == false)	//Sequenz erfolgreich konvertiert
     {
     	return true;
     }
-    else		//Sequenzkonvertierung fehlgeschlagen
+    else	//Sequenzkonvertierung fehlgeschlagen
     {
     	return false;
     }
@@ -274,13 +290,9 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 
 void SWP::CLauflicht::SendeString(stSequenz sBefehl)
 {
-	for(unsigned int i = 0; i < sBefehl.sKonvertiert.length();i++)
-	{
-		RS232_SendByte(m_iComPort, sBefehl.sKonvertiert[i]);
-		m_debugfile << "sende......" << sBefehl.sKonvertiert[i] << std::endl;
-	}
-
-//	RS232_cputs(m_iComPort,sBefehl.sKonvertiert.c_str());
+	RS232_cputs(m_iComPort,GetClock().c_str());
+	usleep(300000);	//200ms
+	RS232_cputs(m_iComPort,sBefehl.sKonvertiert.c_str());
 }
 
 void SWP::CLauflicht::SchliesseRS232()
@@ -299,6 +311,7 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp)
 	std::map<std::wstring,int>::iterator it;
 
 	//Code suchen
+	m_debugfile << "Inhalt von wTemp: " << wTemp << std::endl;
 	it = LauflichtCodetabelle.find(wTemp);
 
 	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
@@ -342,23 +355,66 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp, bool bFlagBig)
 	}
 }
 
-std::string SWP::CLauflicht::GetClock(std::string sClock)
+std::string SWP::CLauflicht::GetClock()
 {
+	std::ofstream clockfile;
+	clockfile.open("clockfile.txt");
+
     time_t tTime = time(0);
     struct tm now;
     now = *localtime(&tTime);  //Aktuelle Zeit einlesen
-    char buf[20];
-    memset(buf,0,sizeof(buf));
 
-    if(sClock == "<CLOCK24>")
+    char buf[20];
+    memset(buf,0,sizeof(buf));	//Buffer auf 0 setzen
+
+    strftime(buf,sizeof(buf),"%y%m%d%H%M%S",&now);  //Uhrzeit im passenden Format kopieren
+
+    clockfile << "Uhrzeit: ";
+    clockfile << buf << std::endl;
+
+    std::string sLocaltime;
+
+    sLocaltime += 170;
+	sLocaltime += 190;
+	sLocaltime += 50;
+
+    for(unsigned int pos = 0;pos < strlen(buf); pos++)
     {
-        strftime(buf,sizeof(buf),"%Y%m%d%H%M%S",&now);  //Uhrzeit im passenden Format kopieren
+    	sLocaltime += buf[pos];
     }
-    else
-    {
-        strftime(buf,sizeof(buf),"%Y%m%d%I%M%S",&now);  //Uhrzeit im passenden Format kopieren
-    }
-    std::string sLocaltime(buf);
+
+    sLocaltime += 191;
+	sLocaltime += 177;
+	sLocaltime += 191;
+	sLocaltime += 177;
+	sLocaltime += 191;
+
+    /* Gültige Sequenz
+    sLocaltime += 170;
+	sLocaltime += 190;
+	sLocaltime += 50;
+	sLocaltime += 49;
+	sLocaltime += 52;
+	sLocaltime += 48;
+	sLocaltime += 54;
+	sLocaltime += 49;
+	sLocaltime += 54;
+	sLocaltime += 50;
+	sLocaltime += 51;
+	sLocaltime += 53;
+	sLocaltime += 55;
+	sLocaltime += 51;
+	sLocaltime += 48;
+	sLocaltime += 191;
+	sLocaltime += 177;
+	sLocaltime += 191;
+	sLocaltime += 177;
+	sLocaltime += 191;
+	*/
+
+    clockfile << "Konvertierte Uhrzeit: ";
+    clockfile << sLocaltime;
+    clockfile.close();
 
     return sLocaltime;
 }
@@ -373,10 +429,10 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"<PROGRAM->"] = 175;   //Speicherwahl
     LauflichtCodetabelle[L"<CLEAR>"] = 142;      //Anzeige leeren
     LauflichtCodetabelle[L"<WAIT>"] = 161;       //Pause bei der Anzeige; muss von einer Zahl von 1-9 gefolgt werden,
-                                                //wobei 1 = schnell und 9 = langsam
+                                                 //wobei 1 = schnell und 9 = langsam
     LauflichtCodetabelle[L"<SPEED>"] = 160;      //Geschwindigkeit der Anzeige muss von einer Zahl von 1-9 gefolgt werden,
-                                                //wobei 1 = schnell und 9 = langsam
-    LauflichtCodetabelle[L"<END>"] = 191;           //Programm-Ende
+                                                 //wobei 1 = schnell und 9 = langsam
+    LauflichtCodetabelle[L"<END>"] = 191;        //Programm-Ende
     LauflichtCodetabelle[L"<GRAPH>"] = 16;
 
     //Einführungsbefehle
@@ -495,13 +551,14 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"-"] = 45;
     LauflichtCodetabelle[L"."] = 46;
 
-    LauflichtCodetabelle[L"⌀"] = 16; //großes Durchschnittszeichen
+    LauflichtCodetabelle[L"⌀"] = 16;
     LauflichtCodetabelle[L"Æ"] = 60;
     LauflichtCodetabelle[L"="] = 61;
     LauflichtCodetabelle[L"?"] = 63;
 
     LauflichtCodetabelle[L"@"] = 64;
     LauflichtCodetabelle[L"Ü"] = 91;
+    LauflichtCodetabelle[L"ü"] = 91;
     LauflichtCodetabelle[L"ù"] = 92;
     LauflichtCodetabelle[L"è"] = 93;
     LauflichtCodetabelle[L"^"] = 94;
@@ -510,7 +567,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
 
     LauflichtCodetabelle[L";"] = 123;
     LauflichtCodetabelle[L"Ñ"] = 124;
-    LauflichtCodetabelle[L"ñ"] = 125;    //ACHTUNG: Ähnlich 124
+    LauflichtCodetabelle[L"ñ"] = 125;
     LauflichtCodetabelle[L"Ä"] = 126;
     LauflichtCodetabelle[L"ä"] = 127;
     LauflichtCodetabelle[L"<"] = 95;
