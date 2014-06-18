@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   #get 'sign/index'
   post 'sign/commit'
+  get "/tweets", to: "posts#tweets"
 
   resources :sequences, except: [:new, :edit]
 

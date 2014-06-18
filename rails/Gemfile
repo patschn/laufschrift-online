@@ -44,3 +44,4 @@ gem 'spring',        group: :development
 
 gem 'jquery-ui-rails', '~> 4.2.1'
 gem 'jquery-popover'
+gem 'twitter'

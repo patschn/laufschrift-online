@@ -1,0 +1,44 @@
+<% require 'twitter'
+
+ Rails.application.assets.context_class.class_eval do
+
+  include Rails.application.routes.url_helpers
+
+  include ActionView::Helpers::JavaScriptHelper
+
+end
+
+
+
+def tweets 
+
+
+
+client = Twitter::REST::Client.new do |config|
+
+  config.consumer_key        = ENV["Cm6UrYbDOUFsYVlAZP5SvJuEe"]
+
+  config.consumer_secret     = ENV["ZR3ujhZd73KdBWW4FGHbAIsSSFetmjyy5cUgPZ5MBzkh8fe8SZ"]
+
+  config.access_token        = ENV["531701148-1VUN5GLJYWBJ4l3mDkH0fdCcPghMG8TBYp4bPIaB"]
+
+  config.access_token_secret = ENV["COuRUdA2WQ5VrMK94wY3vV34HKe0CC88ybviLOGC5mrK6"]
+
+end
+
+end
+
+
+
+def posts
+client.search("bh-club").take(3).each do |tweet|
+
+   puts tweet.text end
+ 
+end
+
+%>
+function get_twitter_str(){
+return "?";
+}
+

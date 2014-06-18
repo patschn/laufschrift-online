@@ -481,6 +481,16 @@ GroupComponent.prototype.getSignText = function() {
     return SequenceCodec.encodeToString(this.components, true);
 };
 
+function TwitterComponent() {
+    CommandComponent.call(this, 'Twitterkomponente', false);
+}
+
+TwitterComponent.prototype = Object.create(CommandComponent.prototype);
+TwitterComponent.prototype.constructor = TwitterComponent;
+TwitterComponent.prototype.getSignText = function() {
+	 return get_twitter_str();
+};
+
 // ComponentInfo
 // ==============
 
@@ -574,7 +584,7 @@ var ASC333Components = {
 			}));
 		});
 		$.each(twitter, function(i, animation) {
-			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation[0], undefined));
+			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation[0], function(){return new TwitterComponent();}));
 			Toolbox.registerToolInfo(new ToolInfo('twitter', info, {
 				tooltip: animation[1]
 			}));

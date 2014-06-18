@@ -146,6 +146,7 @@ rails/app/assets/javascripts/sequence.js -text
 rails/app/assets/javascripts/sequencecontrol.js -text
 rails/app/assets/javascripts/test.js -text
 rails/app/assets/javascripts/toolbox.js -text
+rails/app/assets/javascripts/tweets.js.erb -text
 rails/app/assets/javascripts/util.js -text
 rails/app/assets/stylesheets/application.css -text
 rails/app/assets/stylesheets/base.css.scss -text
