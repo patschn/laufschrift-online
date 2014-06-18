@@ -369,6 +369,7 @@ var SequenceControl = (function() {
     $("#sequence-save").click(preventDefaultProxy(save));
     $("#sequence-save-as").click(preventDefaultProxy(saveAs));
     $("#sequence-delete").click(preventDefaultProxy(destroy));
+    $("#play").click(preventDefaultProxy(playClicked));
    
     // Workaround für http://bugs.jqueryui.com/ticket/7498
     var workaroundHelper = $('<div id="sequence-init-helper" class="component"></div>');
@@ -396,6 +397,26 @@ var SequenceControl = (function() {
     return sequenceDiv;
   };
   
+  var playClicked = function() {
+    commit(commitTextField.val());
+  };
+  
+  var commit = function(text) {
+    $.ajax({
+      url: Config.commitPath,
+      type: 'post',
+      data: { text: text }
+    }).done(function (data, status, xhr) {
+      FlashMessage.success('Text an die Laufschrift übergeben');
+    }).fail(function (xhr, status, e) {
+      var errMsg = e;
+      if (xhr.status === 500) {
+        errMsg = xhr.responseText;
+      }
+      FlashMessage.error('Fehler beim Senden an die Laufschrift: ' + errMsg);
+    });
+  };
+  
   return {
     init: init,
     createNew: createNew,
@@ -404,6 +425,7 @@ var SequenceControl = (function() {
     saveAs: saveAs,
     destroy: destroy,
     getSequenceSortable: getSequenceSortable,
-    loadSequenceFromText: loadSequenceFromText
+    loadSequenceFromText: loadSequenceFromText,
+    commit: commit
   };
 }());
