@@ -97,7 +97,9 @@ rails/app/assets/images/openmid.png -text
 rails/app/assets/images/openmid_hover.png -text
 rails/app/assets/images/openright.png -text
 rails/app/assets/images/openright_hover.png -text
+rails/app/assets/images/play.png -text
 rails/app/assets/images/playbutton.png -text
+rails/app/assets/images/playhover.png -text
 rails/app/assets/images/question.png -text
 rails/app/assets/images/rainbow.png -text
 rails/app/assets/images/rainbow_hover.png -text
@@ -124,6 +126,7 @@ rails/app/assets/images/speed_hover.png -text
 rails/app/assets/images/squeezemid.png -text
 rails/app/assets/images/squeezemid_hover.png -text
 rails/app/assets/images/textelement.png -text
+rails/app/assets/images/textelement2.png -text
 rails/app/assets/images/textelement_hover.png -text
 rails/app/assets/images/timewait.png -text
 rails/app/assets/images/timewait_hover.png -text
