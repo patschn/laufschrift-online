@@ -556,7 +556,6 @@ var ASC333Components = {
 		    [ 'JUMP',  "Mitteilung erscheint sofort" ],
 		    [ 'OPENMID', "Mitteilung erscheint in der Mitte und breitet sich nacheinander zu den Seiten aus" ],
 		    [ 'OPENRIGHT', "Mitteilung erscheint einzeln von links nach rechts" ],
-		    [ 'RAINBOW', "Mitteilung erscheint in Regenbogenfarben" ],
 		    [ 'RANDOM', "Zufälliger Effekt" ],
 		    [ 'SHIFTMID', "Mitteilung bewegt sich von der Mitte gleichmäßig zu beiden Seiten" ],
 		    [ 'SNOW', "Mitteilung erscheint in Einzelpunkten auf der Anzeige" ]

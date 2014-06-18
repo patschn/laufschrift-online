@@ -419,6 +419,12 @@ textarea{
 .button-color-fg-g {
     color: #26ff00;
 }
+.button-color-fg-rainbow { 
+ 	background-image: image-url("rainbow.png") ;
+}
+.button-color-fg-rainbow:hover{
+	background-image: image-url("rainbow_hover.png") ;
+}
 
 .button-color-bg-r {
 	background-image: image-url("redbg.png");
@@ -574,6 +580,11 @@ textarea{
     content: "A";
 }
 
+/* nicht für den Regenbogenknopf */
+.button-color-fg-rainbow:before {
+    content: "" !important;
+}
+
 .tool-command-BIG, .component-command-BIG .button-component {
     font-family: "PIDvl bold";
 }
@@ -685,12 +696,6 @@ textarea{
 }
 .button-command-OPENRIGHT:hover{
 	background-image: image-url("openright_hover.png") ;
-}	
-.button-command-RAINBOW{ 
- 	background-image: image-url("rainbow.png") ;
-}
-.button-command-RAINBOW:hover{
-	background-image: image-url("rainbow_hover.png") ;
 }	
 .button-command-RANDOM{ 
  	background-image: image-url("random.png") ;
