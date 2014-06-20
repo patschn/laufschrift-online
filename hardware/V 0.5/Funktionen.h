@@ -91,6 +91,11 @@ namespace SWP
             */
             std::string GetClock();//std::wstring sClock);
 
+            /**
+            	void AutoLeft(stSequenz &sBefehl):
+            	Behandelt die Befehle Autocenter und Left;
+            */
+            void AutoLeft(stSequenz &sBefehl);
 
             /**
                 std::map<std::wstring,int> LauflichtCodetabelle:

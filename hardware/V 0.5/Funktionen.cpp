@@ -57,10 +57,10 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 
     for(std::wstring line; std::getline(std::wcin, line);)
     {
-        //m_debugfile << line << std::endl;      	//In Debugdatei schreiben
+        m_debugfile << line << std::endl;      	//In Debugdatei schreiben
         sBefehl.sOriginal = line;   //String der Website
     }
-    //m_debugfile << std::endl << std::endl;
+    m_debugfile << std::endl;
 }
 
 bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
@@ -68,7 +68,9 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 	std::ofstream dfileend;
 
 	dfileend.open("debugend.txt");
-	int iAutocenterlastpos = 0;
+	AutoLeft(sBefehl);
+
+	m_debugfile << "Originalstring nach AutoLeft: " << sBefehl.sOriginal << std::endl;
 
 	//Temporäre Variable zur Verarbeitung anlegen
     std::wstring sTemp;
@@ -88,55 +90,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             sTemp += '>';   //Da bei '>' die Schleife abgebrochen wird, muss das Zeichen für das Ende des Befehls
                             //hinzugefügt werden
             m_debugfile << "Konvertiere: " << sTemp << std::endl;
-            /*if(sTemp == L"<RAINBOW>")
-            {
-            	m_iColors[COLOR_FB] = 32;
-            	continue;
-            }
-            if (sTemp == L"<AUTOCENTER>")
-            {
-            	sTemp = L"";
-            	i = 0;
-            	for(int x = iAutocenterlastpos;x < sBefehl.sOriginal.find(L"<AUTOCENTER>");x++)
-            	{
-            		if(sBefehl.sOriginal[x] == '<')
-            		{
-            			for(;sBefehl.sOriginal[x] != '>';x++){}
-            		}
-            		else
-            		{
 
-            		}
-            	}
-
-            	iAutocenterlastpos = sBefehl.sOriginal.find(L"<AUTOCENTER>");
-            	/*Bisherigen String zentrieren
-            	int ispaces = 0;
-
-            	dfileend << "m_iLetters" << m_iLetters << std::endl;
-            	if(m_iLetters < 14)
-            	{
-            		std::string sasdf;
-            		ispaces = (14 - m_iLetters)/2;
-            		dfileend << "Anzahl Leerstellen" << ispaces << std::endl;
-            		for(int i = 0;i < ispaces ;i++)
-            		{
-            			sasdf += m_iColors[COLOR_FB];
-            			sasdf += GetCode(L" ");
-            		}
-            		sasdf += sBefehl.sKonvertiert;
-            		for(int i = 0;i < ispaces ;i++)
-					{
-						sBefehl.sKonvertiert += m_iColors[COLOR_FB];
-						sBefehl.sKonvertiert += GetCode(L" ");
-					}
-            	}*//*
-            	continue;
-            }*/
-            if(sTemp == L"<LEFT>")   //Da Left einfach den String aneinanderkettet, muss der Befehl separat behandelt werden
-            {
-                m_bFlagLeft = true;
-            }
             if(sTemp == L"<BIG>")
             {
             	m_bFlagBig = true;
@@ -151,19 +105,40 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             //Prüfen, ob Farbe vorliegt
             if(sTemp == L"<BGCOLOR b>" || sTemp == L"<BGCOLOR r>" || sTemp == L"<BGCOLOR g>" || sTemp == L"<BGCOLOR y>")
             {
-                //Farbe in Tabelle nachschauen und Variablen aktualisieren
-                m_iColors[COLOR_BG] = GetCode(sTemp);
-                m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
-                dfileend << "Hintergrundfarbe geändert: " << m_iColors[COLOR_BG] << std::endl;
-                dfileend << "Farbe: " << m_iColors[COLOR_FB] << std::endl;
+            	m_debugfile << "COLOR_FG vorher: " << COLOR_FG << std::endl;
+            	m_debugfile << "COLOR_BG vorher: " << COLOR_BG << std::endl;
+            	m_debugfile << "COLOR_FB vorher: " << COLOR_FB << std::endl;
+
+            	if(m_iColors[COLOR_FB] != 32)
+            	{
+            		m_debugfile << "Hintergrundfarbe setzen: " << sTemp << std::endl;
+
+					//Farbe in Tabelle nachschauen und Variablen aktualisieren
+					m_iColors[COLOR_BG] = GetCode(sTemp);
+					m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
+					m_debugfile << "COLOR_FG nachher: " << m_iColors[COLOR_FG] << std::endl;
+					m_debugfile << "COLOR_BG nachher: " << m_iColors[COLOR_BG] << std::endl;
+					m_debugfile << "COLOR_FB nachher: " << m_iColors[COLOR_FB] << std::endl;
+            	}
             }
             else if(sTemp == L"<COLOR b>" || sTemp == L"<COLOR r>" || sTemp == L"<COLOR g>" || sTemp == L"<COLOR y>")
             {
+            	m_debugfile << "COLOR_FG vorher: " << m_iColors[COLOR_FG] << std::endl;
+            	m_debugfile << "COLOR_BG vorher: " << m_iColors[COLOR_BG] << std::endl;
+            	m_debugfile << "COLOR_FB vorher: " << m_iColors[COLOR_FB] << std::endl;
+
                 //Farbe in Tabelle nachschauen und Variablen aktualisieren
+            	m_debugfile << "Vordergrundfarbe setzen: " << sTemp << std::endl;
                 m_iColors[COLOR_FG] = GetCode(sTemp);
                 m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
-                dfileend << "Vordergrundfarbe geändert: " << m_iColors[COLOR_FG] << std::endl;
-                dfileend << "Farbe: " << m_iColors[COLOR_FB] << std::endl;
+                m_debugfile << "COLOR_FG nachher: " << m_iColors[COLOR_FG] << std::endl;
+                m_debugfile << "COLOR_BG nachher: " << m_iColors[COLOR_BG] << std::endl;
+                m_debugfile << "COLOR_FB nachher: " << m_iColors[COLOR_FB] << std::endl;
+            }
+            else if(sTemp == L"<COLOR rainbow>")
+            {
+            	dfileend << "Rainbow!" << std::endl;
+            	m_iColors[COLOR_FB] = GetCode(sTemp);
             }
             else if(sTemp == L"<CLOCK24>" || sTemp == L"<CLOCK12>")
             {
@@ -181,9 +156,9 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             }
             else if(sTemp.find(L"SPEED") != std::wstring::npos)
             {
-                sBefehl.sKonvertiert += GetCode(L"<SPEED>");
-                char c = sTemp[sTemp.find(' ') + 1];
-      //          sBefehl.sKonvertiert += GetCode(&c);
+            	char c = sTemp[sTemp.find(' ') + 1];    //Geschwindigkeit speichern
+				sBefehl.sKonvertiert += GetCode(L"<SPEED>");
+				sBefehl.sKonvertiert += c;//GetCode(L&c);
             }
             else
             {
@@ -193,7 +168,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 sBefehl.sKonvertiert += 3;	//Befehl nur bestimmte Farben!
                 dfileend << "Befehl::Farbe:: " << m_iColors[COLOR_FB] << std::endl;
             }
-        }//if(sBefehl.sOriginal[i] == '<')...
+        }		//if(sBefehl.sOriginal[i] == '<')...
         else    //Wenn kein Befehl gefunden wurde, dann muss es normaler Text sein
         {
             sTemp = sBefehl.sOriginal[i];
@@ -240,17 +215,6 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
         }
         //m_debugfile << sBefehl.sKonvertiert << std::endl;
     }
-
-
-    //Flags prüfen
-    /*if(m_bFlagLeft == true)// && m_bFlagAutocenter == false)	//Left kommt in der Sequenz vor
-    {
-		for (; m_iLetters <= 14; m_iLetters++)
-		{
-			sBefehl.sKonvertiert += m_iColors[COLOR_FB];
-			sBefehl.sKonvertiert += GetCode(L" ");
-		}
-    }*/
 
     //Start- und Endsequenz
     std::string SKonvertiertTemp;
@@ -311,18 +275,20 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp)
 	std::map<std::wstring,int>::iterator it;
 
 	//Code suchen
-	m_debugfile << "Inhalt von wTemp: " << wTemp << std::endl;
+	m_debugfile << "Inhalt von wTemp: " << wTemp << "|" << std::endl;
 	it = LauflichtCodetabelle.find(wTemp);
 
 	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
 	if(it == LauflichtCodetabelle.end())
 	{
-		std::cerr << "Fehler beim Konvertieren!" << std::endl;
+		m_debugfile << "Fehler beim Konvertieren von " << wTemp << std::endl;
+		std::cerr << "Fehler beim Konvertieren!"<< std::endl;
 		m_bFlagFail = true;
 		return 0;
 	}
 	else
 	{
+		m_debugfile << "Erfolgreich " << wTemp << "konvertiert!" << std::endl;
 		return it->second;
 	}
 }
@@ -338,7 +304,7 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp, bool bFlagBig)
 	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
 	if(it == LauflichtCodetabelle.end())
 	{
-		std::cerr << "Fehler beim Konvertieren!" << std::endl;
+		std::cerr << "Fehler beim BigKonvertieren!" << std::endl;
 		m_bFlagFail = true;
 		return 0;
 	}
@@ -417,6 +383,109 @@ std::string SWP::CLauflicht::GetClock()
     clockfile.close();
 
     return sLocaltime;
+}
+
+void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
+{
+	std::string sTemp = "";
+
+	int firstchar,lastchar, lastauto;
+	firstchar = lastchar = lastauto = -1;
+
+	bool bAutoCenterDone = false, bLeftDone = false, bBig = false;
+
+	while(bAutoCenterDone == false)
+	{
+		//Autocenter suchen
+		lastauto = sBefehl.sOriginal.find(L"<AUTOCENTER>");
+
+		if(lastauto == std::string::npos)	//Fehlschlag
+		{
+			bAutoCenterDone = true;
+		}
+		else
+		{
+			for(int i = lastauto-1;i > 0;i--)
+			{
+				//Befehl, falls kein Escapezeichen oder sonstiges gefunden
+				if(sBefehl.sOriginal[i] == '>' && sBefehl.sOriginal[i-1] != '\\')
+				{
+					while(sBefehl.sOriginal[i] != '<')
+					{
+						i--;
+					}
+				}
+				else
+				{
+					while(sBefehl.sOriginal[i] != '>')	//Bis zum nächsten Befehl
+					{
+						if(lastchar == -1)
+						{
+							lastchar = i;
+						}
+						else
+						{
+							firstchar = i;
+							i--;
+						}
+					}
+					if(lastchar - firstchar < 14)	//Leerzeichen einfügen, falls Zeichenanzahl
+					{								//kleiner der maximal darstellbaren Charakter
+						/*
+						 * Big behandeln:
+						 * Wenn vor firstchar noch ein <BIG> kommt (ohne weitere Zeichen dazwischen) dann
+						 * Leerzeichen nochmal durch zwei teilen.
+						 */
+
+						int iLeerzeichen = 0;
+						iLeerzeichen = 14 - (lastchar - firstchar);	//Fehlende Leerzeichen berechnen
+						if(bBig == true)
+						{
+							iLeerzeichen /= 4;	//Durch 4 teilen für links und rechts
+						}
+						else
+						{
+							iLeerzeichen /= 2;	//Durch 2 teilen für links und rechts
+						}
+
+						for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+						{
+							sBefehl.sOriginal.insert(lastchar+1,L" ");
+						}
+
+						for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+						{
+							sBefehl.sOriginal.insert(firstchar,L" ");
+						}
+
+						//<AUTOCENTER> entfernen
+						sBefehl.sOriginal.erase(lastauto + iLeerzeichen*2,12);
+						firstchar = lastchar = lastauto = -1;
+
+						break;
+					}
+					else
+					{
+						sBefehl.sOriginal.erase(lastauto,12);
+						firstchar = lastchar = lastauto = -1;
+						break;
+					}
+				}//</else>
+			}
+		}
+	}
+	return;
+
+	/*
+		if(m_bFlagLeft == true)// && m_bFlagAutocenter == false)	//Left kommt in der Sequenz vor
+		{
+			for (; m_iLetters <= 14; m_iLetters++)
+			{
+				sBefehl.sKonvertiert += m_iColors[COLOR_FB];
+				sBefehl.sKonvertiert += GetCode(L" ");
+			}
+		}
+	*/
 }
 
 void SWP::CLauflicht::InitialisiereTabelle()
@@ -585,6 +654,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"<COLOR r>"] = 1;   //Rot
     LauflichtCodetabelle[L"<COLOR g>"] = 2;   //Grün
     LauflichtCodetabelle[L"<COLOR y>"] = 3;   //Gelb
+    LauflichtCodetabelle[L"<COLOR rainbow>"] = 32;   //Gelb
 
     //Hintergrundfarben:
     LauflichtCodetabelle[L"<BGCOLOR b>"] = 0;   //Schwarz
