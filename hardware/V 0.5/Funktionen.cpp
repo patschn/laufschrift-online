@@ -138,7 +138,12 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             else if(sTemp == L"<COLOR rainbow>")
             {
             	dfileend << "Rainbow!" << std::endl;
-            	m_iColors[COLOR_FB] = GetCode(sTemp);
+            	/*
+            		Der Hintergrund muss schwarz sein - Rainbow lässt keinen anderen Hintergrund zu.
+            	*/
+            	m_iColors[COLOR_FG] = GetCode(sTemp);
+            	m_iColors[COLOR_BG] = 0;
+            	m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
             }
             else if(sTemp == L"<CLOCK24>" || sTemp == L"<CLOCK12>")
             {
@@ -387,10 +392,11 @@ std::string SWP::CLauflicht::GetClock()
 
 void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 {
-	std::string sTemp = "";
+	std::wstring sTemp = L"";
 
 	int firstchar,lastchar, lastauto;
-	firstchar = lastchar = lastauto = -1;
+	int iLeerzeichen;
+	firstchar = lastchar = lastauto = iLeerzeichen = -1;
 
 	bool bAutoCenterDone = false, bLeftDone = false, bBig = false;
 
@@ -429,7 +435,52 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 							i--;
 						}
 					}
-					if(lastchar - firstchar < 14)	//Leerzeichen einfügen, falls Zeichenanzahl
+
+					/*
+						Zwischen BIG und NORMAL unterscheiden:
+						Von aktueller firstchar-Position aus nach <BIG> und <NORMAL> suchen,
+						um Leerzeichen korrekt zu berechnen
+					*/
+
+					for(int iBigNormal = firstchar; iBigNormal > 0;iBigNormal--)
+					{
+						sTemp = L"";
+						if(sBefehl.sOriginal[iBigNormal] == '>')
+						{
+							while(sBefehl.sOriginal[iBigNormal] != '<')
+							{
+								sTemp += sBefehl.sOriginal[iBigNormal];
+								iBigNormal--;
+							}
+							sTemp += '<';
+						}
+
+						if(sTemp == L">LAMRON<")	{ bBig = false; break; }
+						else if (sTemp == L">GIB<")	{ bBig = true; break; }
+					}
+
+					if((lastchar - firstchar < 7) && bBig == true)
+					{
+						iLeerzeichen = (14 - (lastchar - firstchar));
+						iLeerzeichen /= 4;
+
+						for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+						{
+							sBefehl.sOriginal.insert(lastchar+1,L" ");
+						}
+
+						for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+						{
+							sBefehl.sOriginal.insert(firstchar,L" ");
+						}
+
+						//<AUTOCENTER> entfernen
+						sBefehl.sOriginal.erase(lastauto + iLeerzeichen*2,12);
+						firstchar = lastchar = lastauto = -1;
+
+						break;
+					}
+					else if((lastchar - firstchar < 14) && bBig == false)	//Leerzeichen einfügen, falls Zeichenanzahl
 					{								//kleiner der maximal darstellbaren Charakter
 						/*
 						 * Big behandeln:
@@ -471,6 +522,12 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 						break;
 					}
 				}//</else>
+
+				if(i == 0)	//Sollte <AUTOCENTER> unsinnigerweise am Anfang gesetzt oder keine Zeichen gefunden werden
+				{
+					sBefehl.sOriginal.erase(lastauto,12);
+					break;
+				}
 			}
 		}
 	}
