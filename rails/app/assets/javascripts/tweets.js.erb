@@ -8,7 +8,7 @@
 
 end
 
-
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 def tweets 
 
@@ -16,29 +16,26 @@ def tweets
 
 client = Twitter::REST::Client.new do |config|
 
-  config.consumer_key        = ENV["Cm6UrYbDOUFsYVlAZP5SvJuEe"]
+  config.consumer_key        = 'Cm6UrYbDOUFsYVlAZP5SvJuEe'
 
-  config.consumer_secret     = ENV["ZR3ujhZd73KdBWW4FGHbAIsSSFetmjyy5cUgPZ5MBzkh8fe8SZ"]
+  config.consumer_secret     = 'ZR3ujhZd73KdBWW4FGHbAIsSSFetmjyy5cUgPZ5MBzkh8fe8SZ'
 
-  config.access_token        = ENV["531701148-1VUN5GLJYWBJ4l3mDkH0fdCcPghMG8TBYp4bPIaB"]
+  config.access_token        = '531701148-1VUN5GLJYWBJ4l3mDkH0fdCcPghMG8TBYp4bPIaB'
 
-  config.access_token_secret = ENV["COuRUdA2WQ5VrMK94wY3vV34HKe0CC88ybviLOGC5mrK6"]
-
-end
+  config.access_token_secret = 'COuRUdA2WQ5VrMK94wY3vV34HKe0CC88ybviLOGC5mrK6'
 
 end
 
-
-
-def posts
-client.search("bh-club").take(3).each do |tweet|
-
-   puts tweet.text end
+@tweets =
+ client.search("to:justinbieber marry me", :result_type => "recent").take(3).collect do |tweet|
+  "#{tweet.user.screen_name}: #{tweet.text}"
+end
  
 end
+tweets
 
 %>
 function get_twitter_str(){
-return "?";
+return <%= @tweets%>;
 }
 
