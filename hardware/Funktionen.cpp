@@ -19,9 +19,9 @@ SWP::CLauflicht::CLauflicht()
 
     //Com-Port festlegen:
     m_iComPort = 22;    //22 = ttyAMA0 laut teunizbibliothek
-    m_iColors[COLOR_FG] = 3;
-    m_iColors[COLOR_BG] = 0;
-    m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
+    iColors[COLOR_FG] = 3;
+    iColors[COLOR_BG] = 0;
+    iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
     m_iLetters = 0;
     m_bFlagLeft = false;
     m_bFlagBig = false;
@@ -65,7 +65,15 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 
 bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 {
-	std::ofstream dfileend;
+    /**
+        int iColors[3]: Dient zur Speicherung der Farbwerte
+        iColors[COLOR_FG]: Vordergrundfarbe
+        iColors[COLOR_BG]: Hintergrundfarbe
+        iColors[COLOR_FB]: Berechnete Farbenkombination (Addition aus Vorder-/Hintergrundfarbe)
+    */
+    int iColors[3];
+	
+    std::ofstream dfileend;
 
 	dfileend.open("debugend.txt");
 	AutoLeft(sBefehl);
@@ -109,31 +117,31 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             	m_debugfile << "COLOR_BG vorher: " << COLOR_BG << std::endl;
             	m_debugfile << "COLOR_FB vorher: " << COLOR_FB << std::endl;
 
-            	if(m_iColors[COLOR_FB] != 32)
+            	if(iColors[COLOR_FB] != 32)
             	{
             		m_debugfile << "Hintergrundfarbe setzen: " << sTemp << std::endl;
 
 					//Farbe in Tabelle nachschauen und Variablen aktualisieren
-					m_iColors[COLOR_BG] = GetCode(sTemp);
-					m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
-					m_debugfile << "COLOR_FG nachher: " << m_iColors[COLOR_FG] << std::endl;
-					m_debugfile << "COLOR_BG nachher: " << m_iColors[COLOR_BG] << std::endl;
-					m_debugfile << "COLOR_FB nachher: " << m_iColors[COLOR_FB] << std::endl;
+					iColors[COLOR_BG] = GetCode(sTemp);
+					iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
+					m_debugfile << "COLOR_FG nachher: " << iColors[COLOR_FG] << std::endl;
+					m_debugfile << "COLOR_BG nachher: " << iColors[COLOR_BG] << std::endl;
+					m_debugfile << "COLOR_FB nachher: " << iColors[COLOR_FB] << std::endl;
             	}
             }
             else if(sTemp == L"<COLOR b>" || sTemp == L"<COLOR r>" || sTemp == L"<COLOR g>" || sTemp == L"<COLOR y>")
             {
-            	m_debugfile << "COLOR_FG vorher: " << m_iColors[COLOR_FG] << std::endl;
-            	m_debugfile << "COLOR_BG vorher: " << m_iColors[COLOR_BG] << std::endl;
-            	m_debugfile << "COLOR_FB vorher: " << m_iColors[COLOR_FB] << std::endl;
+            	m_debugfile << "COLOR_FG vorher: " << iColors[COLOR_FG] << std::endl;
+            	m_debugfile << "COLOR_BG vorher: " << iColors[COLOR_BG] << std::endl;
+            	m_debugfile << "COLOR_FB vorher: " << iColors[COLOR_FB] << std::endl;
 
                 //Farbe in Tabelle nachschauen und Variablen aktualisieren
             	m_debugfile << "Vordergrundfarbe setzen: " << sTemp << std::endl;
-                m_iColors[COLOR_FG] = GetCode(sTemp);
-                m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
-                m_debugfile << "COLOR_FG nachher: " << m_iColors[COLOR_FG] << std::endl;
-                m_debugfile << "COLOR_BG nachher: " << m_iColors[COLOR_BG] << std::endl;
-                m_debugfile << "COLOR_FB nachher: " << m_iColors[COLOR_FB] << std::endl;
+                iColors[COLOR_FG] = GetCode(sTemp);
+                iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
+                m_debugfile << "COLOR_FG nachher: " << iColors[COLOR_FG] << std::endl;
+                m_debugfile << "COLOR_BG nachher: " << iColors[COLOR_BG] << std::endl;
+                m_debugfile << "COLOR_FB nachher: " << iColors[COLOR_FB] << std::endl;
             }
             else if(sTemp == L"<COLOR rainbow>")
             {
@@ -141,9 +149,9 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             	/*
             		Der Hintergrund muss schwarz sein - Rainbow lässt keinen anderen Hintergrund zu.
             	*/
-            	m_iColors[COLOR_FG] = GetCode(sTemp);
-            	m_iColors[COLOR_BG] = 0;
-            	m_iColors[COLOR_FB] = m_iColors[COLOR_FG] + m_iColors[COLOR_BG];
+            	iColors[COLOR_FG] = GetCode(sTemp);
+            	iColors[COLOR_BG] = 0;
+            	iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
             }
             else if(sTemp == L"<CLOCK24>" || sTemp == L"<CLOCK12>")
             {
@@ -171,7 +179,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 //Befehl in der Codetabelle nachschauen und konvertieren:
                 sBefehl.sKonvertiert += GetCode(sTemp);
                 sBefehl.sKonvertiert += 3;	//Befehl nur bestimmte Farben!
-                dfileend << "Befehl::Farbe:: " << m_iColors[COLOR_FB] << std::endl;
+                dfileend << "Befehl::Farbe:: " << iColors[COLOR_FB] << std::endl;
             }
         }		//if(sBefehl.sOriginal[i] == '<')...
         else    //Wenn kein Befehl gefunden wurde, dann muss es normaler Text sein
@@ -204,16 +212,16 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 }
                 else //Für die Zeichen '<', '>'
                 {
-                	sBefehl.sKonvertiert += m_iColors[COLOR_FB];     //Farbe
+                	sBefehl.sKonvertiert += iColors[COLOR_FB];     //Farbe
                 	sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig);   //Zeichen
                 }
             }
             else
             {
                 //Wenn es kein \ ist, dann ist es ein normales Zeichen
-                sBefehl.sKonvertiert += m_iColors[COLOR_FB];     	//Farbe
+                sBefehl.sKonvertiert += iColors[COLOR_FB];     	//Farbe
                 sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig); //Zeichen
-                dfileend << "Befehl::Zeichen:: " << m_iColors[COLOR_FB] << std::endl;
+                dfileend << "Befehl::Zeichen:: " << iColors[COLOR_FB] << std::endl;
                 //m_debugfile << "Aktuelles Zeichen konvertiert: " << GetCode(sTemp)->second << std::endl;
             }
             m_iLetters++;
@@ -538,7 +546,7 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 		{
 			for (; m_iLetters <= 14; m_iLetters++)
 			{
-				sBefehl.sKonvertiert += m_iColors[COLOR_FB];
+				sBefehl.sKonvertiert += iColors[COLOR_FB];
 				sBefehl.sKonvertiert += GetCode(L" ");
 			}
 		}

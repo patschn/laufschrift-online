@@ -110,14 +110,6 @@ namespace SWP
             */
             int m_iComPort;
 
-            /**
-            	int m_iColors[3]: Dient zur Speicherung der Farbwerte
-                m_iColors[COLOR_FG]: Vordergrundfarbe
-                m_iColors[COLOR_BG]: Hintergrundfarbe
-                m_iColors[COLOR_FB]: Berechnete Farbenkombination (Addition aus Vorder-/Hintergrundfarbe)
-            */
-            int m_iColors[3];
-
 			/**
 				m_iLetters:
 				Anzahl der Zeichen die die Laufschrift anzeigen kann.
@@ -125,22 +117,6 @@ namespace SWP
 			*/
 
             int m_iLetters;
-
-			/**
-				bool m_bFlagLeft:
-				Flag, der anzeigt ob <LEFT> im Befehlsstring vorkommt
-				true: kommt vor, false: kommt nicht vor
-			*/
-
-            bool m_bFlagLeft;
-
-            /**
-				bool m_bFlagAutocenter:
-				Flag, der anzeigt ob <AUTOCENTER> im Befehlsstring vorkommt
-				true: kommt vor, false: kommt nicht vor
-            */
-
-            bool m_bFlagAutocenter;
 
             /**
 				bool m_bFlagBig:
