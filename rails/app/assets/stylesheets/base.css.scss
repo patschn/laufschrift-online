@@ -357,10 +357,10 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	position: relative; /* damit man die tooltips auf position: absolute stellen kann */
 }
 
-.tool-group-text, .tool-group-charwidth, .tool-group-bgcolor, .tool-group-fgcolor, .tool-group-pause, .tool-group-speed, .tool-group-clock, .tool-group-linebreak {
+.tool-group-text, .tool-group-clock, .tool-group-twitter, .tool-group-bgcolor, .tool-group-fgcolor, .tool-group-pause, .tool-group-speed {
     display: inline-block;
     vertical-align: top;
-    width: 204px;
+/*    width: 204px;*/
 }
 
 .button-toolbox, .button-component {

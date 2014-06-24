@@ -141,32 +141,35 @@ var Toolbox = (function() {
   var create = function() {
     function groupDef(name, text) { return { name: name, text: text }; }
     var groups = [
-      groupDef("standard", "Standardelement"),
-      groupDef("text", "Textelement"),
-      groupDef("charwidth", "Zeichenbreite"),
-      groupDef("bgcolor", "Hintergrundfarbe"),
-      groupDef("fgcolor", "Textfarbe"),
-      groupDef("pause", "Wartezeit"),
-      groupDef("speed", "Geschwindigkeit"),
+      [groupDef("standard", "Standardelement")],
+      [groupDef("text", "Textelement"),
       groupDef("clock", "Uhrzeit"),
-      groupDef("linebreak", "Zeilenumbruch"),
-      groupDef("open_animation", "Anfangsanimationen"),
-      groupDef("close_animation", "Endanimationen"),
-	  groupDef("twitter", "Twitter"),
+	    groupDef("twitter", "Twitter")],
+      [groupDef("bgcolor", "Hintergrundfarbe"),
+      groupDef("fgcolor", "Textfarbe")],
+      [groupDef("charwidth", "Zeichenbreite")],
+      [groupDef("pause", "Wartezeit"),
+      groupDef("speed", "Geschwindigkeit")],
+      [groupDef("linebreak", "Zeilenumbruch")],
+      [groupDef("open_animation", "Anfangsanimationen"),
+      groupDef("close_animation", "Endanimationen")],
     ];
     var toolInfos = getAllToolInfosByGroup();
-    $.each(groups, function(i, group) {
-      var groupDiv = $('<div class="tool-group"></div>').appendTo(toolboxDiv);
-      groupDiv.addClass('tool-group-' + group.name);
-      var heading = $('<h3></h3>').append(group.text).appendTo(groupDiv);
-      var groupTools = toolInfos[group.name];
-      if (groupTools !== undefined) {
-        $.each(groupTools, function(j, tool) {
-          var elem = tool.createToolHTMLElement();
-          elem.draggable({ connectToSortable: SequenceControl.getSequenceSortable(), helper: function() { return dragHelper(elem); } });
-          groupDiv.append(elem);
-        });
-      }
+    $.each(groups, function(i, groupContainer) {
+      var groupContainerDiv = $('<div class="tool-container"></div>').appendTo(toolboxDiv);
+      $.each(groupContainer, function(j, group) {
+        var groupDiv = $('<div class="tool-group"></div>').appendTo(groupContainerDiv);
+        groupDiv.addClass('tool-group-' + group.name);
+        var heading = $('<h3></h3>').append(group.text).appendTo(groupDiv);
+        var groupTools = toolInfos[group.name];
+        if (groupTools !== undefined) {
+          $.each(groupTools, function(j, tool) {
+            var elem = tool.createToolHTMLElement();
+            elem.draggable({ connectToSortable: SequenceControl.getSequenceSortable(), helper: function() { return dragHelper(elem); } });
+            groupDiv.append(elem);
+          });
+        }
+      });
     });
   };
   
