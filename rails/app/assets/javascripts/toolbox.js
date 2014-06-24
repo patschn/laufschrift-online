@@ -137,6 +137,12 @@ var Toolbox = (function() {
     clone.data("tool-info", elem.data("tool-info"));
     return clone;
   };
+  
+  var decoratedToolHTML = function(tool) {
+    var elem = tool.createToolHTMLElement();
+    elem.draggable({ connectToSortable: SequenceControl.getSequenceSortable(), helper: function() { return dragHelper(elem); } });
+    return elem;
+  };
 
   var create = function() {
     function groupDef(name, text) { return { name: name, text: text }; }
@@ -150,7 +156,7 @@ var Toolbox = (function() {
       [groupDef("charwidth", "Zeichenbreite")],
       [groupDef("pause", "Wartezeit"),
       groupDef("speed", "Geschwindigkeit")],
-      [groupDef("linebreak", "Zeilenumbruch")],
+//      [groupDef("linebreak", "Zeilenumbruch")],
       [groupDef("open_animation", "Anfangsanimationen"),
       groupDef("close_animation", "Endanimationen")],
     ];
@@ -164,12 +170,14 @@ var Toolbox = (function() {
         var groupTools = toolInfos[group.name];
         if (groupTools !== undefined) {
           $.each(groupTools, function(j, tool) {
-            var elem = tool.createToolHTMLElement();
-            elem.draggable({ connectToSortable: SequenceControl.getSequenceSortable(), helper: function() { return dragHelper(elem); } });
-            groupDiv.append(elem);
+            groupDiv.append(decoratedToolHTML(tool));
           });
         }
       });
+    });
+    
+    $.each(toolInfos['linebreak'], function(i, tool) {
+      $('#linebreak-tool').append(decoratedToolHTML(tool));
     });
   };
   
