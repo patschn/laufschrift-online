@@ -193,6 +193,7 @@ var SequenceControl = (function() {
   var addSpecialCharacterPopover = function(component) {
     var specialCharacterButton = $('<button></button>');
     specialCharacterButton.addClass('component-special-character-button');
+    specialCharacterButton.attr('title', 'Sonderzeichen einfügen');
     component.getHTMLElement().append(specialCharacterButton);
     // Nur ein Popover-Element für alle Buttons verwenden
     if (specialCharacterPopover === null) {
@@ -231,6 +232,7 @@ var SequenceControl = (function() {
     elem.append(moveHandle);
     var deleteButton = $('<button></button>');
     deleteButton.addClass('component-delete-button');
+    deleteButton.attr('title', 'Abschnitt löschen');
     elem.append(deleteButton);
     deleteButton.click(function() { deleteComponent(elem); });
     if (component instanceof TextComponent || component instanceof GroupComponent) {
@@ -353,6 +355,9 @@ var SequenceControl = (function() {
   
   var init = function() {
     currentSequence = new Sequence();
+    
+    // Tooltips hübscher
+    $('body').tooltip({ hide: 100, show: 100, tooltipClass: 'tooltip' });
     
     commitTextField = $("#commit-text");
     sequenceSelect = $("#sequences");

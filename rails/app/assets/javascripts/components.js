@@ -418,6 +418,15 @@ SliderCommandComponent.prototype.constructor = SliderCommandComponent;
 SliderCommandComponent.prototype.getAsText = function() {
 	return "<" + this.command + " " + this.value + ">";
 };
+SliderCommandComponent.prototype.getSignText = function() {
+    var adjValue = this.value;
+    if (this.command === 'SPEED') {
+        // Skala invertieren für SPEED, damit es intuitiver ist
+        // Nur für die Laufschrift!
+        adjValue = (10 - adjValue);
+    }
+	return "<" + this.command + " " + adjValue + ">";
+};
 
 function LinebreakComponent() {
     CommandComponent.call(this, 'LINEBREAK', false);
@@ -642,7 +651,7 @@ var ASC333Components = {
 			sliderStep: 1,
 			sliderRange: [1, 9],
 			sliderInitialValue: 5,
-			sliderLabels: ['schnell', 'langsam'],
+			sliderLabels: ['langsam', 'schnell'],
 			overrideFactory : function() { return this.componentInfo.factory($('#speed_slider').val()); }
 		}));
 

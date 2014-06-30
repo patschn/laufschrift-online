@@ -38,7 +38,7 @@ function ToolInfo(group, componentInfo, options) {
 		}
 		if (options.tooltip !== undefined) {
 		    elem.attr('title', options.tooltip);
-		    elem.tooltip({ hide: 100, show: 100, tooltipClass: 'tooltip' });
+		    //elem.tooltip({ hide: 100, show: 100, tooltipClass: 'tooltip' });
 		}
 		
 		if (options.toolType === 'slider') {
