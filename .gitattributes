@@ -56,6 +56,7 @@ rails/app/assets/images/left.png -text
 rails/app/assets/images/left_hover.png -text
 rails/app/assets/images/linebreak.png -text
 rails/app/assets/images/linebreak_hover.png -text
+rails/app/assets/images/linie.png -text
 rails/app/assets/images/linksoben.png -text svneol=unset#image/png
 rails/app/assets/images/linksunten.png -text svneol=unset#image/png
 rails/app/assets/images/mitte.png -text svneol=unset#image/png
@@ -98,6 +99,7 @@ rails/app/assets/images/speed.png -text
 rails/app/assets/images/speed_hover.png -text
 rails/app/assets/images/squeezemid.png -text
 rails/app/assets/images/squeezemid_hover.png -text
+rails/app/assets/images/textbg.png -text
 rails/app/assets/images/textelement.png -text
 rails/app/assets/images/textelement2.png -text
 rails/app/assets/images/textelement_hover.png -text

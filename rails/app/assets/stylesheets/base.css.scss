@@ -1,4 +1,6 @@
-﻿* {
+﻿/*Mindestbreite: 1280px*/
+
+* {
     padding: 0;
     margin: 0;
 }
@@ -34,14 +36,14 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 #help{
     position:absolute;
-    top:105px;
-    right:15px;
+    top:-20px;
+    right:10px;
     margin-left:20px;
     background: transparent;
     background-image: url(question.png);
     background-repeat: no-repeat;
-    width: 22px;
-    height: 22px
+    width: 40px;
+    height: 40px;
 }
 #links {
     position:absolute;
@@ -120,7 +122,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 #mitte {
     margin-left: 300px;
-    margin-right: 500px;
+    margin-right: 550px;
     margin-top: 30px;
     min-width: 325px;
 }
@@ -139,6 +141,14 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     background:transparent;
     height: 25px;
     width: 25px;
+}
+#linebreak-tool{
+    position:absolute;
+    right:570px;
+    top:130px;
+    height:40px;
+    width:40px;
+    background:transparent;
 }
 #sequence {
     height: 586px;
@@ -171,26 +181,24 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 
 #feld{
     height: 900px;
-    background-color:yellow;
+    background-color:pink;
     background:image-url("mitte.png");
     background-repeat:repeat-x;
 }
 
 #debug {
-    margin-left: 130px;
-    margin-right: 80px;
-    margin-top:25px;
-    min-width: 325px;
-    height: 30px;
-}
-#debug-bg{
+    margin-left: 140px;
+    margin-right: 100px;
+    margin-top:17px;
+    min-width: 250px;
+    height: 40px;
     background-image: image-url("debuglinks.png"), image-url("debugrechts.png"), image-url("debugmitte.png");
     background-repeat: no-repeat, no-repeat, repeat-x;
     background-position: left,right,left;
 }
-
-#debug-feld{
-    background: transparent;
+#debug-text{
+    margin-left: -5px;
+    margin-right: 10px;
 }
 
 #bug{
@@ -206,7 +214,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     position:absolute;
     top:130px;
     right:0px;		
-    width: 450px;
+    width: 500px;
     float: right;		
     height:750px;
     background: image-url("rechts.png"); opacity: 0.5;
@@ -220,12 +228,66 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     margin:20px;
     height:730px;
     background: transparent;
-    width: 430px;
+    width: 480px;
     float: right;
     font-family:Arial;
     color:white;
     font-size:12px;
     text-align:left;
+}
+#line1{
+    position:absolute;
+    top:108px;
+    left:6px;
+    background-image:image-url("linie.png");
+    height:1px;
+    width:466px;
+    background-color:transparent;
+}
+#line2{
+    position:absolute;
+    top:190px;
+    left:6px;
+    background-image:image-url("linie.png");
+    height:1px;
+    width:466px;
+    backgroud-color:transparent;
+}
+#line3{
+    position:absolute;
+    top:280px;
+    left:6px;
+    background-image:image-url("linie.png");
+    height:1px;
+    width:466px;
+    backgroud-color:transparent;
+}
+#line4{
+    position:absolute;
+    top:366px;
+    left:6px;
+    background-image:image-url("linie.png");
+    height:1px;
+    width:466px;
+    backgroud-color:transparent;
+}
+#line5{
+    position:absolute;
+    top:445px;
+    left:6px;
+    background-image:image-url("linie.png");
+    height:1px;
+    width:466px;
+    backgroud-color:transparent;
+}
+#line6{
+    position:absolute;
+    top:590px;
+    left:6px;
+    background-image:image-url("linie.png");
+    height:1px;
+    width:466px;
+    backgroud-color:transparent;
 }
 .playbutton{
     background-image:image-url("play.png");
@@ -289,7 +351,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 
 .component-group {
-    background-color: #1f181f;
+    background-color: #1f181f; /*Standardelement Farbe*/
     height: 55px;
 }
 .component-group>.component-inner {
@@ -381,8 +443,8 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     background-image: image-url("but_hover.png");
 }
 .button-toolbox {
-	margin-left: 6px;
-	margin-bottom: 6px;    
+	margin-left: 10px;
+	margin-bottom: 10px;
 }
 .button-component {
     vertical-align: top;
@@ -493,8 +555,9 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 
 #toolbox h3 {
-    margin-bottom: 9px;
-    margin-left: 20px;
+    margin-top: 15px;
+    margin-bottom:5px;
+    margin-left: 15px;
 }
 
 .tool-slider {
@@ -763,22 +826,25 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 
 input[type=text] {
-    background-color: black;
+    background-color: transparent;
     color: white;
-    border-image: radial-gradient(#016cd7 40%, #01192e 120%);
-    background-image: linear-gradient(#1e1e1e, #343434);
+    border-image: image-url("textelement.png");
+    background-image:url("textbg.png");
+    background-repeat: no-repeat;
     padding: 2px;
     border-image-slice: 3 3 3 3;
     border-image-width: 3px;
-    border-image-outset: 0;
-    border-image-repeat:repeat;
+    border-image-heighth:3px;
+    border-image-outset: 1;
 }
 
 input[id=commit-text] {
     margin-left:10px;
+    margin-top:10px;
     background-color: transparent;
     color: white;
     border: none;
+    font-size:16px;
     width: 96%;
 }
 #footer{
@@ -800,3 +866,4 @@ input[id=commit-text] {
 	left: 60%;
 	width: 30%;
 }
+
