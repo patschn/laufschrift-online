@@ -19,11 +19,7 @@ SWP::CLauflicht::CLauflicht()
 
     //Com-Port festlegen:
     m_iComPort = 22;    //22 = ttyAMA0 laut teunizbibliothek
-    iColors[COLOR_FG] = 3;
-    iColors[COLOR_BG] = 0;
-    iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
     m_iLetters = 0;
-    m_bFlagLeft = false;
     m_bFlagBig = false;
     m_bFlagFail = false;
 }
@@ -71,8 +67,11 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
         iColors[COLOR_BG]: Hintergrundfarbe
         iColors[COLOR_FB]: Berechnete Farbenkombination (Addition aus Vorder-/Hintergrundfarbe)
     */
+
     int iColors[3];
-	
+    iColors[COLOR_FG] = 3;
+    iColors[COLOR_BG] = 0;
+    iColors[COLOR_FB] = 3;
     std::ofstream dfileend;
 
 	dfileend.open("debugend.txt");
