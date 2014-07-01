@@ -23,8 +23,6 @@ rails/app/assets/images/break_hover.png -text
 rails/app/assets/images/bug.png -text
 rails/app/assets/images/but.png -text
 rails/app/assets/images/but_hover.png -text
-rails/app/assets/images/but_twitter.png -text
-rails/app/assets/images/but_twitter_hover.png -text
 rails/app/assets/images/clock12.png -text
 rails/app/assets/images/clock12_hover.png -text
 rails/app/assets/images/clock24.png -text
@@ -54,8 +52,6 @@ rails/app/assets/images/jump.png -text
 rails/app/assets/images/jump_hover.png -text
 rails/app/assets/images/left.png -text
 rails/app/assets/images/left_hover.png -text
-rails/app/assets/images/linebreak.png -text
-rails/app/assets/images/linebreak_hover.png -text
 rails/app/assets/images/linie.png -text
 rails/app/assets/images/linksoben.png -text svneol=unset#image/png
 rails/app/assets/images/linksunten.png -text svneol=unset#image/png
@@ -109,6 +105,8 @@ rails/app/assets/images/timewait_hover.png -text
 rails/app/assets/images/toplinks.png -text
 rails/app/assets/images/topmitte.png -text
 rails/app/assets/images/toprechts.png -text
+rails/app/assets/images/twitter.png -text
+rails/app/assets/images/twitter_hover.png -text
 rails/app/assets/images/up.png -text
 rails/app/assets/images/up_hover.png -text
 rails/app/assets/images/yellowbg.png -text
