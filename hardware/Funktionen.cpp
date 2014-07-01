@@ -430,18 +430,25 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 				}
 				else
 				{
-					while(sBefehl.sOriginal[i] != '>')	//Bis zum nächsten Befehl
-					{
-						if(lastchar == -1)
-						{
-							lastchar = i;
-						}
-						else
-						{
-							firstchar = i;
-							i--;
-						}
-					}
+				    while(i > 0)
+                    {
+                        if(sBefehl.sOriginal[i] == '>') //Bis zum nächsten Befehl
+                        {
+                            if(sBefehl.sOriginal[i-1] != '\\')
+                            {
+                                break;
+                            }
+                        }
+                        if(lastchar == -1)
+                        {
+                            lastchar = i;
+                        }
+                        else
+                        {
+                            firstchar = i;
+                            i--;
+                        }
+                    }
 
 					/*
 						Zwischen BIG und NORMAL unterscheiden:
