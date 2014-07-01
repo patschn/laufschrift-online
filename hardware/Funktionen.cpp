@@ -538,18 +538,125 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 			}
 		}
 	}
-	return;
+	iBig = false;
 
-	/*
-		if(m_bFlagLeft == true)// && m_bFlagAutocenter == false)	//Left kommt in der Sequenz vor
-		{
-			for (; m_iLetters <= 14; m_iLetters++)
-			{
-				sBefehl.sKonvertiert += iColors[COLOR_FB];
-				sBefehl.sKonvertiert += GetCode(L" ");
-			}
-		}
-	*/
+	while(bLeftDone == false)
+    {
+        int iTemp = lastautoleft;
+        int iAnzahlZeichen = 0;     //Dient der korrekten Behandlung von Sonderzeichen (\\ darf nicht gezählt werden)
+
+        //Letztes Vorkommen von Left kopieren
+        while(iTemp == lastautoleft)
+        {
+            lastautoleft = sBefehl.sOriginal.find(L"<LEFT>",lastautoleft+1);
+        }
+
+        if(lastautoleft == std::wstring::npos)  //Fehlschlag
+        {
+            bLeftDone = true;
+        }
+        else
+        {
+            //Falls left gefunden, left auf letzte bekannte Position setzen
+            for(int i = lastautoleft;i < sBefehl.sOriginal[i];i++)
+            {
+                //Befehl, falls kein Escapezeichen oder sonstiges gefunden
+                if(sBefehl.sOriginal[i] == '<' && sBefehl.sOriginal[i-1] != '\\')
+                {
+                    while(sBefehl.sOriginal[i] != '>')
+                    {
+                        i++;
+                    }
+                }
+                else
+                {
+                    while(sBefehl.sOriginal[i] != '<')  //Bis zum nächsten Befehl die Zeichen durchgehen
+                    {
+                        if(firstchar == -1)
+                        {
+                            firstchar = i;
+                        }
+                        else
+                        {
+                            lastchar = i;
+                            iAnzahlZeichen++;
+                            i++;
+                        }
+                        if(sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '<' ||
+                           sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '>' ||
+                           sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '\\' )
+                        {
+                            /*
+                                 i wurde schon weitergeschalten, falls das vorhergehende Element ein Zeichen
+                                 war. Deshalb wird mit der vorherigen und aktuellen Position geprüft, ob ein
+                                 Sonderzeichen eingeleitet wurde, um nicht irrtümlich einen Befehl anzunehmen.
+                            */
+                            lastchar = i;
+                            i++;
+                        }
+                    }
+                    /*
+                        Zwischen BIG und NORMAL unterscheiden:
+                        Von aktueller firstchar-Position aus nach <BIG> und <NORMAL> suchen,
+                        um Leerzeichen korrekt zu berechnen
+                    */
+
+                    for(int iBigNormal = firstchar; iBigNormal > 0;iBigNormal--)
+                    {
+                        sTemp = L"";
+                        if(sBefehl.sOriginal[iBigNormal] == '>')
+                        {
+                            while(sBefehl.sOriginal[iBigNormal] != '<')
+                            {
+                                sTemp += sBefehl.sOriginal[iBigNormal];
+                                iBigNormal--;
+                            }
+                            sTemp += '<';
+                        }
+
+                        if(sTemp == L">LAMRON<")    { bBig = false; break; }
+                        else if (sTemp == L">GIB<") { bBig = true; break; }
+                    }
+
+                    if(iAnzahlZeichen < 14 && bBig == false)   //Leerzeichen einfügen, falls Zeichenanzahl
+                    {                                          //kleiner der maximal darstellbaren Charakter
+                        /*
+                         * Big behandeln:
+                         * Wenn vor firstchar noch ein <BIG> kommt (ohne weitere Zeichen dazwischen) dann
+                         * Leerzeichen nochmal durch zwei teilen.
+                         */
+
+                        iLeerzeichen = 14 - (iAnzahlZeichen);   //Fehlende Leerzeichen berechnen
+
+                        //Leerzeichen einfügen
+                        for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+                        {
+                            sBefehl.sOriginal.insert(lastchar+1,L" ");
+                        }
+
+                        firstchar = lastchar = -1;
+
+                        break;
+                    }
+                    else if(iAnzahlZeichen < 7 && bBig == true)     //Leerzeichen einfügen, falls Zeichenanzahl
+                    {                                               //kleiner der maximal darstellbaren Charakter
+                        iLeerzeichen = 7 - (iAnzahlZeichen);        //Fehlende Leerzeichen berechnen
+
+                        for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+                        {
+                            sBefehl.sOriginal.insert(lastchar+1,L" ");
+                        }
+
+                        firstchar = lastchar = -1;
+
+                        break;
+                    }
+                }//</else>
+            }//</for>
+        }//</else>
+    }//</while>
+
+	return;
 }
 
 void SWP::CLauflicht::InitialisiereTabelle()
@@ -718,7 +825,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"<COLOR r>"] = 1;   //Rot
     LauflichtCodetabelle[L"<COLOR g>"] = 2;   //Grün
     LauflichtCodetabelle[L"<COLOR y>"] = 3;   //Gelb
-    LauflichtCodetabelle[L"<COLOR rainbow>"] = 32;   //Gelb
+    LauflichtCodetabelle[L"<COLOR rainbow>"] = 32;   //Rainbow
 
     //Hintergrundfarben:
     LauflichtCodetabelle[L"<BGCOLOR b>"] = 0;   //Schwarz
