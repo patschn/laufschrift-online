@@ -75,6 +75,7 @@ rails/app/assets/images/play.png -text
 rails/app/assets/images/playbutton.png -text
 rails/app/assets/images/playhover.png -text
 rails/app/assets/images/question.png -text
+rails/app/assets/images/question_hover.png -text
 rails/app/assets/images/rainbow.png -text
 rails/app/assets/images/rainbow_hover.png -text
 rails/app/assets/images/random.png -text
