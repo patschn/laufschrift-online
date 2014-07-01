@@ -40,7 +40,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     right:10px;
     margin-left:20px;
     background: transparent;
-    background-image: url(question.png);
+    background-image: image-url("question.png");
     background-repeat: no-repeat;
     width: 40px;
     height: 40px;
@@ -237,55 +237,55 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 #line1{
     position:absolute;
-    top:108px;
+    top:115px;
     left:6px;
     background-image:image-url("linie.png");
-    height:1px;
+    height:2px;
     width:466px;
     background-color:transparent;
 }
 #line2{
     position:absolute;
-    top:190px;
+    top:205px;
     left:6px;
     background-image:image-url("linie.png");
-    height:1px;
+    height:2px;
     width:466px;
     backgroud-color:transparent;
 }
 #line3{
     position:absolute;
-    top:280px;
+    top:303px;
     left:6px;
     background-image:image-url("linie.png");
-    height:1px;
+    height:2px;
     width:466px;
     backgroud-color:transparent;
 }
 #line4{
     position:absolute;
-    top:366px;
+    top:390px;
     left:6px;
     background-image:image-url("linie.png");
-    height:1px;
+    height:2px;
     width:466px;
     backgroud-color:transparent;
 }
 #line5{
     position:absolute;
-    top:445px;
+    top:475px;
     left:6px;
     background-image:image-url("linie.png");
-    height:1px;
+    height:2px;
     width:466px;
     backgroud-color:transparent;
 }
 #line6{
     position:absolute;
-    top:590px;
+    top:616px;
     left:6px;
     background-image:image-url("linie.png");
-    height:1px;
+    height:2px;
     width:466px;
     backgroud-color:transparent;
 }
@@ -419,12 +419,31 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	position: relative; /* damit man die tooltips auf position: absolute stellen kann */
 }
 
-.tool-group-text, .tool-group-clock, .tool-group-twitter, .tool-group-bgcolor, .tool-group-fgcolor, .tool-group-pause, .tool-group-speed {
+.tool-group-text, .tool-group-bgcolor{
     display: inline-block;
     vertical-align: top;
+    margin-top:10px;
 /*    width: 204px;*/
 }
 
+.tool-group-twitter,.tool-group-clock{
+    display: inline-block;
+    vertical-align: top;
+    margin-top:10px;
+    margin-left:40px;
+}
+.tool-group-fgcolor{
+    display: inline-block;
+    vertical-align: top;
+    margin-top:10px;
+    margin-left:20px;
+}
+.tool-group-pause, .tool-group-speed{
+    display: inline-block;
+    vertical-align: top;
+    margin-top:10px;
+    margin-left:20px;
+}
 .button-toolbox, .button-component {
 	display:inline-block;
 	color:#ffffff;
@@ -555,13 +574,14 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 
 #toolbox h3 {
-    margin-top: 15px;
+    margin-top:15px;
     margin-bottom:5px;
     margin-left: 15px;
 }
 
 .tool-slider {
     line-height: 0;
+    margin-left:15px;
 }
 
 .tool-slider > * {
@@ -602,8 +622,9 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 
 .button-command-WAIT {
     background-image: image-url("timewait.png");
-	padding-right: 10px;		
+    padding-right: 10px;		
     box-sizing: border-box;
+    padding-top: 6px;
 }
 .button-command-WAIT:hover {
     background-image: image-url("timewait_hover.png");
@@ -803,7 +824,6 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 .button-command-Twitterkomponente{
 	background-image: image-url("but_twitter.png") ;
-	
 }
 .button-command-Twitterkomponente:hover{
 	background-image: image-url("but_twitter_hover.png");
@@ -866,4 +886,3 @@ input[id=commit-text] {
 	left: 60%;
 	width: 30%;
 }
-
