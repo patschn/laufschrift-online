@@ -37,13 +37,10 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 #help{
     position:absolute;
     top:-20px;
-    right:10px;
-    margin-left:20px;
+    right:-10px;
     background: transparent;
-    background-image: image-url("question.png");
-    background-repeat: no-repeat;
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
 }
 #links {
     position:absolute;
@@ -301,8 +298,18 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 .playbutton:focus {
     outline: 0;
 }
-
-
+.helpbutton{
+    background-image: image-url("question.png");
+    display:block;
+    height:40px;
+    width:40px;
+}
+.helpbutton:hover{
+    background-image: image-url("question_hover.png") ;
+}
+.helpbutton:focus {
+    outline: 0;
+}
 .button {									/*Sequenzbutton(links oben")*/
 	background-image: image-url("seqbut.png");
 	display: block;
@@ -355,7 +362,9 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 }
 
 .component-group {
-    background-color: #1f181f; /*Standardelement Farbe*/
+    background-color:transparent;
+    background-image:image-url("StandardBG.png");
+    padding-top:2px;
     height: 55px;
 }
 .component-group>.component-inner {
@@ -855,24 +864,22 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 input[type=text] {
     background-color: transparent;
     color: white;
-    border-image: image-url("textelement.png");
-    background-image:url("textbg.png");
-    background-repeat: no-repeat;
-    padding: 2px;
-    border-image-slice: 3 3 3 3;
-    border-image-width: 3px;
-    border-image-heighth:3px;
-    border-image-outset: 1;
+    width:148px;
+    background-image:url("textelement2.png");
+    background-repeat:no-repeat;
+    padding: 12px;
+    margin-top:-7px;
+    border: none;
 }
 
 input[id=commit-text] {
     margin-left:10px;
     margin-top:10px;
     background-color: transparent;
-    color: white;
-    border: none;
+    background-image:none;
     font-size:16px;
     width: 96%;
+    padding:0px;
 }
 #footer{
 	position: absolute;

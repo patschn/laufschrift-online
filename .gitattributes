@@ -12,6 +12,7 @@ rails/Rakefile -text
 rails/app/assets/images/.keep -text
 rails/app/assets/images/PIDvl[!!-~]bold.ttf -text svneol=unset#application/x-font-ttf
 rails/app/assets/images/PIDvl.ttf -text svneol=unset#application/x-font-ttf
+rails/app/assets/images/StandardBG.png -text
 rails/app/assets/images/Symbola.ttf -text svneol=unset#application/x-font-ttf
 rails/app/assets/images/autocenter.png -text
 rails/app/assets/images/autocenter_hover.png -text
