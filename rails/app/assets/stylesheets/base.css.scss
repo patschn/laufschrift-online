@@ -337,6 +337,10 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 	position: relative; /* damit man dann den delete-button auf position: absolute stellen kann */
 }
 
+.tool .component .button-component {
+    cursor: default;
+}
+
 .component-placeholder {
     border: 1px solid white;
     border-radius: 5px;

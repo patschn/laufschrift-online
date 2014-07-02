@@ -132,16 +132,20 @@ function TextComponent(text) {
 	text = SequenceCodec.unescapeText(text);
 	var inputElem = null;
 	var disableOnCreate = false;
-
+		
+	this.updateTextFromHTMLElement = function() {
+	    if (inputElem) {
+	        text = inputElem.val();
+            $(this).trigger('change');
+	    }
+	};
+	
 	this.createInsideHTMLElement = function(containerElem, elem) {
 		containerElem.addClass("component-text");
 		inputElem = $('<input type="text" />');
 		inputElem.val(text);
 		var that = this;
-		inputElem.change($.proxy(function() {
-			text = inputElem.val();
-			$(this).trigger('change');
-		}, this));
+		inputElem.change($.proxy(this.updateTextFromHTMLElement, this));
 		elem.append(inputElem);
 		if (disableOnCreate) {
 		    this.disable();
@@ -210,6 +214,10 @@ TextComponent.prototype.getSignText = function() {
 	return SequenceCodec.escapeText(this.text);
 };
 TextComponent.prototype.insertText = function(position, text) {
+    // Wenn der Benutzer Sonderzeichen einfügt ohne vorher aus dem Element rauszuklicken,
+    // ist das 'change'-Event vom Textfeld noch nicht gefeuert -> this.text hat
+    // noch einen falschen Wert, das muss korrigiert werden
+    this.updateTextFromHTMLElement();
     this.text = this.text.substr(0, position) + text + this.text.substr(position);
 };
 TextComponent.prototype.insertTextAtCursor = function(text) {
