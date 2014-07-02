@@ -108,7 +108,7 @@ namespace SWP
                 Die Liste ist in rs232.c zu finden.
                 Hier wird die Nummer 22 für ttyAMA0 verwendet.
             */
-            int m_iComPort;
+            std::string m_sComPort;
 
 			/**
 				m_iLetters:

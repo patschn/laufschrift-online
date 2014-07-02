@@ -8,6 +8,7 @@
 #include "serialib.h"
 #include <iostream>
 #include <ctime>
+#include <unistd.h>
 
 SWP::CLauflicht::CLauflicht()
 {
@@ -17,7 +18,7 @@ SWP::CLauflicht::CLauflicht()
     std::cin.clear();
 
     //Com-Port festlegen:
-    m_iComPort = 22;    //22 = ttyAMA0 laut teunizbibliothek
+    m_sComPort = "/dev/ttyAMA0";
     m_iLetters = 0;
     m_bFlagBig = false;
     m_bFlagFail = false;
@@ -26,7 +27,7 @@ SWP::CLauflicht::CLauflicht()
 bool SWP::CLauflicht::OeffneRS232()
 {
     //Port öffnen, Baudrate: 2400 - tty-Rechte benötigt!
-    if(m_sl.Open("/dev/ttyAMA0",2400) != 1)
+    if(m_sl.Open(m_sComPort.c_str(),2400) != 1)
     {
         std::cerr << "Fehler beim Öffnen des Com-Ports!" << std::endl;
 
@@ -55,6 +56,12 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 
 bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 {
+    std::wstring Anfangsanimationen[]
+    {
+        L"LEFT",L"RIGHT",L"UP",L"DOWN",L"DOFF",L"DOBIG",L"FLASH",
+        L"JUMP",L"OPENMID",L"OPENRIGHT",L"RANDOM",L"SHIFTMID",L"SNOW"
+    };
+
     /**
         int iColors[3]: Dient zur Speicherung der Farbwerte
         iColors[COLOR_FG]: Vordergrundfarbe
@@ -71,6 +78,14 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 
 	//Temporäre Variable zur Verarbeitung anlegen
     std::wstring sTemp;
+
+    /*
+        Sinnlose Zusammensetzungen verhindern
+    */
+
+
+    //Prüfen, ob Zeichen vorhanden sind
+    sTemp = L"";
 
     //Start der Konvertierung - der fertige Befehl wird in sBefehl.sKonvertiert gespeichert
     for(unsigned int i = 0;i < sBefehl.sOriginal.length() && m_bFlagFail == false;i++)
@@ -225,6 +240,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 void SWP::CLauflicht::SendeString(stSequenz sBefehl)
 {
     m_sl.WriteString(sBefehl.sKonvertiert.c_str());
+    usleep(300000);
     m_sl.WriteString(GetClock().c_str());
 }
 
@@ -367,35 +383,47 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
         }
         else
         {
-            for(int i = lastautoleft-1;i > 0;i--)
+            int index = 0;
+            for(index = lastautoleft-1;index >= 0;index--)
             {
-                //Befehl, falls kein Escapezeichen oder sonstiges gefunden
-                if(sBefehl.sOriginal[i] == '>' && sBefehl.sOriginal[i-1] != '\\')
+                if(index == 0 && lastchar == -1)
                 {
-                    while(sBefehl.sOriginal[i] != '<')
+                    sBefehl.sOriginal.erase(lastautoleft,12);
+                    break;
+                }
+                else if(index == 0)  //Sollte <AUTOCENTER> unsinnigerweise am Anfang gesetzt oder keine Zeichen gefunden werden
+                {
+                    sBefehl.sOriginal.erase(lastautoleft,12);
+                    break;
+                }
+
+                //Befehl, falls kein Escapezeichen oder sonstiges gefunden
+                if(sBefehl.sOriginal[index] == '>' && sBefehl.sOriginal[index-1] != '\\')
+                {
+                    while(sBefehl.sOriginal[index] != '<')
                     {
-                        i--;
+                        index--;
                     }
                 }
                 else
                 {
-                    while(i > 0)//sBefehl.sOriginal[i] != '>')  //Bis zum nächsten Befehl
+                    while(index > 0)//sBefehl.sOriginal[i] != '>')  //Bis zum nächsten Befehl
                     {
-                        if(sBefehl.sOriginal[i] == '>')
+                        if(sBefehl.sOriginal[index] == '>')
                         {
-                            if(sBefehl.sOriginal[i-1] != '\\')
+                            if(sBefehl.sOriginal[index-1] != '\\')
                             {
                                 break;
                             }
                         }
                         if(lastchar == -1)
                         {
-                            lastchar = i;
+                            lastchar = index;
                         }
                         else
                         {
-                            firstchar = i;
-                            i--;
+                            firstchar = index;
+                            index--;
                         }
                     }
 
@@ -439,7 +467,7 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                         }
 
                         //<AUTOCENTER> entfernen
-                        sBefehl.sOriginal.erase(lastautoleft + iLeerzeichen*2,12);
+                        sBefehl.sOriginal.erase(lastautoleft-1 + iLeerzeichen*2,12);
                         firstchar = lastchar = lastautoleft = -1;
 
                         break;
@@ -473,12 +501,10 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                         break;
                     }
                 }//</else>
-
-                if(i == 0)  //Sollte <AUTOCENTER> unsinnigerweise am Anfang gesetzt oder keine Zeichen gefunden werden
-                {
-                    sBefehl.sOriginal.erase(lastautoleft,12);
-                    break;
-                }
+            }
+            if(index == -1 && lastautoleft != std::wstring::npos || (lastchar == -1 && index == -1))
+            {
+                sBefehl.sOriginal.erase(lastautoleft,12);
             }
         }//</else>
     }//</while>
@@ -518,7 +544,7 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                 }
                 else
                 {
-                    while(sBefehl.sOriginal[i] != '<')  //Bis zum nächsten Befehl die Zeichen durchgehen
+                    while(sBefehl.sOriginal[i] != '<' && i < sBefehl.sOriginal.length())  //Bis zum nächsten Befehl die Zeichen durchgehen
                     {
                         if(firstchar == -1)
                         {
@@ -735,6 +761,8 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"%"] = 37;
     LauflichtCodetabelle[L"&"] = 38;
     LauflichtCodetabelle[L"'"] = 39;
+    LauflichtCodetabelle[L"´"] = 39;
+    LauflichtCodetabelle[L"`"] = 39;
     LauflichtCodetabelle[L"("] = 40;
     LauflichtCodetabelle[L")"] = 41;
     LauflichtCodetabelle[L"*"] = 42;

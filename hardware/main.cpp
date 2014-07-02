@@ -9,7 +9,7 @@
 int main(int argc, char *argv[])
 {
     SWP::stSequenz Sequenz;
-    Sequenz.sOriginal = "";
+    Sequenz.sOriginal = L"";
     Sequenz.sKonvertiert = "";
     SWP::CLauflicht Lauflicht;
 
@@ -17,7 +17,10 @@ int main(int argc, char *argv[])
     Lauflicht.LeseString(Sequenz);
 
     //Sequenz konvertieren
-    Lauflicht.KonvertiereString(Sequenz);
+    if(Lauflicht.KonvertiereString(Sequenz) == false)
+    {
+        return 1;
+    }
 
     //Verbindung öffnen
     if(Lauflicht.OeffneRS232() == false)
