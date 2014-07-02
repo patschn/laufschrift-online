@@ -8,7 +8,7 @@
 #include <string>
 #include <map>
 #include <fstream>
-
+#include "serialib.h"
 #ifndef _FUNKTIONEN_HPP
 #define _FUNKTIONEN_HPP
 
@@ -132,10 +132,10 @@ namespace SWP
             bool m_bFlagFail;
 
             /**
-                Dient zu Debuggingzwecken:
-                Damit kann nachgeprüft werden, was wie (und ob etwas überhaupt) konvertiert wurde.
+                Klasse Serialib:
+                Dient der Verwaltung der RS232-Schnittstelle (Öffnen,Schließen,Senden)...
             */
-            std::wofstream m_debugfile;
+            serialib m_sl;
     };
 }
 

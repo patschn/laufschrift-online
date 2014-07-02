@@ -5,10 +5,9 @@
 */
 
 #include "Funktionen.h" //Funktionsprototypen
-#include "rs232.h"      //Bibliothek von http://www.teuniz.net/RS-232/
+#include "serialib.h"
 #include <iostream>
 #include <ctime>
-//#include <unistd.h>		//Für usleep()
 
 SWP::CLauflicht::CLauflicht()
 {
@@ -27,7 +26,7 @@ SWP::CLauflicht::CLauflicht()
 bool SWP::CLauflicht::OeffneRS232()
 {
     //Port öffnen, Baudrate: 2400 - tty-Rechte benötigt!
-    if(RS232_OpenComport(m_iComPort,2400) == 1)
+    if(m_sl.Open("/dev/ttyAMA0",2400) != 1)
     {
         std::cerr << "Fehler beim Öffnen des Com-Ports!" << std::endl;
 
@@ -35,7 +34,7 @@ bool SWP::CLauflicht::OeffneRS232()
     }
     else
     {
-        m_debugfile << "Verbindung erfolgreich aufgebaut!" << std::endl;
+        std::cout << "Verbindung erfolgreich aufgebaut" << std::endl;
     }
 
     return true;    //Port erfolgreich geöffnet
@@ -46,17 +45,12 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
     std::locale::global(std::locale(""));
     std::wcin.clear();
 
-    m_debugfile.open("debug.txt");
-    m_debugfile << "Originalstring:" << std::endl;
-
     //String speichern:
 
     for(std::wstring line; std::getline(std::wcin, line);)
     {
-        m_debugfile << line << std::endl;      	//In Debugdatei schreiben
         sBefehl.sOriginal = line;   //String der Website
     }
-    m_debugfile << std::endl;
 }
 
 bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
@@ -72,12 +66,8 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     iColors[COLOR_FG] = 3;
     iColors[COLOR_BG] = 0;
     iColors[COLOR_FB] = 3;
-    std::ofstream dfileend;
 
-	dfileend.open("debugend.txt");
 	AutoLeft(sBefehl);
-
-	m_debugfile << "Originalstring nach AutoLeft: " << sBefehl.sOriginal << std::endl;
 
 	//Temporäre Variable zur Verarbeitung anlegen
     std::wstring sTemp;
@@ -96,7 +86,6 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 
             sTemp += '>';   //Da bei '>' die Schleife abgebrochen wird, muss das Zeichen für das Ende des Befehls
                             //hinzugefügt werden
-            m_debugfile << "Konvertiere: " << sTemp << std::endl;
 
             if(sTemp == L"<BIG>")
             {
@@ -112,39 +101,21 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             //Prüfen, ob Farbe vorliegt
             if(sTemp == L"<BGCOLOR b>" || sTemp == L"<BGCOLOR r>" || sTemp == L"<BGCOLOR g>" || sTemp == L"<BGCOLOR y>")
             {
-            	m_debugfile << "COLOR_FG vorher: " << COLOR_FG << std::endl;
-            	m_debugfile << "COLOR_BG vorher: " << COLOR_BG << std::endl;
-            	m_debugfile << "COLOR_FB vorher: " << COLOR_FB << std::endl;
-
             	if(iColors[COLOR_FB] != 32)
             	{
-            		m_debugfile << "Hintergrundfarbe setzen: " << sTemp << std::endl;
-
 					//Farbe in Tabelle nachschauen und Variablen aktualisieren
 					iColors[COLOR_BG] = GetCode(sTemp);
 					iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
-					m_debugfile << "COLOR_FG nachher: " << iColors[COLOR_FG] << std::endl;
-					m_debugfile << "COLOR_BG nachher: " << iColors[COLOR_BG] << std::endl;
-					m_debugfile << "COLOR_FB nachher: " << iColors[COLOR_FB] << std::endl;
             	}
             }
             else if(sTemp == L"<COLOR b>" || sTemp == L"<COLOR r>" || sTemp == L"<COLOR g>" || sTemp == L"<COLOR y>")
             {
-            	m_debugfile << "COLOR_FG vorher: " << iColors[COLOR_FG] << std::endl;
-            	m_debugfile << "COLOR_BG vorher: " << iColors[COLOR_BG] << std::endl;
-            	m_debugfile << "COLOR_FB vorher: " << iColors[COLOR_FB] << std::endl;
-
                 //Farbe in Tabelle nachschauen und Variablen aktualisieren
-            	m_debugfile << "Vordergrundfarbe setzen: " << sTemp << std::endl;
                 iColors[COLOR_FG] = GetCode(sTemp);
                 iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
-                m_debugfile << "COLOR_FG nachher: " << iColors[COLOR_FG] << std::endl;
-                m_debugfile << "COLOR_BG nachher: " << iColors[COLOR_BG] << std::endl;
-                m_debugfile << "COLOR_FB nachher: " << iColors[COLOR_FB] << std::endl;
             }
             else if(sTemp == L"<COLOR rainbow>")
             {
-            	dfileend << "Rainbow!" << std::endl;
             	/*
             		Der Hintergrund muss schwarz sein - Rainbow lässt keinen anderen Hintergrund zu.
             	*/
@@ -174,18 +145,14 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             }
             else
             {
-            	m_debugfile << "Befehl konvertieren..." << std::endl;
                 //Befehl in der Codetabelle nachschauen und konvertieren:
                 sBefehl.sKonvertiert += GetCode(sTemp);
                 sBefehl.sKonvertiert += 3;	//Befehl nur bestimmte Farben!
-                dfileend << "Befehl::Farbe:: " << iColors[COLOR_FB] << std::endl;
             }
         }		//if(sBefehl.sOriginal[i] == '<')...
         else    //Wenn kein Befehl gefunden wurde, dann muss es normaler Text sein
         {
             sTemp = sBefehl.sOriginal[i];
-
-            m_debugfile << "Zeichen konvertieren: " << sTemp << std::endl;
 
             if(sTemp == L"Ω" || sTemp == L"Σ" || sTemp == L"¤" || sTemp == L"æ" ||
                         		sTemp == L"£" || sTemp == L"🍷" || sTemp == L"♪" ||
@@ -220,7 +187,6 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 //Wenn es kein \ ist, dann ist es ein normales Zeichen
                 sBefehl.sKonvertiert += iColors[COLOR_FB];     	//Farbe
                 sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig); //Zeichen
-                dfileend << "Befehl::Zeichen:: " << iColors[COLOR_FB] << std::endl;
             }
             m_iLetters++;
         }
@@ -246,10 +212,6 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     sBefehl.sKonvertiert += 177;
     sBefehl.sKonvertiert += GetCode(L"<END>");
 
-    dfileend << "Endstring: " << std::endl;
-	dfileend << sBefehl.sKonvertiert << std::endl;
-	dfileend.close();
-
     if(m_bFlagFail == false)	//Sequenz erfolgreich konvertiert
     {
     	return true;
@@ -262,21 +224,14 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 
 void SWP::CLauflicht::SendeString(stSequenz sBefehl)
 {
-//	RS232_cputs(m_iComPort,GetClock().c_str());
-//	usleep(300000);	//200ms
-	RS232_cputs(m_iComPort,sBefehl.sKonvertiert.c_str());
-	RS232_cputs(m_iComPort,GetClock().c_str());
+    m_sl.WriteString(sBefehl.sKonvertiert.c_str());
+    m_sl.WriteString(GetClock().c_str());
 }
 
 void SWP::CLauflicht::SchliesseRS232()
 {
-    RS232_CloseComport(m_iComPort);
-
-    //Filestream schließen
-    m_debugfile.close();
+    m_sl.Close();
 }
-
-
 
 int SWP::CLauflicht::GetCode(std::wstring wTemp)
 {
@@ -284,20 +239,17 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp)
 	std::map<std::wstring,int>::iterator it;
 
 	//Code suchen
-	m_debugfile << "Inhalt von wTemp: " << wTemp << "|" << std::endl;
 	it = LauflichtCodetabelle.find(wTemp);
 
 	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
 	if(it == LauflichtCodetabelle.end())
 	{
-		m_debugfile << "Fehler beim Konvertieren von " << wTemp << std::endl;
 		std::cerr << "Fehler beim Konvertieren!"<< std::endl;
 		m_bFlagFail = true;
 		return 0;
 	}
 	else
 	{
-		m_debugfile << "Erfolgreich " << wTemp << "konvertiert!" << std::endl;
 		return it->second;
 	}
 }

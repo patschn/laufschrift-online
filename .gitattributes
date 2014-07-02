@@ -7,6 +7,8 @@ hardware/Funktionen.h -text
 hardware/main.cpp -text
 hardware/rs232.c -text
 hardware/rs232.h -text
+hardware/serialib.cpp -text
+hardware/serialib.h -text
 rails/Gemfile -text
 rails/README.rdoc -text
 rails/Rakefile -text
