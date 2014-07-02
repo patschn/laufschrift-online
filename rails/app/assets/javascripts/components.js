@@ -518,9 +518,7 @@ function TwitterComponent() {
 
 TwitterComponent.prototype = Object.create(CommandComponent.prototype);
 TwitterComponent.prototype.constructor = TwitterComponent;
-TwitterComponent.prototype.getSignText = function() {
-	 return get_twitter_str();
-};
+TwitterComponent.prototype.getSignText=function(){return 'Twitterkomponente';};
 
 // ComponentInfo
 // ==============
@@ -584,7 +582,7 @@ var ASC333Components = {
 		    toolHTMLElement: $('<div/>')
 		}));
 		var twitter = [
-			[ 'Twitterkomponente' , "Ruft die letzten Tweets ab" ],
+			[ 'Twitterkomponente' , "Ruft die letzten drei Tweets ab" ],
 			];
 		var openAnimations = [
 		    [ 'LEFT', "Von rechts nach links" ],

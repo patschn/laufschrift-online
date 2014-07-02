@@ -402,36 +402,97 @@ var SequenceControl = (function() {
   var getSequenceSortable = function() {
     return sequenceDiv;
   };
-  
-  var playClicked = function() {
-    commit(commitTextField.val());
-  };
-  
-  var commit = function(text) {
-    $.ajax({
-      url: Config.commitPath,
-      type: 'post',
-      data: { text: text }
-    }).done(function (data, status, xhr) {
-      FlashMessage.success('Text an die Laufschrift übergeben');
-    }).fail(function (xhr, status, e) {
-      var errMsg = e;
-      if (xhr.status === 500) {
-        errMsg = xhr.responseText;
-      }
-      FlashMessage.error('Fehler beim Senden an die Laufschrift: ' + errMsg);
-    });
-  };
-  
-  return {
-    init: init,
-    createNew: createNew,
-    load: load,
-    save: save,
-    saveAs: saveAs,
-    destroy: destroy,
-    getSequenceSortable: getSequenceSortable,
-    loadSequenceFromText: loadSequenceFromText,
-    commit: commit
-  };
-}());
+  var lastPlayed;
+		var interval;
+		var playClicked = function() {
+			lastPlayed = commitTextField.val();
+			commit(commitTextField.val());
+		};
+		var post_tweets= function(text){
+			$.ajax({
+					url : Config.commitPath,
+					type : 'post',
+					data : {
+						text : text
+					}
+				}).done(function(data, status, xhr) {
+					//FlashMessage.success('Twitter');
+				}).fail(function(xhr, status, e) {
+					var errMsg = e;
+					if (xhr.status === 500) {
+						errMsg = xhr.responseText;
+					}
+					FlashMessage.error('Fehler beim Senden an die Laufschrift: ' + errMsg);
+				});
+		};
+		var commit = function(text) {
+			clearInterval(interval);
+			if (text.indexOf("Twitterkomponente") > -1) {
+				save();
+				var tweets;
+				$.ajax({
+					url : Config.tweetsPath,
+					type : 'get' 
+				}).done(function(data, status, xhr) {
+					tweets= data;
+					text=text.replace('Twitterkomponente',data.join(""));
+					lastPlayed=lastPlayed.replace('Twitterkomponente',data);
+					FlashMessage.success('Tweets bekommen');
+				}).fail(function(xhr, status, e) {
+					var errMsg = e;
+					if (xhr.status === 500) {
+						errMsg = xhr.responseText;
+					}
+					FlashMessage.error('Tweets nicht bekommen '+status + errMsg);
+				});
+				setTimeout(function(){post_tweets(text);},5000);
+				//Für permanente Neuprogrammierung, wenn Twitter enthalten
+				 interval = setInterval(function(){
+				 	var tweet;
+				 	$.ajax({
+					url : Config.tweetsPath,
+					type : 'get' 
+				}).done(function(data, status, xhr) {
+					lastPlayed=lastPlayed.replace(tweets,data.join(""));
+					tweets= data.join("");
+					//FlashMessage.success('Tweets bekommen --'+tweet);
+				}).fail(function(xhr, status, e) {
+					var errMsg = e;
+					if (xhr.status === 500) {
+						errMsg = xhr.responseText;
+					}
+					FlashMessage.error('Tweets nicht bekommen '+status + errMsg);
+				});
+				 	setTimeout(function(){post_tweets(lastPlayed);},5000);
+				 	}, 1*30000);
+			} else {
+				$.ajax({
+					url : Config.commitPath,
+					type : 'post',
+					data : {
+						text : text
+					}
+				}).done(function(data, status, xhr) {
+					FlashMessage.success('Text an die Laufschrift übergeben');
+				}).fail(function(xhr, status, e) {
+					var errMsg = e;
+					if (xhr.status === 500) {
+						errMsg = xhr.responseText;
+					}
+					FlashMessage.error('Fehler beim Senden an die Laufschrift: ' + errMsg);
+				});
+			};
+		};
+
+		return {
+			init : init,
+			createNew : createNew,
+			load : load,
+			save : save,
+			saveAs : saveAs,
+			destroy : destroy,
+			getSequenceSortable : getSequenceSortable,
+			loadSequenceFromText : loadSequenceFromText,
+			commit : commit
+		};
+	}());
