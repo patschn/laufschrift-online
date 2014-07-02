@@ -2,6 +2,7 @@
 design/Animationen.jpg -text
 design/seite.xcf -text
 hardware/Funktionen.cpp -text
+hardware/Funktionen.cpp.temp -text
 hardware/Funktionen.h -text
 hardware/main.cpp -text
 hardware/rs232.c -text
