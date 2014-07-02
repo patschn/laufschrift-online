@@ -8,7 +8,7 @@
 #include "rs232.h"      //Bibliothek von http://www.teuniz.net/RS-232/
 #include <iostream>
 #include <ctime>
-#include <unistd.h>		//Für usleep()
+//#include <unistd.h>		//Für usleep()
 
 SWP::CLauflicht::CLauflicht()
 {
@@ -221,18 +221,16 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                 sBefehl.sKonvertiert += iColors[COLOR_FB];     	//Farbe
                 sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig); //Zeichen
                 dfileend << "Befehl::Zeichen:: " << iColors[COLOR_FB] << std::endl;
-                //m_debugfile << "Aktuelles Zeichen konvertiert: " << GetCode(sTemp)->second << std::endl;
             }
             m_iLetters++;
         }
-        //m_debugfile << sBefehl.sKonvertiert << std::endl;
     }
 
     //Start- und Endsequenz
     std::string SKonvertiertTemp;
 
     //Lauflicht initialisieren, sonst Gerät nicht ansprechbar
-    SKonvertiertTemp += GetCode(L"<INIT>");
+    for(int i = 0; i < 10; i++) { SKonvertiertTemp += GetCode(L"<INIT>"); }
 
 	//Sequenzstart signalisieren
     SKonvertiertTemp += GetCode(L"<START>");
@@ -247,8 +245,6 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     sBefehl.sKonvertiert += GetCode(L"<END>");
     sBefehl.sKonvertiert += 177;
     sBefehl.sKonvertiert += GetCode(L"<END>");
-
-    //m_debugfile << "Endstring: " << sBefehl.sKonvertiert << std::endl;
 
     dfileend << "Endstring: " << std::endl;
 	dfileend << sBefehl.sKonvertiert << std::endl;
@@ -266,9 +262,10 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 
 void SWP::CLauflicht::SendeString(stSequenz sBefehl)
 {
-	RS232_cputs(m_iComPort,GetClock().c_str());
-	usleep(300000);	//200ms
+//	RS232_cputs(m_iComPort,GetClock().c_str());
+//	usleep(300000);	//200ms
 	RS232_cputs(m_iComPort,sBefehl.sKonvertiert.c_str());
+	RS232_cputs(m_iComPort,GetClock().c_str());
 }
 
 void SWP::CLauflicht::SchliesseRS232()
@@ -352,7 +349,7 @@ std::string SWP::CLauflicht::GetClock()
 
     std::string sLocaltime;
 
-    sLocaltime += 170;
+    for(int i = 0; i < 10; i++) { sLocaltime += 170; }  //Init
 	sLocaltime += 190;
 	sLocaltime += 50;
 
@@ -399,40 +396,40 @@ std::string SWP::CLauflicht::GetClock()
 
 void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 {
-	std::wstring sTemp = L"";
+    int firstchar,lastchar;
+    int lastautoleft;
+    int iLeerzeichen = 0;
+    std::wstring sTemp = L"";
+    firstchar = lastchar = lastautoleft = -1;
 
-	int firstchar,lastchar, lastauto;
-	int iLeerzeichen;
-	firstchar = lastchar = lastauto = iLeerzeichen = -1;
+    bool bAutoCenterDone = false, bLeftDone = false, bBig = false;
 
-	bool bAutoCenterDone = false, bLeftDone = false, bBig = false;
+    while(bAutoCenterDone == false)
+    {
+        //Autocenter suchen
+        lastautoleft = sBefehl.sOriginal.find(L"<AUTOCENTER>");
 
-	while(bAutoCenterDone == false)
-	{
-		//Autocenter suchen
-		lastauto = sBefehl.sOriginal.find(L"<AUTOCENTER>");
-
-		if(lastauto == std::string::npos)	//Fehlschlag
-		{
-			bAutoCenterDone = true;
-		}
-		else
-		{
-			for(int i = lastauto-1;i > 0;i--)
-			{
-				//Befehl, falls kein Escapezeichen oder sonstiges gefunden
-				if(sBefehl.sOriginal[i] == '>' && sBefehl.sOriginal[i-1] != '\\')
-				{
-					while(sBefehl.sOriginal[i] != '<')
-					{
-						i--;
-					}
-				}
-				else
-				{
-				    while(i > 0)
+        if(lastautoleft == std::wstring::npos)  //Fehlschlag
+        {
+            bAutoCenterDone = true;
+        }
+        else
+        {
+            for(int i = lastautoleft-1;i > 0;i--)
+            {
+                //Befehl, falls kein Escapezeichen oder sonstiges gefunden
+                if(sBefehl.sOriginal[i] == '>' && sBefehl.sOriginal[i-1] != '\\')
+                {
+                    while(sBefehl.sOriginal[i] != '<')
                     {
-                        if(sBefehl.sOriginal[i] == '>') //Bis zum nächsten Befehl
+                        i--;
+                    }
+                }
+                else
+                {
+                    while(i > 0)//sBefehl.sOriginal[i] != '>')  //Bis zum nächsten Befehl
+                    {
+                        if(sBefehl.sOriginal[i] == '>')
                         {
                             if(sBefehl.sOriginal[i-1] != '\\')
                             {
@@ -450,112 +447,104 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                         }
                     }
 
-					/*
-						Zwischen BIG und NORMAL unterscheiden:
-						Von aktueller firstchar-Position aus nach <BIG> und <NORMAL> suchen,
-						um Leerzeichen korrekt zu berechnen
-					*/
+                    /*
+                        Zwischen BIG und NORMAL unterscheiden:
+                        Von aktueller firstchar-Position aus nach <BIG> und <NORMAL> suchen,
+                        um Leerzeichen korrekt zu berechnen
+                    */
 
-					for(int iBigNormal = firstchar; iBigNormal > 0;iBigNormal--)
-					{
-						sTemp = L"";
-						if(sBefehl.sOriginal[iBigNormal] == '>')
-						{
-							while(sBefehl.sOriginal[iBigNormal] != '<')
-							{
-								sTemp += sBefehl.sOriginal[iBigNormal];
-								iBigNormal--;
-							}
-							sTemp += '<';
-						}
+                    for(int iBigNormal = firstchar; iBigNormal > 0;iBigNormal--)
+                    {
+                        sTemp = L"";
+                        if(sBefehl.sOriginal[iBigNormal] == '>')
+                        {
+                            while(sBefehl.sOriginal[iBigNormal] != '<')
+                            {
+                                sTemp += sBefehl.sOriginal[iBigNormal];
+                                iBigNormal--;
+                            }
+                            sTemp += '<';
+                            std::wcout << L"sTemp aktuell: " << sTemp << std::endl;
+                        }
 
-						if(sTemp == L">LAMRON<")	{ bBig = false; break; }
-						else if (sTemp == L">GIB<")	{ bBig = true; break; }
-					}
+                        if(sTemp == L">LAMRON<")    { bBig = false; break; }
+                        else if (sTemp == L">GIB<") { bBig = true; break; }
+                    }
 
-					if((lastchar - firstchar < 7) && bBig == true)
-					{
-						iLeerzeichen = (14 - (lastchar - firstchar));
-						iLeerzeichen /= 4;
+                    if((lastchar - firstchar < 7) && bBig == true)
+                    {
+                        iLeerzeichen = (14 - (lastchar - firstchar));
+                        iLeerzeichen /= 4;
 
-						for(int spaces = 0;spaces < iLeerzeichen;spaces++)
-						{
-							sBefehl.sOriginal.insert(lastchar+1,L" ");
-						}
+                        for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+                        {
+                            sBefehl.sOriginal.insert(lastchar+1,L" ");
+                        }
 
-						for(int spaces = 0;spaces < iLeerzeichen;spaces++)
-						{
-							sBefehl.sOriginal.insert(firstchar,L" ");
-						}
+                        for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+                        {
+                            sBefehl.sOriginal.insert(firstchar,L" ");
+                        }
 
-						//<AUTOCENTER> entfernen
-						sBefehl.sOriginal.erase(lastauto + iLeerzeichen*2,12);
-						firstchar = lastchar = lastauto = -1;
+                        //<AUTOCENTER> entfernen
+                        sBefehl.sOriginal.erase(lastautoleft + iLeerzeichen*2,12);
+                        firstchar = lastchar = lastautoleft = -1;
 
-						break;
-					}
-					else if((lastchar - firstchar < 14) && bBig == false)	//Leerzeichen einfügen, falls Zeichenanzahl
-					{								//kleiner der maximal darstellbaren Charakter
-						/*
-						 * Big behandeln:
-						 * Wenn vor firstchar noch ein <BIG> kommt (ohne weitere Zeichen dazwischen) dann
-						 * Leerzeichen nochmal durch zwei teilen.
-						 */
+                        break;
+                    }
+                    else if((lastchar - firstchar < 14) && bBig == false)   //Leerzeichen einfügen, falls Zeichenanzahl
+                    {                                                       //kleiner der maximal darstellbaren Charakter
 
-						int iLeerzeichen = 0;
-						iLeerzeichen = 14 - (lastchar - firstchar);	//Fehlende Leerzeichen berechnen
-						if(bBig == true)
-						{
-							iLeerzeichen /= 4;	//Durch 4 teilen für links und rechts
-						}
-						else
-						{
-							iLeerzeichen /= 2;	//Durch 2 teilen für links und rechts
-						}
+                        iLeerzeichen = 14 - (lastchar - firstchar);     //Fehlende Leerzeichen berechnen
+                        iLeerzeichen /= 2;                              //Durch 2 teilen für links und rechts
 
-						for(int spaces = 0;spaces < iLeerzeichen;spaces++)
-						{
-							sBefehl.sOriginal.insert(lastchar+1,L" ");
-						}
+                        for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+                        {
+                            sBefehl.sOriginal.insert(lastchar+1,L" ");
+                        }
 
-						for(int spaces = 0;spaces < iLeerzeichen;spaces++)
-						{
-							sBefehl.sOriginal.insert(firstchar,L" ");
-						}
+                        for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+                        {
+                            sBefehl.sOriginal.insert(firstchar,L" ");
+                        }
 
-						//<AUTOCENTER> entfernen
-						sBefehl.sOriginal.erase(lastauto + iLeerzeichen*2,12);
-						firstchar = lastchar = lastauto = -1;
+                        //<AUTOCENTER> entfernen
+                        sBefehl.sOriginal.erase(lastautoleft + iLeerzeichen*2,12);
+                        firstchar = lastchar = lastautoleft = -1;
 
-						break;
-					}
-					else
-					{
-						sBefehl.sOriginal.erase(lastauto,12);
-						firstchar = lastchar = lastauto = -1;
-						break;
-					}
-				}//</else>
+                        break;
+                    }
+                    else
+                    {
+                        sBefehl.sOriginal.erase(lastautoleft,12);
+                        firstchar = lastchar = lastautoleft = -1;
+                        break;
+                    }
+                }//</else>
 
-				if(i == 0)	//Sollte <AUTOCENTER> unsinnigerweise am Anfang gesetzt oder keine Zeichen gefunden werden
-				{
-					sBefehl.sOriginal.erase(lastauto,12);
-					break;
-				}
-			}
-		}
-	}
-	iBig = false;
+                if(i == 0)  //Sollte <AUTOCENTER> unsinnigerweise am Anfang gesetzt oder keine Zeichen gefunden werden
+                {
+                    sBefehl.sOriginal.erase(lastautoleft,12);
+                    break;
+                }
+            }
+        }//</else>
+    }//</while>
+    bBig = false;
 
-	while(bLeftDone == false)
+    //Left behandeln
+    while(bLeftDone == false)
     {
         int iTemp = lastautoleft;
-        int iAnzahlZeichen = 0;     //Dient der korrekten Behandlung von Sonderzeichen (\\ darf nicht gezählt werden)
+        int iAnzahlZeichen = 0;
+
+        firstchar = lastchar = -1;
 
         //Letztes Vorkommen von Left kopieren
         while(iTemp == lastautoleft)
         {
             lastautoleft = sBefehl.sOriginal.find(L"<LEFT>",lastautoleft+1);
+            if(lastautoleft == std::wstring::npos) { break; }
         }
 
         if(lastautoleft == std::wstring::npos)  //Fehlschlag
@@ -589,9 +578,9 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                             iAnzahlZeichen++;
                             i++;
                         }
-                        if(sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '<' ||
-                           sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '>' ||
-                           sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '\\' )
+                        if((sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '<') ||
+                           (sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '>') ||
+                           (sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '\\') )
                         {
                             /*
                                  i wurde schon weitergeschalten, falls das vorhergehende Element ein Zeichen
@@ -624,7 +613,6 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                         if(sTemp == L">LAMRON<")    { bBig = false; break; }
                         else if (sTemp == L">GIB<") { bBig = true; break; }
                     }
-
                     if(iAnzahlZeichen < 14 && bBig == false)   //Leerzeichen einfügen, falls Zeichenanzahl
                     {                                          //kleiner der maximal darstellbaren Charakter
                         /*
@@ -633,9 +621,8 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                          * Leerzeichen nochmal durch zwei teilen.
                          */
 
-                        iLeerzeichen = 14 - (iAnzahlZeichen);   //Fehlende Leerzeichen berechnen
+                        iLeerzeichen = 14 - (iAnzahlZeichen); //Fehlende Leerzeichen berechnen
 
-                        //Leerzeichen einfügen
                         for(int spaces = 0;spaces < iLeerzeichen;spaces++)
                         {
                             sBefehl.sOriginal.insert(lastchar+1,L" ");
@@ -645,9 +632,15 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 
                         break;
                     }
-                    else if(iAnzahlZeichen < 7 && bBig == true)     //Leerzeichen einfügen, falls Zeichenanzahl
-                    {                                               //kleiner der maximal darstellbaren Charakter
-                        iLeerzeichen = 7 - (iAnzahlZeichen);        //Fehlende Leerzeichen berechnen
+                    else if(iAnzahlZeichen < 7 && bBig == true)   //Leerzeichen einfügen, falls Zeichenanzahl
+                    {                                             //kleiner der maximal darstellbaren Charakter
+                        /*
+                         * Big behandeln:
+                         * Wenn vor firstchar noch ein <BIG> kommt (ohne weitere Zeichen dazwischen) dann
+                         * Leerzeichen nochmal durch zwei teilen.
+                        */
+
+                        iLeerzeichen = 7 - (iAnzahlZeichen); //Fehlende Leerzeichen berechnen
 
                         for(int spaces = 0;spaces < iLeerzeichen;spaces++)
                         {
@@ -659,11 +652,11 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                         break;
                     }
                 }//</else>
-            }//</for>
-        }//</else>
-    }//</while>
+            }
+        }
+    }
 
-	return;
+    return;
 }
 
 void SWP::CLauflicht::InitialisiereTabelle()
