@@ -30,7 +30,7 @@ end
 
   def commit
     @text = params[:text]
-    output, status = Open3.capture2e("./laufschrift_steuerung_bsp", :stdin_data => @text, :binmode => true)
+    output, status = Open3.capture2e("./laufschrift_steuerung", :stdin_data => @text, :binmode => true)
     if status.success?
       render plain: "OK"
     else
