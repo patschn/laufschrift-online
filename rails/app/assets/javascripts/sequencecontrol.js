@@ -153,6 +153,7 @@ var SequenceControl = (function() {
     elem.data('component').destroy();
 //    elem.remove();
     updateCommitTextField();
+    updateLinebreaks();
   };
   
   var specialCharacterPopover = null;
