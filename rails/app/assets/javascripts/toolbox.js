@@ -179,6 +179,8 @@ var Toolbox = (function() {
     $.each(toolInfos['linebreak'], function(i, tool) {
       $('#linebreak-tool').append(decoratedToolHTML(tool));
     });
+    
+    $(this).trigger('created');
   };
   
   return {

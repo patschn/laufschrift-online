@@ -415,8 +415,11 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 
 .tool {
 	display: inline-block;
-	cursor: move;
 	position: relative; /* damit man die tooltips auf position: absolute stellen kann */
+}
+
+.tool, .tool .component {
+    cursor: move;
 }
 
 .tool-group-text, .tool-group-bgcolor{

@@ -161,6 +161,20 @@ function TextComponent(text) {
     	}
 	};
 	
+	// Damit man das Element ziehen kann wenn es deaktiviert ist,
+	// der Browser erlaubt das bei dem Textfeld sonst nicht
+	this.addDivCover = function() {
+	    if (inputElem) {
+            var dragDiv = $('<div>');
+            dragDiv.css('position', 'absolute');
+            var border = parseInt(inputElem.css('border-left-width')) + parseInt(inputElem.css('border-image-width')) * 2;
+            dragDiv.height(inputElem.height() + border);
+            dragDiv.width(inputElem.width() + border);
+            this.getInnerHTMLElement().append(dragDiv);
+            dragDiv.position({my: 'center', at: 'center', of: inputElem});	
+        }
+	};
+	
 	this.enable = function() {
 	    if (inputElem) {
     	    inputElem.prop("disabled", false);
@@ -659,6 +673,10 @@ var ASC333Components = {
 		ComponentMapper.registerComponentInfo(groupComponentInfo);
 		var toolboxGroupTextComponent = textComponentInfo.factory();
 		toolboxGroupTextComponent.disable();
+		// div kann erst erzeugt werden, wenn das HTML-Element schon auf der Seite eingebunden ist
+		$(Toolbox).on('created', function() {
+		    toolboxGroupTextComponent.addDivCover();
+		});
         var toolboxGroupComponent = groupComponentInfo.factory([
             colorInfo.fg.factory(),
             colorInfo.bg.factory(),
