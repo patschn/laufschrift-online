@@ -500,7 +500,7 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
     bBig = false;
 
     //Left behandeln
-    while(bLeftDone == true)
+    while(bLeftDone == false)
     {
         int iTemp = lastautoleft;
         int iAnzahlZeichen = 0;
