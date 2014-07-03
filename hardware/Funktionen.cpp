@@ -247,7 +247,8 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                         		sTemp == L"♥" || sTemp == L"⌂" || sTemp == L"◆" ||
                         		sTemp == L"▲" || sTemp == L"▶" || sTemp == L"▼" ||
                         		sTemp == L"◀" || sTemp == L"☉" || sTemp == L"⬆" ||
-                        		sTemp == L"⬇" || sTemp == L"⇦" || sTemp == L"⇨")
+                        		sTemp == L"⬇" || sTemp == L"⇦" || sTemp == L"⇨" ||
+                        		sTemp == L"€")
 			{
 				sBefehl.sKonvertiert += GetCode(L"<GRAPH>");
 				sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig);
@@ -810,9 +811,11 @@ void SWP::CLauflicht::InitialisiereTabelle()
 
 
 
+
     LauflichtCodetabelle[L"ö"] = 31;
     LauflichtCodetabelle[L":"] = 32;
     LauflichtCodetabelle[L"!"] = 33;
+    LauflichtCodetabelle[L"€"] = 35;
     LauflichtCodetabelle[L"/"] = 47;
     LauflichtCodetabelle[L"#"] = 35;
     LauflichtCodetabelle[L"$"] = 36;
