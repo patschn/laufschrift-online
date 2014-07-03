@@ -73,6 +73,11 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     iColors[COLOR_FB] = 3;
 
 	AutoLeft(sBefehl);
+	if(sBefehl.sOriginal.empty())
+	{
+	    m_bFlagFail = true;
+	    std::cerr << "Der String ist leer!";
+	}
 
 	//Temporäre Variable zur Verarbeitung anlegen
     std::wstring sTemp;
@@ -378,6 +383,7 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
         if(lastautoleft == 0)   //Autocenter wurde am Anfang platziert
         {
             sBefehl.sOriginal.erase(0,12);
+            continue;
         }
         if(lastautoleft == std::wstring::npos)  //<AUTOCENTER> nicht gefunden
         {
@@ -387,7 +393,7 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
         {
             //Zeichen ab <AUTOCENTER>-Position suchen
             //lastautoleft -1 wegen dem < Zeichen
-            for(int i = lastautoleft-1;i >= 0; i--)
+            for(int i = lastautoleft-1;i >= 0;)
             {
                 //Befehlsanfang nachschauen und überspringen
                 if((lastchar == -1) && ((sBefehl.sOriginal[i] == '>') && (sBefehl.sOriginal[i-1] != '\\')))
@@ -402,6 +408,10 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                     }
                 }
                 else if(lastchar != -1 && sBefehl.sOriginal[i] == '>' && sBefehl.sOriginal[i-1] != '\\')
+                {
+                    break;
+                }
+                else if(lastchar == -1 && i == 0 && sBefehl.sOriginal[i] == '<')
                 {
                     break;
                 }
@@ -422,6 +432,7 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                     {
                         firstchar = i;
                         iLeerzeichen++;
+                        i--;
                     }
                 }
             }
