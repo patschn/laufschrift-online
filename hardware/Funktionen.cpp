@@ -54,12 +54,82 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 
 bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 {
+    std::wofstream dfile;
+    dfile.open("debug.txt");
+
+    //Uhrzeitbehandlung (Keine Animationen vor Uhrzeit, wenn kein Text in der Sequenz ist
     std::wstring Anfangsanimationen[]
     {
-        L"LEFT",L"RIGHT",L"UP",L"DOWN",L"DOFF",L"DOBIG",L"FLASH",
-        L"JUMP",L"OPENMID",L"OPENRIGHT",L"RANDOM",L"SHIFTMID",L"SNOW"
+        L"<LEFT>",L"<RIGHT>",L"<UP>",L"<DOWN>",L"<DOFF>",L"<DOBIG>",L"<FLASH>",
+        L"<JUMP>",L"<OPENMID>",L"<OPENRIGHT>",L"<RANDOM>",L"<SHIFTMID>",L"<SNOW>"
     };
 
+    if(sBefehl.sOriginal.find(L"<CLOCK24>") != std::wstring::npos ||  //Uhrzeitelement gefunden
+        sBefehl.sOriginal.find(L"<CLOCK12>") != std::wstring::npos)
+    {
+        int Clockpos = -1;
+        if(sBefehl.sOriginal.find(L"<CLOCK24>") != std::wstring::npos)
+        {
+            Clockpos = sBefehl.sOriginal.find(L"<CLOCK24>");
+        }
+        else
+        {
+            Clockpos = sBefehl.sOriginal.find(L"<CLOCK12>");
+        }
+
+        bool bText = false; //Flag, ob Text im String vorhanden ist
+        std::wstring::iterator it, itanim;
+
+        //Prüfen, ob überhaupt Text vorhanden ist:
+        for(int i = 0; i < sBefehl.sOriginal.length();i++)
+        {
+            if((sBefehl.sOriginal[i] == '<') && (sBefehl.sOriginal[i-1] != '\\'))
+            {
+                while(sBefehl.sOriginal[i] != '>')
+                {
+                    i++;
+                }
+            }
+            else
+            {
+                bText = true;
+            }
+        }
+        if(bText == false)  //Kein Text vorhanden --> Prüfen ob vorher Animationen
+        {
+            int index = 0;
+            std::wstring sTemp = L"";
+            while(index != Clockpos)
+            {
+                sTemp = L"";
+                if(sBefehl.sOriginal[index] == '<')// && sBefehl.sOriginal[i-1] != '\\')
+                {
+                    while(sBefehl.sOriginal[index] != '>')
+                    {
+                        sTemp += sBefehl.sOriginal[index];
+                        index++;
+                    }
+                    sTemp += '>';
+
+                    for(int i = 0;i < 13; i++)
+                    {
+                        if(Anfangsanimationen[i] == sTemp)
+                        {
+                            std::cerr << "Anfangsanimation vor Clock gefunden: Abbruch!" << std::endl;
+                            m_bFlagFail = true;
+                        }
+                    }
+                }
+                index++;
+            }
+        }
+    }
+
+    if(m_bFlagFail == true)
+    {
+        return false;
+    }
+//-------------------------------------------------------------------------------
     /**
         int iColors[3]: Dient zur Speicherung der Farbwerte
         iColors[COLOR_FG]: Vordergrundfarbe
@@ -72,12 +142,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     iColors[COLOR_BG] = 0;
     iColors[COLOR_FB] = 3;
 
-	AutoLeft(sBefehl);
-	if(sBefehl.sOriginal.empty())
-	{
-	    m_bFlagFail = true;
-	    std::cerr << "Der String ist leer!";
-	}
+    AutoLeft(sBefehl);
 
 	//Temporäre Variable zur Verarbeitung anlegen
     std::wstring sTemp;
@@ -263,7 +328,7 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp)
 	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
 	if(it == LauflichtCodetabelle.end())
 	{
-		std::wcerr << "Fehler beim Konvertieren: " << std::endl;
+		std::wcerr << "Fehler beim Konvertiervorgang! " << std::endl;
 		m_bFlagFail = true;
 		return 0;
 	}
