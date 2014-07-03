@@ -54,11 +54,15 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 
 bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 {
-    std::wofstream dfile;
-    dfile.open("debug.txt");
+    if(sBefehl.sOriginal.empty() == true)   //Sequenz ist leer
+    {
+        std::cerr << "Leere Sequenzen sind ungültig!" << std::endl;
+        m_bFlagFail = true;
+        return false;
+    }
 
     //Uhrzeitbehandlung (Keine Animationen vor Uhrzeit, wenn kein Text in der Sequenz ist
-    std::wstring Anfangsanimationen[]
+    std::wstring Anfangsanimationen[] =
     {
         L"<LEFT>",L"<RIGHT>",L"<UP>",L"<DOWN>",L"<DOFF>",L"<DOBIG>",L"<FLASH>",
         L"<JUMP>",L"<OPENMID>",L"<OPENRIGHT>",L"<RANDOM>",L"<SHIFTMID>",L"<SNOW>"
