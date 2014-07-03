@@ -333,7 +333,7 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp)
 	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
 	if(it == LauflichtCodetabelle.end())
 	{
-		std::wcerr << "Fehler beim Konvertiervorgang! " << std::endl;
+		std::wcerr << "Fehler beim Konvertiervorgang! " << wTemp << std::endl;
 		m_bFlagFail = true;
 		return 0;
 	}
@@ -354,7 +354,7 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp, bool bFlagBig)
 	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
 	if(it == LauflichtCodetabelle.end())
 	{
-		std::cerr << "Fehler beim Konvertieren!" << std::endl;
+		std::wcerr << "Fehler beim Konvertieren!" << wTemp << std::endl;
 		m_bFlagFail = true;
 		return 0;
 	}
