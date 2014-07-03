@@ -466,16 +466,16 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 
 
                 //Leerzeichen berechnen und einfügen
-                if(lastchar - firstchar < 6 && bBig == true)
+                if(lastchar - firstchar < 7 && bBig == true)
                 {
-                    iLeerzeichen = lastchar - firstchar;
+                    iLeerzeichen = 7 - (lastchar - firstchar);
                     iLeerzeichen /= 2;
 
                     for(int spaces = 0; spaces < iLeerzeichen;spaces++)
                     {
                         sBefehl.sOriginal.insert(lastchar+1,L" ");
                     }
-                    for(int spaces = 0; spaces < iLeerzeichen;spaces++)
+                    for(int spaces = 0; spaces <= iLeerzeichen;spaces++)
                     {
                         sBefehl.sOriginal.insert(firstchar,L" ");
                     }
