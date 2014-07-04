@@ -3,6 +3,7 @@ design/Animationen.jpg -text
 design/seite.xcf -text
 hardware/Funktionen.cpp -text
 hardware/Funktionen.h -text
+hardware/Makefile -text
 hardware/main.cpp -text
 hardware/serialib.cpp -text
 hardware/serialib.h -text
