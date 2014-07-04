@@ -7,7 +7,7 @@
         },
                 
         _create: function() {
-            this._on({ 'click li': this._clickHandler });
+            this._on({ 'click li': this._clickHandler, 'dblclick li': this._dblclickHandler });
         },
         
         _select: function(elem) {
@@ -18,6 +18,12 @@
         _clickHandler: function(event) {
             var target = $(event.target);
             this._select(target);      
+            this._trigger('click', event, target.data('value'));
+        },
+        
+        _dblclickHandler: function(event) {
+            var target = $(event.target);
+            this._trigger('dblclick', event, target.data('value'));
         },
         
         _elemForValue: function(value) {

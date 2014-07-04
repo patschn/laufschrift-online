@@ -171,7 +171,8 @@ function TextComponent(text) {
 	    if (inputElem) {
             var dragDiv = $('<div>');
             dragDiv.css('position', 'absolute');
-            var border = parseInt(inputElem.css('border-left-width')) + parseInt(inputElem.css('border-image-width')) * 2;
+            // Das funktioniert nur wenn die Ränder überall gleich sind
+            var border = parseInt(inputElem.css('border-left-width')) + parseInt(inputElem.css('border-image-width')) * 2 + parseInt(inputElem.css('padding-left')) * 2;
             dragDiv.height(inputElem.height() + border);
             dragDiv.width(inputElem.width() + border);
             this.getInnerHTMLElement().append(dragDiv);

@@ -198,6 +198,7 @@ rails/vendor/assets/javascripts/achtung/version.txt -text
 rails/vendor/assets/javascripts/caret/jquery.caret.js -text
 rails/vendor/assets/javascripts/caret/license.txt -text
 rails/vendor/assets/javascripts/caret/readme.md -text
+rails/vendor/assets/javascripts/popover/jquery-popover.js -text
 rails/vendor/assets/javascripts/preload/LICENSE -text
 rails/vendor/assets/javascripts/preload/README.txt -text
 rails/vendor/assets/javascripts/preload/changes.txt -text

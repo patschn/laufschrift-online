@@ -42,6 +42,6 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'jquery-ui-rails', '~> 4.2.1'
-gem 'jquery-popover'
+gem 'jquery-ui-rails', '~> 5.0.0'
+#gem 'jquery-popover'
 gem 'twitter', '~> 5.11.0'

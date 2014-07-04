@@ -12,9 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery.ui.all
+//= require jquery-ui
 //= require achtung/ui.achtung
-//= require jquery-popover
+//= require popover/jquery-popover
 //= require caret/jquery.caret
 //= require preload/jquery.preload
 // require turbolinks (disabled, we don't need it)

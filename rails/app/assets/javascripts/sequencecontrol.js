@@ -365,7 +365,9 @@ var SequenceControl = (function() {
     sequenceDiv = $('#sequence-inner');
     sequenceNameDiv = $('#sequence-name');
     
-    sequenceList = sequenceSelect.listasselect().data('swpListasselect');
+    sequenceSelect.listasselect();
+    sequenceList = sequenceSelect.listasselect("instance");
+    sequenceSelect.disableSelection();
     
     setSequenceName('Unbenannte Sequenz');
     
@@ -376,6 +378,7 @@ var SequenceControl = (function() {
     $("#sequence-save-as").click(preventDefaultProxy(saveAs));
     $("#sequence-delete").click(preventDefaultProxy(destroy));
     $("#run-button").click(preventDefaultProxy(playClicked));
+    sequenceSelect.bind("listasselectdblclick", preventDefaultProxy(load));
    
     // Workaround für http://bugs.jqueryui.com/ticket/7498
     var workaroundHelper = $('<div id="sequence-init-helper" class="component"></div>');
@@ -397,6 +400,11 @@ var SequenceControl = (function() {
     sequenceDiv.on('sortstop', updateLinebreaks);
     // Workaround-Hilfselement wieder töten
     workaroundHelper.remove();
+    
+    $('#debug').hide();
+    $('#bug').click(function() {
+        $('#debug').toggle();
+    });
   };
   
   var getSequenceSortable = function() {

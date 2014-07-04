@@ -37,10 +37,17 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 #help{
     position:absolute;
     top:-20px;
-    right:-10px;
-    background: transparent;
-    width: 60px;
-    height: 60px;
+    right:10px;
+    background-image: image-url("question.png");
+    display:block;
+    height:40px;
+    width:40px;
+}
+#help:hover{
+    background-image: image-url("question_hover.png") ;
+}
+#help:focus {
+    outline: 0;
 }
 #links {
     position:absolute;
@@ -205,6 +212,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     width: 64px;		
     height:72px;
     background: image-url("bug.png");
+    cursor: pointer;
 }
 
 #toolbox_bg{
@@ -298,18 +306,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 .playbutton:focus {
     outline: 0;
 }
-.helpbutton{
-    background-image: image-url("question.png");
-    display:block;
-    height:40px;
-    width:40px;
-}
-.helpbutton:hover{
-    background-image: image-url("question_hover.png") ;
-}
-.helpbutton:focus {
-    outline: 0;
-}
+
 .button {									/*Sequenzbutton(links oben")*/
 	background-image: image-url("seqbut.png");
 	display: block;
