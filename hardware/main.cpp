@@ -5,9 +5,45 @@
 
 #include "Funktionen.h"
 #include <iostream>
+#include <unistd.h>
+#include <signal.h>
+#include <cstring>
+#include <cstdlib>
+
+void timeoutHandler(int n)
+{
+    std::cerr << "Programm hat sich aufgehängt" << std::endl;
+    std::exit(1);
+}
+
 
 int main(int argc, char *argv[])
 {
+    //Nach 3 Sekunden Programm töten
+    timer_t timer;
+    if (timer_create(CLOCK_MONOTONIC, NULL, &timer) != 0)
+    {
+        perror("timer_create");
+        return 1;
+    }
+    struct itimerspec timerSpec;
+    timerSpec.it_interval.tv_sec = timerSpec.it_interval.tv_nsec = 0;
+    timerSpec.it_value.tv_sec = 3;
+    timerSpec.it_value.tv_nsec = 0;
+    if (timer_settime(timer, 0, &timerSpec, NULL) != 0)
+    {
+        perror("timer_settime");
+        return 1;
+    }
+    struct sigaction act;
+    std::memset(&act, 0, sizeof(act));
+    act.sa_handler = timeoutHandler;
+    if (sigaction(SIGALRM, &act, NULL) != 0)
+    {
+        perror("sigaction");
+        return 1;
+    }
+
     SWP::stSequenz Sequenz;
     Sequenz.sOriginal = L"";
     Sequenz.sKonvertiert = "";
