@@ -657,6 +657,7 @@ var ASC333Components = {
 		Toolbox.registerToolInfo(new ToolInfo('pause', waitInfo, {
 		    sliderID: 'wait_slider',
 		    toolType: 'slider',
+		    tooltip: 'Wartezeit einfügen, in der die Animation angehalten wird. Das Element muss hinter den Text gestellt werden, der während der Warteperiode angezeigt werden soll.',
 		    sliderStep: 1,
 		    sliderRange: [1, 9],
 		    sliderInitialValue: 5,
@@ -669,6 +670,7 @@ var ASC333Components = {
 		})), {
 			sliderID: 'speed_slider',
 			toolType: 'slider',
+			tooltip: 'Geschwindigkeit für alle nachfolgenden Animationen einstellen. Soll eine bestimmte Animation angepasst werden, so muss das Element vor dem entsprechenden Animationsbefehl eingefügt werden.',
 			sliderStep: 1,
 			sliderRange: [1, 9],
 			sliderInitialValue: 5,
@@ -707,10 +709,13 @@ var ASC333Components = {
             tooltip: 'In der Sequenzliste zur besseren Übersicht einen Zeilenumbruch einfügen. Dies hat keine Auswirkung auf die Anzeige auf der Laufschrift!'
         }));
 		
-		var clocks = ['CLOCK12', 'CLOCK24'];
+		var clocks = [
+		    ['CLOCK12', 'Aktuelle Uhrzeit kurz im 12-Stunden-Format anzeigen. Animationen werden für diesen Befehl nicht unterstützt.'],
+		    ['CLOCK24', 'Aktuelle Uhrzeit kurz im 24-Stunden-Format anzeigen. Animationen werden für diesen Befehl nicht unterstützt.']
+		];
 		$.each(clocks, function(i, clock) {
-			var clockInfo = ComponentMapper.registerComponentInfo(new ComponentInfo(clock));
-			Toolbox.registerToolInfo(new ToolInfo('clock', clockInfo));
+			var clockInfo = ComponentMapper.registerComponentInfo(new ComponentInfo(clock[0]));
+			Toolbox.registerToolInfo(new ToolInfo('clock', clockInfo, { tooltip: clock[1] }));
 		});
 	}
 };
