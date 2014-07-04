@@ -250,11 +250,18 @@ function CommandComponent(command, hasPopover) {
 	    if (!ci) {
 	        return [];
 	    }
+	    var tools;
+	    console.log(ci.options);
 	    var group = ci.options.exchangeableInGroup;
 	    if (group === undefined) {
-	        return [];
-	    }
-	    var tools = Toolbox.getToolInfosForGroup(group);
+	        if (ci.options.exchangeableWithTools === undefined) {
+                return [];
+	        } else {
+	            tools = ci.options.exchangeableWithTools;
+	        }
+	    } else {
+    	    tools = Toolbox.getToolInfosForGroup(group);
+        }
 	    return $.map(tools, function(tool) {
 	        var button = tool.createToolHTMLElement();
 	        var command = tool.componentInfo.command;
@@ -285,6 +292,14 @@ function CommandComponent(command, hasPopover) {
 	    updateClasses();
 		elem.addClass('button-component');
 	};
+	
+	this.getSignText = function() {
+	    if (ci && (ci.options.sendToSign === undefined || ci.options.sendToSign === true)) {
+	        return this.getAsText();
+	    } else {
+	        return "";
+	    }
+	};	
 
 	Object.defineProperties(this, {
 		command : {
@@ -302,6 +317,9 @@ function CommandComponent(command, hasPopover) {
     			    popoverElem.addClass("popover-command-" + newCommand);
     			}
 	   		    command = newCommand;
+                try {
+	                ci = ComponentMapper.getComponentInfoForCommand(command);
+                } catch (e) {}
 			    updateClasses();
 			    $(that).trigger('change');
 			},
@@ -582,11 +600,21 @@ var ASC333Components = {
 		    toolType: 'htmlElement',
 		    toolHTMLElement: $('<div/>')
 		}));
+		var autocenterComponentInfo = ComponentMapper.registerComponentInfo(new ComponentInfo('AUTOCENTER', undefined, {}));
+	    var noAutocenterComponentInfo = ComponentMapper.registerComponentInfo(new ComponentInfo('NOAUTOCENTER', undefined, { sendToSign: false } ));
+		var autocenterToolInfo = Toolbox.registerToolInfo(new ToolInfo('text', autocenterComponentInfo, {
+		    tooltip: "Text seit dem letzten Anfangsbefehl wird automatisch zentriert. Muss nach dem Text eingefügt werden, der zentriert werden soll, aber vor einer etwaigen Endanimation."
+	    }));
+		var noAutocenterToolInfo = Toolbox.registerToolInfo(new ToolInfo('', noAutocenterComponentInfo, {
+		    tooltip: "Text seit dem letzten Anfangsbefehl wird nicht zentriert. Bei der Animation LEFT ist er daher linksbündig, sonst rechtsbündig."
+	    }));
+	    autocenterComponentInfo.options.exchangeableWithTools = noAutocenterComponentInfo.options.exchangeableWithTools = [ noAutocenterToolInfo, autocenterToolInfo ];
+
 		var twitter = [
 			[ 'Twitterkomponente' , "Ruft die letzten drei Tweets ab" ],
 			];
 		var openAnimations = [
-		    [ 'LEFT', "Von rechts nach links" ],
+		    [ 'LEFT', "Von rechts nach links. Bei dieser Animation wird der Text standardmäßig linksbündig angezeigt." ],
 		    [ 'RIGHT', "Von links nach rechts" ],
 		    [ 'UP', "Von unten nach oben" ],
 		    [ 'DOWN', "Von oben nach unten" ],
@@ -605,7 +633,6 @@ var ASC333Components = {
 		    [ 'CLOSERIGHT', "Mitteilung verschwindet einzeln von links nach rechts" ],
 		    [ 'SQUEEZEMID', "Mitteilung bewegt sich von beiden Seiten zur Mitte und verschwindet dort" ],
 		    [ 'DSNOW', "Mitteilung verschwindet nach und nach von der Anzeige" ],
-		    [ 'AUTOCENTER', "Text seit dem letzten Anfangsbefehl wird automatisch zentriert" ]
 		];
 		$.each(openAnimations, function(i, animation) {
 			var info = ComponentMapper.registerComponentInfo(new ComponentInfo(animation[0], undefined, { exchangeableInGroup: 'open_animation' }));
@@ -691,6 +718,7 @@ var ASC333Components = {
             colorInfo.bg.factory(),
             ComponentMapper.getComponentInfoForCommand('LEFT').factory(),
             toolboxGroupTextComponent,
+            autocenterComponentInfo.factory(),
             waitInfo.factory()
         ]);
 		Toolbox.registerToolInfo(new ToolInfo('standard', groupComponentInfo, {

@@ -432,6 +432,10 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     cursor: move;
 }
 
+.tool-group-text .tool {
+    vertical-align: top;
+}
+
 .tool-group-text, .tool-group-bgcolor{
     display: inline-block;
     vertical-align: top;
@@ -443,7 +447,7 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     display: inline-block;
     vertical-align: top;
     margin-top:10px;
-    margin-left:40px;
+    margin-left:30px;
 }
 .tool-group-fgcolor{
     display: inline-block;

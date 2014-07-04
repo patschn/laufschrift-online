@@ -1,12 +1,16 @@
 "use strict";
 
 var FlashMessage = {
+  _htmlencode: function(text) {
+    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  },
+
   success: function(text) {
-    $.achtung({message: text, timeout:5, className:'achtungSuccess'});
+    $.achtung({message: this._htmlencode(text), timeout:5, className:'achtungSuccess'});
   },
   
   error: function(text) {
-    $.achtung({message: text, className:'achtungFail'});
+    $.achtung({message: this._htmlencode(text), className:'achtungFail'});
   }
 };
 
