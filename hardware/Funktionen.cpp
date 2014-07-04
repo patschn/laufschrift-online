@@ -41,7 +41,7 @@ bool SWP::CLauflicht::OeffneRS232()
 
 void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
 {
-    std::locale::global(std::locale(""));
+    std::locale::global(std::locale("de_DE.UTF-8"));
     std::wcin.clear();
 
     //String speichern:
