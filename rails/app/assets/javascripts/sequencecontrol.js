@@ -120,6 +120,10 @@ var SequenceControl = (function() {
   var getSelectedSequenceID = function() {
     return sequenceList.getSelectedValue();
   };
+  
+  var getSelectedSequenceName = function() {
+    return sequenceList.getSelectedElement().text();
+  };
 
   var componentListFromHTML = function() {
     return sequenceDiv.children("div.component").map(function() {
@@ -322,7 +326,7 @@ var SequenceControl = (function() {
       return;
     }
     var destroySequence = new Sequence();
-    if (confirm('Wollen Sie wirklich diese Sequenz löschen?')) {
+    if (confirm('Wollen Sie wirklich die ausgewählte Sequenz „' + getSelectedSequenceName() + '“ löschen?')) {
     destroySequence.load(destroyID).done(function() {
       if (!destroySequence.modifiable) {
         FlashMessage.error("Demosequenzen können nicht gelöscht werden");
