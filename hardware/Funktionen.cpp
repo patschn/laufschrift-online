@@ -91,8 +91,6 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 
 		if(Clockpos > 0)
 		{
-			bool bTextfound = false;
-
 			//Es muss geprüft werden, ob Befehle vor der Clockanweisung sind, die das Verhalten beeinträchtigen könnten.
 			for(int i = Clockpos-1;i > 0;i--)
 			{
@@ -130,11 +128,6 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 
 	if(m_bFlagFail == true) { return false; }
 	else { return true; }
-
-    if(m_bFlagFail == true)
-    {
-        return false;
-    }
 //-------------------------------------------------------------------------------
     /**
         int iColors[3]: Dient zur Speicherung der Farbwerte
