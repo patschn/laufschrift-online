@@ -328,7 +328,7 @@ CommandComponent.prototype.getAsText = function() {
 CommandComponent.prototype.getSignText = function() {
     var ci;
 	try {
-    	ci = ComponentMapper.getComponentInfoForCommand(command);
+    	ci = ComponentMapper.getComponentInfoForCommand(this.command);
     } catch (e) {}
     if (ci && (ci.options.sendToSign === undefined || ci.options.sendToSign === true)) {
         return this.getAsText();
