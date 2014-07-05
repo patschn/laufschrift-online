@@ -127,7 +127,6 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 	}//</if>
 
 	if(m_bFlagFail == true) { return false; }
-	else { return true; }
 //-------------------------------------------------------------------------------
     /**
         int iColors[3]: Dient zur Speicherung der Farbwerte
