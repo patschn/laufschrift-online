@@ -62,72 +62,74 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     }
 
     //Uhrzeitbehandlung (Keine Animationen vor Uhrzeit, wenn kein Text in der Sequenz ist
-    std::wstring Anfangsanimationen[] =
-    {
-        L"<LEFT>",L"<RIGHT>",L"<UP>",L"<DOWN>",L"<DOFF>",L"<DOBIG>",L"<FLASH>",
-        L"<JUMP>",L"<OPENMID>",L"<OPENRIGHT>",L"<RANDOM>",L"<SHIFTMID>",L"<SNOW>"
-    };
+	/*std::wstring Anfangsanimationen[] =
+	{
+		L"<LEFT>",L"<RIGHT>",L"<UP>",L"<DOWN>",L"<DOFF>",L"<DOBIG>",L"<FLASH>",
+		L"<JUMP>",L"<OPENMID>",L"<OPENRIGHT>",L"<RANDOM>",L"<SHIFTMID>",L"<SNOW>"
+	};*/
 
-    if(sBefehl.sOriginal.find(L"<CLOCK24>") != std::wstring::npos ||  //Uhrzeitelement gefunden
-        sBefehl.sOriginal.find(L"<CLOCK12>") != std::wstring::npos)
-    {
-        int Clockpos = -1;
-        if(sBefehl.sOriginal.find(L"<CLOCK24>") != std::wstring::npos)
-        {
-            Clockpos = sBefehl.sOriginal.find(L"<CLOCK24>");
-        }
-        else
-        {
-            Clockpos = sBefehl.sOriginal.find(L"<CLOCK12>");
-        }
+	std::wstring Anfangsanimationen[] = //Invertiert, da von Clock aus rückwärts gesucht wird
+	{
+		L">TFEL<",L">THGIR<",L">PU<",L">NWOD<",L">FFOD<",L">GIBOD<",L">HSLAF<",
+		L">PMUJ<",L">DIMNEPO<",L">THGIRNEPO<",L">MODNAR<",L">DIMTFIHS<",L">WONS<"
+	};
 
-        bool bText = false; //Flag, ob Text im String vorhanden ist
-        std::wstring::iterator it, itanim;
+	if(sBefehl.sOriginal.find(L"<CLOCK24>") != std::wstring::npos ||  //Uhrzeitelement gefunden
+		sBefehl.sOriginal.find(L"<CLOCK12>") != std::wstring::npos)
+	{
+		int Clockpos = -1;
+		std::wstring wsTemp = L"";
 
-        //Prüfen, ob überhaupt Text vorhanden ist:
-        for(int i = 0; i < sBefehl.sOriginal.length();i++)
-        {
-            if((sBefehl.sOriginal[i] == '<') && (sBefehl.sOriginal[i-1] != '\\'))
-            {
-                while(sBefehl.sOriginal[i] != '>')
-                {
-                    i++;
-                }
-            }
-            else
-            {
-                bText = true;
-            }
-        }
-        if(bText == false)  //Kein Text vorhanden --> Prüfen ob vorher Animationen
-        {
-            int index = 0;
-            std::wstring sTemp = L"";
-            while(index != Clockpos)
-            {
-                sTemp = L"";
-                if(sBefehl.sOriginal[index] == '<')// && sBefehl.sOriginal[i-1] != '\\')
-                {
-                    while(sBefehl.sOriginal[index] != '>')
-                    {
-                        sTemp += sBefehl.sOriginal[index];
-                        index++;
-                    }
-                    sTemp += '>';
+		if(sBefehl.sOriginal.find(L"<CLOCK24>") != std::wstring::npos)
+		{
+			Clockpos = sBefehl.sOriginal.find(L"<CLOCK24>");
+		}
+		else
+		{
+			Clockpos = sBefehl.sOriginal.find(L"<CLOCK12>");
+		}
 
-                    for(int i = 0;i < 13; i++)
-                    {
-                        if(Anfangsanimationen[i] == sTemp)
-                        {
-                            std::cerr << "Anfangsanimation vor Clock gefunden: Abbruch!" << std::endl;
-                            m_bFlagFail = true;
-                        }
-                    }
-                }
-                index++;
-            }
-        }
-    }
+		if(Clockpos > 0)
+		{
+			bool bTextfound = false;
+
+			//Es muss geprüft werden, ob Befehle vor der Clockanweisung sind, die das Verhalten beeinträchtigen könnten.
+			for(int i = Clockpos-1;i > 0;i--)
+			{
+				//Befehl
+				if(sBefehl.sOriginal[i] == '>' && sBefehl.sOriginal[i-1] != '\\')
+				{
+					//Befehl einlesen
+					while(sBefehl.sOriginal[i] != '<')
+					{
+						wsTemp += sBefehl.sOriginal[i];
+						i--;
+					}
+					wsTemp += '<';
+
+					//Anfangsanimationen durchschalten
+					for(int i = 0;i < 13; i++)
+					{
+						if(Anfangsanimationen[i] == wsTemp)
+						{
+							std::cerr << "Ungültige Anfangsanimation vor Clock gefunden: Abbruch!" << std::endl;
+							m_bFlagFail = true;
+							break;
+						}
+					}
+
+					wsTemp = L"";
+				}//</if>
+				else
+				{
+					break;
+				}//</else>
+			}//</for>
+		}//</if>
+	}//</if>
+
+	if(m_bFlagFail == true) { return false; }
+	else { return true; }
 
     if(m_bFlagFail == true)
     {
