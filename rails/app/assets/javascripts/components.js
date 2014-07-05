@@ -293,14 +293,6 @@ function CommandComponent(command, hasPopover) {
 		elem.addClass('button-component');
 	};
 	
-	this.getSignText = function() {
-	    if (ci && (ci.options.sendToSign === undefined || ci.options.sendToSign === true)) {
-	        return this.getAsText();
-	    } else {
-	        return "";
-	    }
-	};	
-
 	Object.defineProperties(this, {
 		command : {
 			get : function() {
@@ -332,6 +324,17 @@ CommandComponent.prototype = Object.create(Component.prototype);
 CommandComponent.prototype.constructor = CommandComponent;
 CommandComponent.prototype.getAsText = function() {
 	return "<" + this.command + ">";
+};
+CommandComponent.prototype.getSignText = function() {
+    var ci;
+	try {
+    	ci = ComponentMapper.getComponentInfoForCommand(command);
+    } catch (e) {}
+    if (ci && (ci.options.sendToSign === undefined || ci.options.sendToSign === true)) {
+        return this.getAsText();
+    } else {
+        return "";
+    }
 };
 
 function ColorCommandComponent(command, color, hasPopover) {
