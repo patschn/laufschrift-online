@@ -1,4 +1,4 @@
-﻿/*Mindestbreite: 1280px*/
+﻿/*Mindestbreite: jetzt 1360px wegen breiterem Standardelement*/
 
 * {
     padding: 0;
@@ -211,8 +211,11 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
     left:330px;		
     width: 64px;		
     height:72px;
-    background: image-url("bug.png");
+    background:image-url("bug.png");
     cursor: pointer;
+}
+#bug:hover{
+    background-image:image-url("bug_hover.png");
 }
 
 #toolbox_bg{
@@ -306,7 +309,6 @@ body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-
 .playbutton:focus {
     outline: 0;
 }
-
 .button {									/*Sequenzbutton(links oben")*/
 	background-image: image-url("seqbut.png");
 	display: block;
