@@ -60,6 +60,6 @@ $(document).ready(function() {
   checkStr("<TEXT a><LEFT><TEXT \\>>");
   checkStr("<TEXT a><LEFT><TEXT \\<>");*/
   
-  SequenceControl.loadSequenceFromText('<GROUP <COLOR y><BGCOLOR b><LEFT>bla<WAIT 5>><COLOR r>test');
+  //SequenceControl.loadSequenceFromText('<GROUP <COLOR y><BGCOLOR b><LEFT>bla<WAIT 5>><COLOR r>test');
   //SequenceControl.loadSequenceFromText('<COLOR r>');
 });
