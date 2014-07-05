@@ -333,8 +333,7 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp)
 	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
 	if(it == LauflichtCodetabelle.end())
 	{
-	    std::wcerr << "Fehler beim Konvertiervorgang!" << std::endl;
-	    std::wcerr << "Übergebener Sequenzteil: " << wTemp << std::endl;
+	    std::wcerr << L"Ungültige Zeichenkette „" << wTemp << L"“" << std::endl;
 		m_bFlagFail = true;
 		return 0;
 	}
@@ -355,8 +354,7 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp, bool bFlagBig)
 	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
 	if(it == LauflichtCodetabelle.end())
 	{
-		std::wcerr << "Fehler beim Konvertiervorgang!" << std::endl;
-		std::wcerr << "Übergebener Sequenzteil: " << wTemp << std::endl;
+		std::wcerr << L"Ungültige Zeichenkette „" << wTemp << L"“" << std::endl;
 		m_bFlagFail = true;
 		return 0;
 	}
