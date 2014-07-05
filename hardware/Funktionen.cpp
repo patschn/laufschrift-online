@@ -407,29 +407,6 @@ std::string SWP::CLauflicht::GetClock()
 	sLocaltime += 177;
 	sLocaltime += 191;
 
-    /* Gültige Sequenz
-    sLocaltime += 170;
-	sLocaltime += 190;
-	sLocaltime += 50;
-	sLocaltime += 49;
-	sLocaltime += 52;
-	sLocaltime += 48;
-	sLocaltime += 54;
-	sLocaltime += 49;
-	sLocaltime += 54;
-	sLocaltime += 50;
-	sLocaltime += 51;
-	sLocaltime += 53;
-	sLocaltime += 55;
-	sLocaltime += 51;
-	sLocaltime += 48;
-	sLocaltime += 191;
-	sLocaltime += 177;
-	sLocaltime += 191;
-	sLocaltime += 177;
-	sLocaltime += 191;
-	*/
-
     clockfile << "Konvertierte Uhrzeit: ";
     clockfile << sLocaltime;
     clockfile.close();
@@ -513,6 +490,7 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 
             if(lastchar != -1)
             {
+                int spaces = 0;
                 /*
                     Zwischen BIG und NORMAL unterscheiden:
                     Von aktueller firstchar-Position aus nach <BIG> und <NORMAL> suchen,
@@ -543,11 +521,17 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                     iLeerzeichen = 7 - (lastchar - firstchar);
                     iLeerzeichen /= 2;
 
-                    for(int spaces = 0; spaces < iLeerzeichen;spaces++)
+                    if(((lastchar - firstchar) % 2) == 1)
+                    {
+                        spaces = 1;
+                    }
+
+                    for(; spaces < iLeerzeichen;spaces++) //Rechts auffüllen
                     {
                         sBefehl.sOriginal.insert(lastchar+1,L" ");
                     }
-                    for(int spaces = 0; spaces <= iLeerzeichen;spaces++)
+
+                    for(spaces = 0; spaces < iLeerzeichen;spaces++)    //Links auffüllen
                     {
                         sBefehl.sOriginal.insert(firstchar,L" ");
                     }
@@ -557,11 +541,16 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
                     iLeerzeichen = 14 - (lastchar - firstchar);
                     iLeerzeichen /= 2;
 
-                    for(int spaces = 0; spaces < iLeerzeichen;spaces++)
+                    if(((lastchar - firstchar) % 2 + 1) == 1)
+                    {
+                        spaces = 1;
+                    }
+                    for(; spaces < iLeerzeichen;spaces++) //Rechts auffüllen
                     {
                         sBefehl.sOriginal.insert(lastchar+1,L" ");
                     }
-                    for(int spaces = 0; spaces < iLeerzeichen;spaces++)
+
+                    for(spaces = 0; spaces < iLeerzeichen;spaces++) //Links auffüllen
                     {
                         sBefehl.sOriginal.insert(firstchar,L" ");
                     }
