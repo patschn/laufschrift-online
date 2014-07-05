@@ -333,7 +333,8 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp)
 	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
 	if(it == LauflichtCodetabelle.end())
 	{
-		std::wcerr << "Fehler beim Konvertiervorgang! " << wTemp << std::endl;
+	    std::wcerr << "Fehler beim Konvertiervorgang!" << std::endl;
+	    std::wcerr << "Übergebener Sequenzteil: " << wTemp << std::endl;
 		m_bFlagFail = true;
 		return 0;
 	}
@@ -354,7 +355,8 @@ int SWP::CLauflicht::GetCode(std::wstring wTemp, bool bFlagBig)
 	//Prüfen ob der die Teilsequenz in der Tabelle gefunden wurde
 	if(it == LauflichtCodetabelle.end())
 	{
-		std::wcerr << "Fehler beim Konvertieren!" << wTemp << std::endl;
+		std::wcerr << "Fehler beim Konvertiervorgang!" << std::endl;
+		std::wcerr << "Übergebener Sequenzteil: " << wTemp << std::endl;
 		m_bFlagFail = true;
 		return 0;
 	}
@@ -815,7 +817,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"ö"] = 31;
     LauflichtCodetabelle[L":"] = 32;
     LauflichtCodetabelle[L"!"] = 33;
-    LauflichtCodetabelle[L"€"] = 35;
+    LauflichtCodetabelle[L"€"] = 36;
     LauflichtCodetabelle[L"/"] = 47;
     LauflichtCodetabelle[L"#"] = 35;
     LauflichtCodetabelle[L"$"] = 36;
