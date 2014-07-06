@@ -12,16 +12,16 @@ class SignController < ApplicationController
     
     client = Twitter::REST::Client.new do |config|
 
-      config.consumer_key        = 'Cm6UrYbDOUFsYVlAZP5SvJuEe'
+      config.consumer_key        = '8La81KYPmMBQ8SBsS3VDFiD38'
 
-      config.consumer_secret     = 'ZR3ujhZd73KdBWW4FGHbAIsSSFetmjyy5cUgPZ5MBzkh8fe8SZ'
+      config.consumer_secret     = 'QhlvKjNWSU0FdDR1UMMzwwVbQ2ebDLI1dmf47a4sVHlY0GgBIV'
 
-      config.access_token        = '531701148-1VUN5GLJYWBJ4l3mDkH0fdCcPghMG8TBYp4bPIaB'
+      config.access_token        = '2603579250-qfFJXGyU1gzTIlA1y1ODAJWa1pdJVQTbf8SSgAC'
 
-      config.access_token_secret = 'COuRUdA2WQ5VrMK94wY3vV34HKe0CC88ybviLOGC5mrK6'
+      config.access_token_secret = 'xYiC6327ZVaPGayi1uoL2DUhelRej14wKAVBXxyNM81nZ'
 
     end
- @tweets = client.search("#testtweet", :result_type => "recent").take(3).collect do |tweet|
+ @tweets = client.search("#bhclub", :result_type => "recent").take(3).collect do |tweet|
   "<COLOR y><BGCOLOR b><LEFT>#{tweet.user.screen_name}: #{tweet.text}<WAIT 5>"
 end
   puts @tweets.to_s

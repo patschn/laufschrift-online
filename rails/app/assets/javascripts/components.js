@@ -540,7 +540,7 @@ function TwitterComponent() {
 
 TwitterComponent.prototype = Object.create(CommandComponent.prototype);
 TwitterComponent.prototype.constructor = TwitterComponent;
-TwitterComponent.prototype.getSignText=function(){return 'Twitterkomponente';};
+TwitterComponent.prototype.getSignText=function(){return tweet;};
 
 // ComponentInfo
 // ==============

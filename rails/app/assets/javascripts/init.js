@@ -5,6 +5,7 @@ $(document).ready(function() {
   SequenceControl.init();
   ASC333Components.register();
   Toolbox.create();
+  get_tweets();
 
   $.preload(Config.preloadAssets);
 });
