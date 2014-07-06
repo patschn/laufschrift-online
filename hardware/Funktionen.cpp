@@ -112,7 +112,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 						{
 							if(Anfangsanimationen[m] == wsTemp)
 							{
-								std::wcerr << "Ungültige Anfangsanimation vor Clock gefunden! Position: " << m << std::endl;
+								std::wcerr << L"Ungültige Anfangsanimation vor Clock gefunden! Position: " << m << std::endl;
 								m_bFlagFail = true;
 								break;
 							}
