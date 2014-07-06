@@ -670,7 +670,8 @@ var ASC333Components = {
 				Toolbox.registerToolInfo(new ToolInfo(type + 'color', colorInfo[type], {
 					extraClass : 'button-color-' + type + '-' + color,
 					factoryArguments : [color],
-					toolText : ''
+					toolText : '',
+					tooltip: (type === 'fg' && color === 'rainbow') ? 'Dreifarbige Anzeige. Die Hintergrundfarbe wird automatisch auf schwarz gesetzt und ist nicht änderbar.' : ''
 				}));
 			});
 		});
@@ -741,8 +742,8 @@ var ASC333Components = {
         }));
 		
 		var clocks = [
-		    ['CLOCK12', 'Aktuelle Uhrzeit kurz im 12-Stunden-Format anzeigen. Animationen werden für diesen Befehl nicht unterstützt.'],
-		    ['CLOCK24', 'Aktuelle Uhrzeit kurz im 24-Stunden-Format anzeigen. Animationen werden für diesen Befehl nicht unterstützt.']
+		    ['CLOCK12', 'Aktuelle Uhrzeit für 5 Sekunden im 12-Stunden-Format anzeigen. Animationen werden für diesen Befehl nicht unterstützt.'],
+		    ['CLOCK24', 'Aktuelle Uhrzeit für 5 Sekunden im 24-Stunden-Format anzeigen. Animationen werden für diesen Befehl nicht unterstützt.']
 		];
 		$.each(clocks, function(i, clock) {
 			var clockInfo = ComponentMapper.registerComponentInfo(new ComponentInfo(clock[0]));
