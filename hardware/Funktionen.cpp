@@ -132,22 +132,6 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 					iColors[COLOR_BG] = GetCode(sTemp);
 					iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
 				}
-            	/*
-            		//Alter Code:
-            	if(iColors[COLOR_FB] != 32)	//Farbe rainbow
-            	{
-					//Farbe in Tabelle nachschauen und Variablen aktualisieren
-            	    if((sTemp == L"<BGCOLOR b>") && (iColors[COLOR_FG] == GetCode(L"<COLOR b>")))
-            	    {
-            	        m_bFlagFail = true;
-            	        std::cerr << "Schwarzer Hintergrund und Textfarbe verboten!" << std::endl;
-            	    }
-            	    else
-            	    {
-            	        iColors[COLOR_BG] = GetCode(sTemp);
-            	        iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
-            	    }
-            	}*/
             }
             else if(sTemp == L"<COLOR b>" || sTemp == L"<COLOR r>" || sTemp == L"<COLOR g>" || sTemp == L"<COLOR y>")
             {
@@ -514,7 +498,7 @@ void SWP::CLauflicht::CheckAnimation(stSequenz &sBefehl)
 			}
 			else
 			{
-				std::wcerr << "Keine Anfangsanimation vor Text gesetzt, abbruch!" << std::endl;
+				std::wcerr << "Keine Anfangsanimation vor Text gesetzt. Letzter bekannter String: " << wsTemp << std::endl;
 				m_bFlagFail = true;
 				return;
 			}
