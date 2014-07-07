@@ -9,23 +9,17 @@ class SignController < ApplicationController
   OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
   def tweets
-    
     client = Twitter::REST::Client.new do |config|
-
       config.consumer_key        = '8La81KYPmMBQ8SBsS3VDFiD38'
-
       config.consumer_secret     = 'QhlvKjNWSU0FdDR1UMMzwwVbQ2ebDLI1dmf47a4sVHlY0GgBIV'
-
       config.access_token        = '2603579250-qfFJXGyU1gzTIlA1y1ODAJWa1pdJVQTbf8SSgAC'
-
       config.access_token_secret = 'xYiC6327ZVaPGayi1uoL2DUhelRej14wKAVBXxyNM81nZ'
-
     end
- @tweets = client.search("#bhclub", :result_type => "recent").take(3).collect do |tweet|
-  "<COLOR y><BGCOLOR b><LEFT>#{tweet.user.screen_name}: #{tweet.text}<WAIT 5>"
-end
-  puts @tweets.to_s
-  render :json => @tweets.to_s
+    @tweets = client.search("#bhclub", :result_type => "recent").take(3).collect do |tweet|
+      [ "#{tweet.id}", "#{tweet.user.screen_name}: #{tweet.text}" ]
+    end
+    #puts @tweets.to_s
+    render :json => @tweets.to_s
   end
 
   def commit

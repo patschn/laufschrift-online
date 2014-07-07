@@ -115,6 +115,10 @@ var SequenceControl = ( function() {
 		var sequenceDiv = null;
 		// Referenz zum Sequenz-Namen-<div>
 		var sequenceNameDiv = null;
+		// Liste mit Abschnitten der Sequenz, die als letztes auf die Laufschrift gespielt wurde
+		var lastPlayedComponents;
+		// Timeout, das bei aktiver Twitterkomponente die Tweets aktualisiert
+		var timeout;
 
 		// Hilfsfunktionen
 		// Gibt die ID der momentan ausgewählten Sequenz zurück, oder undefined falls
@@ -440,98 +444,73 @@ var SequenceControl = ( function() {
 		var getSequenceSortable = function() {
 			return sequenceDiv;
 		};
-		var lastPlayed;
-		var interval;
+		
+		var resendLastSequence = function(quiet) {
+			// Re-encode text and insert current tweets
+			var newText = SequenceCodec.encodeToString(lastPlayedComponents, true);
+			commit(newText, quiet);
+		};
+		
+		var updateTwitter = function(firstUpdate) {
+			Twitter.updateTweets().done(function(haveNewTweets) {
+				if (haveNewTweets) {
+					FlashMessage.success("Tweets aktualisiert");
+				} else {
+					FlashMessage.success("Tweets aktualisiert - keine neuen Tweets");
+				}
+				
+				if (firstUpdate || haveNewTweets) {
+					resendLastSequence(!firstUpdate);
+				}
+			}).fail(function(e) {
+				// Nothing to do?
+			}).always(function() {
+				timeout = window.setTimeout(updateTwitter, 30000);
+			});
+		};
+				
 		var playClicked = function() {
-			lastPlayed = commitTextField.val();
-			commit(commitTextField.val());
-		};
-		//Wird nur aufgerufen, wenn Twitter in der Sequenz existiert
-		var post_tweets = function(text) {
-			$.ajax({
-				url : Config.commitPath,
-				type : 'post',
-				data : {
-					text : text
+			window.clearTimeout(timeout);
+			// Copy component list
+			lastPlayedComponents = SequenceCodec.decodeFromString(currentSaveString());
+			
+			var haveTwitter = false;
+			var components = componentListFromHTML();
+			var c;
+			for (c = 0; c < components.length; c++) {
+				if (components[c] instanceof TwitterComponent) {
+					haveTwitter = true;
+					break;
 				}
-			}).done(function(data, status, xhr) {
-				//FlashMessage.success('Twitter');
-			}).fail(function(xhr, status, e) {
-				var errMsg = e;
-				if (xhr.status === 500) {
-					errMsg = xhr.responseText;
-				}
-				FlashMessage.error('Fehler beim Senden an die Laufschrift: ' + errMsg);
-			});
-		};
-		var post_sequence = function(text) {
-			$.ajax({
-				url : Config.commitPath,
-				type : 'post',
-				data : {
-					text : text
-				}
-			}).done(function(data, status, xhr) {
-				FlashMessage.success('Text an die Laufschrift übergeben');
-			}).fail(function(xhr, status, e) {
-				var errMsg = e;
-				if (xhr.status === 500) {
-					errMsg = xhr.responseText;
-				}
-				FlashMessage.error('Fehler beim Senden an die Laufschrift: ' + errMsg);
-			});
-		};
-		var commit = function(text) {
-			clearInterval(interval);
-			if (text.indexOf(tweet) > -1) {
-				save();
-				var tweets;
-				//Einmaliger Aufruf
-				$.ajax({
-					url : Config.tweetsPath,
-					type : 'get'
-				}).done(function(data, status, xhr) {
-					tweets = data;
-					text = text.replace(tweet, data.join(""));
-					text.escapeText;
-					lastPlayed = lastPlayed.replace(tweet, data);
-					FlashMessage.success('Tweets nachgeladen');
-				}).fail(function(xhr, status, e) {
-					var errMsg = e;
-					if (xhr.status === 500) {
-						errMsg = xhr.responseText;
-					}
-					FlashMessage.error('Tweets nicht bekommen ' + status + errMsg);
-				});
-				setTimeout(function() {
-					post_sequence(text);
-				}, 5000);
-				//Für permanente Neuprogrammierung, wenn Twitter enthalten
-				interval = setInterval(function() {
-					var tweet;
-					$.ajax({
-						url : Config.tweetsPath,
-						type : 'get'
-					}).done(function(data, status, xhr) {
-						lastPlayed = lastPlayed.replace(tweets, data.join(""));
-						lastPlayed.escapeText;
-						tweets = data.join("");
-						tweets.escapeText;
-						//FlashMessage.success('Tweets bekommen --'+tweet);
-					}).fail(function(xhr, status, e) {
-						var errMsg = e;
-						if (xhr.status === 500) {
-							errMsg = xhr.responseText;
-						}
-						FlashMessage.error('Tweets nicht bekommen ' + status + errMsg);
-					});
-					setTimeout(function() {
-						post_tweets(lastPlayed);
-					}, 5000);
-				}, 1 * 30000);
-			}  else {
-				post_sequence(text);
+			}
+			
+			if (haveTwitter) {
+				//save();
+				FlashMessage.status("Tweets werden geladen …");
+				updateTwitter(true);
+			} else {
+				commit(commitTextField.val(), false);
 			};
+		};
+
+		var commit = function(text, quiet) {
+			$.ajax({
+				url : Config.commitPath,
+				type : 'post',
+				data : {
+					text : text
+				}
+			}).done(function(data, status, xhr) {
+				if (!quiet) {
+					FlashMessage.success('Text an die Laufschrift übergeben');
+				}
+			}).fail(function(xhr, status, e) {
+				var errMsg = e;
+				if (xhr.status === 500) {
+					errMsg = xhr.responseText;
+				}
+				FlashMessage.error('Fehler beim Senden an die Laufschrift: ' + errMsg);
+			});
 		};
 
 		return {
@@ -546,21 +525,3 @@ var SequenceControl = ( function() {
 			commit : commit
 		};
 	}());
-//Wird bei der Initialisierung aufgerufen und die Tweets geladen
-var tweet;
-var get_tweets = function() {
-	$.ajax({
-		url : Config.tweetsPath,
-		type : 'get'
-	}).done(function(data, status, xhr) {
-		tweet = data;
-		FlashMessage.success('Twittermodul geladen');
-	}).fail(function(xhr, status, e) {
-		var errMsg = e;
-		if (xhr.status === 500) {
-			errMsg = xhr.responseText;
-		}
-		FlashMessage.error('Fehler beim Laden des Twittermoduls' + status + errMsg);
-	});
-	return tweet;
-}; 

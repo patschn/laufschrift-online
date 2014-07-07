@@ -251,7 +251,7 @@ function CommandComponent(command, hasPopover) {
 	        return [];
 	    }
 	    var tools;
-	    console.log(ci.options);
+
 	    var group = ci.options.exchangeableInGroup;
 	    if (group === undefined) {
 	        if (ci.options.exchangeableWithTools === undefined) {
@@ -535,12 +535,20 @@ GroupComponent.prototype.getSignText = function() {
 };
 
 function TwitterComponent() {
-    CommandComponent.call(this, 'Twitterkomponente', false);
+    CommandComponent.call(this, 'TWITTER', false);
 }
 
 TwitterComponent.prototype = Object.create(CommandComponent.prototype);
 TwitterComponent.prototype.constructor = TwitterComponent;
-TwitterComponent.prototype.getSignText=function(){return tweet;};
+TwitterComponent.prototype.getSignText = function() {
+    var text = "";
+    var i;
+    var tweets = Twitter.getTweets();
+    for (i = 0; i < tweets.length; i++) {
+        text += "<SPEED 8><COLOR y><BGCOLOR b><LEFT>" + SequenceCodec.escapeText(StringUtil.stripSpecialChars(tweets[i][1])) + "<WAIT 2>";
+    }
+    return text;
+};
 
 // ComponentInfo
 // ==============
@@ -614,7 +622,7 @@ var ASC333Components = {
 	    autocenterComponentInfo.options.exchangeableWithTools = noAutocenterComponentInfo.options.exchangeableWithTools = [ noAutocenterToolInfo, autocenterToolInfo ];
 
 		var twitter = [
-			[ 'Twitterkomponente' , "Ruft die letzten drei Tweets ab" ],
+			[ 'TWITTER' , "Ruft die letzten drei Tweets ab" ],
 			];
 		var openAnimations = [
 		    [ 'LEFT', "Von rechts nach links. Bei dieser Animation wird der Text standardmäßig linksbündig angezeigt." ],

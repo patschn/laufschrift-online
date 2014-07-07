@@ -1,16 +1,16 @@
 "use strict";
 
 var FlashMessage = {
-  _htmlencode: function(text) {
-    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  },
-
   success: function(text) {
-    $.achtung({message: this._htmlencode(text), timeout:5, className:'achtungSuccess'});
+    $.achtung({message: StringUtil.htmlencode(text), timeout:5, className:'achtungSuccess'});
   },
   
   error: function(text) {
-    $.achtung({message: this._htmlencode(text), className:'achtungFail'});
+    $.achtung({message: StringUtil.htmlencode(text), className:'achtungFail'});
+  },
+  
+  status: function(text) {
+    $.achtung({message: StringUtil.htmlencode(text), timeout: 5, className:'achtungStatus'});
   }
 };
 
@@ -25,5 +25,13 @@ var StringUtil = {
     }
     
     return (first === null) ? -1 : first;
+  },
+  
+  htmlencode: function(text) {
+    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  },
+  
+  stripSpecialChars: function(text) {
+    return text.replace(/[^a-zA-Z0-9äöüÄÖÜèÉñÑȧȦ!@#$§%^&*();.,\[\]_\-+=':"\/\\§? ]/g, '');
   }
 };
