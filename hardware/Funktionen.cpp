@@ -742,7 +742,8 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 							sTempBefehl += '>';
 							i++;
 
-							if(sTempBefehl.find(L"COLOR") == std::wstring::npos)
+							if(sTempBefehl.find(L"COLOR") == std::wstring::npos ||
+							   sTempBefehl.find(L"BGCOLOR") == std::wstring::npos)
 							{
 								break;
 							}
