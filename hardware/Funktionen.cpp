@@ -201,7 +201,8 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                         		sTemp == L"♥" || sTemp == L"⌂" || sTemp == L"◆" ||
                         		sTemp == L"▲" || sTemp == L"▶" || sTemp == L"▼" ||
                         		sTemp == L"◀" || sTemp == L"☉" || sTemp == L"⬆" ||
-                        		sTemp == L"⬇" || sTemp == L"⇦" || sTemp == L"⇨")
+                        		sTemp == L"⬇" || sTemp == L"⇦" || sTemp == L"⇨" ||
+                        		sTemp == L"[" || sTemp == L"]" || sTemp == L"_" )
 			{
 				sBefehl.sKonvertiert += GetCode(L"<GRAPH>");
 				sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig);
@@ -914,6 +915,7 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"♪"] = 12;
     LauflichtCodetabelle[L"☉"] = 13;
     LauflichtCodetabelle[L"🕓"] = 17;   //Uhr
+    LauflichtCodetabelle[L"_"] = 18;
     LauflichtCodetabelle[L"⛵"] = 28;
     LauflichtCodetabelle[L"♥"] = 33;
 
@@ -929,7 +931,9 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"æ"] = 22;
     LauflichtCodetabelle[L"Σ"] = 23;
     LauflichtCodetabelle[L"🍷"] = 24;   //Weinglas
-
+    LauflichtCodetabelle[L"\""] = 34;
+    LauflichtCodetabelle[L"["] = 14;
+    LauflichtCodetabelle[L"]"] = 30;
 
 
 
