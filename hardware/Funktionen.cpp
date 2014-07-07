@@ -440,8 +440,6 @@ void SWP::CLauflicht::CheckAnimation(stSequenz &sBefehl)
 			}
 			wsTemp += '>';
 
-			std::wcout << "Aktueller String: " << wsTemp << std::endl;
-
 			//Anfangsanimationen durchschalten
 			for(int m = 0;m < 13; m++)
 			{
@@ -454,7 +452,7 @@ void SWP::CLauflicht::CheckAnimation(stSequenz &sBefehl)
 			//Endanimationen durchschalten
 			for(int m = 0;m < 6; m++)
 			{
-				if(Endanimationen[m] == wsTemp)
+				if(Endanimationen[m] == wsTemp || wsTemp.find(L"WAIT") != std::wstring::npos)	//WAIT als Endbefehl behandeln
 				{
 					bAnim = false;
 				}
@@ -481,6 +479,7 @@ void SWP::CLauflicht::CheckAnimation(stSequenz &sBefehl)
 			{
 				std::wcerr << "Keine Anfangsanimation vor Text gesetzt, abbruch!" << std::endl;
 				m_bFlagFail = true;
+				return;
 			}
 		}
 	}
