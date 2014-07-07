@@ -545,7 +545,7 @@ TwitterComponent.prototype.getSignText = function() {
     var i;
     var tweets = Twitter.getTweets();
     for (i = 0; i < tweets.length; i++) {
-        text += "<SPEED 8><COLOR y><BGCOLOR b><LEFT>" + SequenceCodec.escapeText(StringUtil.stripSpecialChars(tweets[i][1])) + "<WAIT 2>";
+        text += "<SPEED 2><COLOR y><BGCOLOR b><LEFT>" + SequenceCodec.escapeText(StringUtil.stripSpecialChars(tweets[i][1])) + "<WAIT 2>";
     }
     return text;
 };
