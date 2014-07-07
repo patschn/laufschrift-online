@@ -61,73 +61,11 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
         return false;
     }
 
-    //Uhrzeitbehandlung (Keine Animationen vor Uhrzeit, wenn kein Text in der Sequenz ist
-	/*std::wstring Anfangsanimationen[] =
-	{
-		L"<LEFT>",L"<RIGHT>",L"<UP>",L"<DOWN>",L"<DOFF>",L"<DOBIG>",L"<FLASH>",
-		L"<JUMP>",L"<OPENMID>",L"<OPENRIGHT>",L"<RANDOM>",L"<SHIFTMID>",L"<SNOW>"
-	};*/
+    //Uhrzeitbehandlung (Keine Animationen vor Uhrzeit, wenn kein Text in der Sequenz ist)
+    CheckClock(sBefehl);
 
-	std::wstring Anfangsanimationen[] = //Invertiert, da von Clock aus rückwärts gesucht wird
-	{
-		L">TFEL<",L">THGIR<",L">PU<",L">NWOD<",L">FFOD<",L">GIBOD<",L">HSLAF<",
-		L">PMUJ<",L">DIMNEPO<",L">THGIRNEPO<",L">MODNAR<",L">DIMTFIHS<",L">WONS<"
-	};
-
-	 if(sBefehl.sOriginal.find(L"<CLOCK24>") != std::wstring::npos ||  //Uhrzeitelement gefunden
-	        sBefehl.sOriginal.find(L"<CLOCK12>") != std::wstring::npos)
-	{
-		int Clockpos = 0;
-		std::wstring wsTemp = L"";
-
-		while(Clockpos != std::wstring::npos)
-		{
-			if(sBefehl.sOriginal.find(L"<CLOCK24>") != std::wstring::npos)
-			{
-				Clockpos = sBefehl.sOriginal.find(L"<CLOCK24>",Clockpos+1);
-			}
-			else
-			{
-				Clockpos = sBefehl.sOriginal.find(L"<CLOCK12>",Clockpos+1);
-			}
-
-			if(Clockpos > 0)
-			{
-				//Es muss geprüft werden, ob Befehle vor der Clockanweisung sind, die das Verhalten beeinträchtigen könnten.
-				for(int i = Clockpos-1;i > 0;i--)
-				{
-					//Befehl
-					if(sBefehl.sOriginal[i] == '>' && sBefehl.sOriginal[i-1] != '\\')
-					{
-						//Befehl einlesen
-						while(sBefehl.sOriginal[i] != '<')
-						{
-							wsTemp += sBefehl.sOriginal[i];
-							i--;
-						}
-						wsTemp += '<';
-
-						//Anfangsanimationen durchschalten
-						for(int m = 0;m < 13; m++)
-						{
-							if(Anfangsanimationen[m] == wsTemp)
-							{
-								std::wcerr << L"Ungültige Anfangsanimation vor Clock gefunden! Position: " << m << std::endl;
-								m_bFlagFail = true;
-								break;
-							}
-						}
-
-						wsTemp = L"";
-					}//</if>
-					else
-					{
-						break;
-					}//</else>
-				}//</for>
-			}//</if>
-		}//</while>
-	}//</if>
+    //Zeichenketten auf Animationen prüfen (Prüfen ob vor jeder Zeichenkette eine Animation ist)
+    CheckAnimation(sBefehl);
 
 	if(m_bFlagFail == true) { return false; }
 //-------------------------------------------------------------------------------
@@ -407,6 +345,145 @@ std::string SWP::CLauflicht::GetClock()
     clockfile.close();
 
     return sLocaltime;
+}
+
+void SWP::CLauflicht::CheckClock(stSequenz &sBefehl)
+{
+	std::wstring AnfangsanimationenInvertiert[] = //Invertiert, da von Clock aus rückwärts gesucht wird
+	{
+		L">TFEL<",L">THGIR<",L">PU<",L">NWOD<",L">FFOD<",L">GIBOD<",L">HSLAF<",
+		L">PMUJ<",L">DIMNEPO<",L">THGIRNEPO<",L">MODNAR<",L">DIMTFIHS<",L">WONS<"
+	};
+
+	if(sBefehl.sOriginal.find(L"<CLOCK24>") != std::wstring::npos ||  //Uhrzeitelement gefunden
+		        sBefehl.sOriginal.find(L"<CLOCK12>") != std::wstring::npos)
+	{
+		int Clockpos = 0;
+		std::wstring wsTemp = L"";
+
+		while(Clockpos != std::wstring::npos)
+		{
+			if(sBefehl.sOriginal.find(L"<CLOCK24>") != std::wstring::npos)
+			{
+				Clockpos = sBefehl.sOriginal.find(L"<CLOCK24>",Clockpos+1);
+			}
+			else
+			{
+				Clockpos = sBefehl.sOriginal.find(L"<CLOCK12>",Clockpos+1);
+			}
+
+			if(Clockpos > 0)
+			{
+				//Es muss geprüft werden, ob Befehle vor der Clockanweisung sind, die das Verhalten beeinträchtigen könnten.
+				for(int i = Clockpos-1;i > 0;i--)
+				{
+					//Befehl
+					if(sBefehl.sOriginal[i] == '>' && sBefehl.sOriginal[i-1] != '\\')
+					{
+						//Befehl einlesen
+						while(sBefehl.sOriginal[i] != '<')
+						{
+							wsTemp += sBefehl.sOriginal[i];
+							i--;
+						}
+						wsTemp += '<';
+
+						//Anfangsanimationen durchschalten
+						for(int m = 0;m < 13; m++)
+						{
+							if(AnfangsanimationenInvertiert[m] == wsTemp)
+							{
+								std::wcerr << L"Ungültige Anfangsanimation vor Clock gefunden! Position: " << m << std::endl;
+								m_bFlagFail = true;
+								break;
+							}
+						}
+
+						wsTemp = L"";
+					}//</if>
+					else
+					{
+						break;
+					}//</else>
+				}//</for>
+			}//</if>
+		}//</while>
+	}//</if>
+}
+
+void SWP::CLauflicht::CheckAnimation(stSequenz &sBefehl)
+{
+	std::wstring Anfangsanimationen[] =
+	{
+		L"<LEFT>",L"<RIGHT>",L"<UP>",L"<DOWN>",L"<DOFF>",L"<DOBIG>",L"<FLASH>",
+		L"<JUMP>",L"<OPENMID>",L"<OPENRIGHT>",L"<RANDOM>",L"<SHIFTMID>",L"<SNOW>"
+	};
+
+	std::wstring Endanimationen[] =
+	{
+		L"<DSNOW>",L"<CLOSEMID>",L"<SQUEEZEMID>",L"<CLOSERIGHT>",L"<CLOCK12>",L"<CLOCK24>"
+	};
+
+	bool bAnim = false;
+	for(int i = 0;i < sBefehl.sOriginal.length();i++)
+	{
+		std::wstring wsTemp = L"";
+
+		//Befehlsanfang: Befehl einlesen und dann auf Anfangs-/Endanimationen testen
+		if(sBefehl.sOriginal[i] == '<' && sBefehl.sOriginal[i-1] != '\\')
+		{
+			//Befehl einlesen
+			while(sBefehl.sOriginal[i] != '>')
+			{
+				wsTemp += sBefehl.sOriginal[i];
+				i++;
+			}
+			wsTemp += '>';
+
+			std::wcout << "Aktueller String: " << wsTemp << std::endl;
+
+			//Anfangsanimationen durchschalten
+			for(int m = 0;m < 13; m++)
+			{
+				if(Anfangsanimationen[m] == wsTemp)
+				{
+					bAnim = true;
+				}
+			}
+
+			//Endanimationen durchschalten
+			for(int m = 0;m < 6; m++)
+			{
+				if(Endanimationen[m] == wsTemp)
+				{
+					bAnim = false;
+				}
+			}
+		}
+		else	//Zeichen folgt
+		{
+			if(bAnim == true)
+			{
+				//Zeichen durchschalten
+				for(;i < sBefehl.sOriginal.length();i++)
+				{
+					if(sBefehl.sOriginal[i] == '\\')
+					{
+						i++;
+					}
+					else if(sBefehl.sOriginal[i+1] == '<')
+					{
+						break;
+					}
+				}
+			}
+			else
+			{
+				std::wcerr << "Keine Anfangsanimation vor Text gesetzt, abbruch!" << std::endl;
+				m_bFlagFail = true;
+			}
+		}
+	}
 }
 
 void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)

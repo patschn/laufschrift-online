@@ -92,6 +92,20 @@ namespace SWP
             std::string GetClock();//std::wstring sClock);
 
             /**
+				void CheckClock(stSequenz &sBefehl):
+				Prüft, ob vor CheckClock eine Animation ist.
+				Falls ja: Fehler
+				Falls nein: OK
+            */
+            void CheckClock(stSequenz &sBefehl);
+
+            /**
+				void CheckAnimation(stSequenz &sBefehl):
+				Prüft, ob vor jeder Zeichenkette eine Anfangsanimation ist.
+            */
+            void CheckAnimation(stSequenz &sBefehl);
+
+            /**
             	void AutoLeft(stSequenz &sBefehl):
             	Behandelt die Befehle Autocenter und Left;
             */
