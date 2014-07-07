@@ -115,7 +115,26 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             //Prüfen, ob Farbe vorliegt
             if(sTemp == L"<BGCOLOR b>" || sTemp == L"<BGCOLOR r>" || sTemp == L"<BGCOLOR g>" || sTemp == L"<BGCOLOR y>")
             {
-            	if(iColors[COLOR_FB] != 32)
+            	if(iColors[COLOR_FB] == 32)	//Farbe Rainbow
+            	{
+            		//Bei Hintergrundänderung auf Schriftfarbe Gelb schalten
+            		iColors[COLOR_FG] = GetCode(L"COLOR y");
+            		iColors[COLOR_BG] = GetCode(sTemp);
+            		iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
+            	}
+            	else if((sTemp == L"<BGCOLOR b>") && (iColors[COLOR_FG] == GetCode(L"<COLOR b>")))
+            	{
+            		m_bFlagFail = true;
+					std::cerr << "Schwarzer Hintergrund und Textfarbe verboten!" << std::endl;
+				}
+				else
+				{
+					iColors[COLOR_BG] = GetCode(sTemp);
+					iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
+				}
+            	/*
+            		//Alter Code:
+            	if(iColors[COLOR_FB] != 32)	//Farbe rainbow
             	{
 					//Farbe in Tabelle nachschauen und Variablen aktualisieren
             	    if((sTemp == L"<BGCOLOR b>") && (iColors[COLOR_FG] == GetCode(L"<COLOR b>")))
@@ -128,7 +147,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             	        iColors[COLOR_BG] = GetCode(sTemp);
             	        iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
             	    }
-            	}
+            	}*/
             }
             else if(sTemp == L"<COLOR b>" || sTemp == L"<COLOR r>" || sTemp == L"<COLOR g>" || sTemp == L"<COLOR y>")
             {
