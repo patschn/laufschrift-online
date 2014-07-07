@@ -182,12 +182,29 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
                         		sTemp == L"♥" || sTemp == L"⌂" || sTemp == L"◆" ||
                         		sTemp == L"▲" || sTemp == L"▶" || sTemp == L"▼" ||
                         		sTemp == L"◀" || sTemp == L"☉" || sTemp == L"⬆" ||
-                        		sTemp == L"⬇" || sTemp == L"⇦" || sTemp == L"⇨" ||
-                        		sTemp == L"€")
+                        		sTemp == L"⬇" || sTemp == L"⇦" || sTemp == L"⇨")
 			{
 				sBefehl.sKonvertiert += GetCode(L"<GRAPH>");
 				sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig);
 			}
+            else if(sTemp == L"€")
+            {
+            	switch(iColors[0])
+            	{
+					case 2:	//Grünes Eurozeichen verwenden
+						sTemp += 'G';
+					break;
+					case 1:	//Rotes Eurozeichen verwenden
+						sTemp += 'R';
+					break;
+					default:	//Für die restlichen Farben das gelbe Eurozeichen verwenden
+						sTemp += 'Y';
+					break;
+            	}
+            	sBefehl.sKonvertiert += GetCode(L"<GRAPH>");
+            	sBefehl.sKonvertiert += GetCode(sTemp, m_bFlagBig);
+            }
+
             //Bei Zeichen kommt erst die Farbe, anschließend das Zeichen
             else if(sTemp == L"\\")   //Escapezeichen
             {
@@ -877,7 +894,9 @@ void SWP::CLauflicht::InitialisiereTabelle()
     LauflichtCodetabelle[L"ö"] = 31;
     LauflichtCodetabelle[L":"] = 32;
     LauflichtCodetabelle[L"!"] = 33;
-    LauflichtCodetabelle[L"€"] = 36;
+    LauflichtCodetabelle[L"€R"] = 34;
+    LauflichtCodetabelle[L"€G"] = 35;
+    LauflichtCodetabelle[L"€Y"] = 36;
     LauflichtCodetabelle[L"/"] = 47;
     LauflichtCodetabelle[L"#"] = 35;
     LauflichtCodetabelle[L"$"] = 36;
