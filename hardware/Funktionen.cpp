@@ -650,127 +650,149 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 
     //Left behandeln
     while(bLeftDone == false)
-    {
-        int iTemp = lastautoleft;
-        int iAnzahlZeichen = 0;
+	{
+		int iTemp = lastautoleft;
+		int iAnzahlZeichen = 0;
 
-        firstchar = lastchar = -1;
+		firstchar = lastchar = -1;
 
-        //Letztes Vorkommen von Left kopieren
-        while(iTemp == lastautoleft)
-        {
-            lastautoleft = sBefehl.sOriginal.find(L"<LEFT>",lastautoleft+1);
-            if(lastautoleft == std::wstring::npos) { break; }
-        }
+		//Letztes Vorkommen von Left kopieren
+		while(iTemp == lastautoleft)
+		{
+			lastautoleft = sBefehl.sOriginal.find(L"<LEFT>",lastautoleft+1);
+			if(lastautoleft == std::wstring::npos) { break; }
+		}
 
-        if(lastautoleft == std::wstring::npos)  //Fehlschlag
-        {
-            bLeftDone = true;
-        }
-        else
-        {
-            //Falls left gefunden, left auf letzte bekannte Position setzen
-            for(int i = lastautoleft;i < sBefehl.sOriginal[i];i++)
-            {
-                //Befehl, falls kein Escapezeichen oder sonstiges gefunden
-                if(sBefehl.sOriginal[i] == '<' && sBefehl.sOriginal[i-1] != '\\')
-                {
-                    while(sBefehl.sOriginal[i] != '>')
-                    {
-                        i++;
-                    }
-                }
-                else
-                {
-                    while(sBefehl.sOriginal[i] != '<' && i < sBefehl.sOriginal.length())  //Bis zum nächsten Befehl die Zeichen durchgehen
-                    {
-                        if(firstchar == -1)
-                        {
-                            firstchar = i;
-                        }
-                        else
-                        {
-                            lastchar = i;
-                            iAnzahlZeichen++;
-                            i++;
-                        }
-                        if((sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '<') ||
-                           (sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '>') ||
-                           (sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '\\') )
-                        {
-                            /*
-                                 i wurde schon weitergeschalten, falls das vorhergehende Element ein Zeichen
-                                 war. Deshalb wird mit der vorherigen und aktuellen Position geprüft, ob ein
-                                 Sonderzeichen eingeleitet wurde, um nicht irrtümlich einen Befehl anzunehmen.
-                            */
-                            lastchar = i;
-                            i++;
-                        }
-                    }
-                    /*
-                        Zwischen BIG und NORMAL unterscheiden:
-                        Von aktueller firstchar-Position aus nach <BIG> und <NORMAL> suchen,
-                        um Leerzeichen korrekt zu berechnen
-                    */
+		if(lastautoleft == std::wstring::npos)  //Fehlschlag
+		{
+			bLeftDone = true;
+		}
+		else
+		{
+			//Falls left gefunden, left auf letzte bekannte Position setzen
+			for(int i = lastautoleft;i < sBefehl.sOriginal[i];i++)
+			{
+				//Befehl, falls kein Escapezeichen oder sonstiges gefunden
+				if(sBefehl.sOriginal[i] == '<' && sBefehl.sOriginal[i-1] != '\\')
+				{
+					while(sBefehl.sOriginal[i] != '>')
+					{
+						i++;
+					}
+				}
+				else
+				{
+					while(i < sBefehl.sOriginal.length())
+					{
+						while(sBefehl.sOriginal[i] != '<' && i < sBefehl.sOriginal.length())  //Bis zum nächsten Befehl die Zeichen durchgehen
+						{
+							if(firstchar == -1)
+							{
+								firstchar = i;
+							}
+							else
+							{
+								lastchar = i;
+								iAnzahlZeichen++;
+								i++;
+							}
+							if((sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '<') ||
+							   (sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '>') ||
+							   (sBefehl.sOriginal[i-1] == '\\' && sBefehl.sOriginal[i] == '\\') )
+							{
+								/*
+									 i wurde schon weitergeschalten, falls das vorhergehende Element ein Zeichen
+									 war. Deshalb wird mit der vorherigen und aktuellen Position geprüft, ob ein
+									 Sonderzeichen eingeleitet wurde, um nicht irrtümlich einen Befehl anzunehmen.
+								*/
+								lastchar = i;
+								i++;
+							}
+						}
+						/*
+							Prüfen, ob gerade der Befehl "COLOR" folgt
+						*/
+						if(sBefehl.sOriginal[i-1] != '\\' && sBefehl.sOriginal[i] == '<')
+						{
+							std::wstring sTempBefehl = L"";
+							while(sBefehl.sOriginal[i] != '>')
+							{
+								sTempBefehl += sBefehl.sOriginal[i];
+								i++;
+							}
+							sTempBefehl += '>';
+							i++;
 
-                    for(int iBigNormal = firstchar; iBigNormal > 0;iBigNormal--)
-                    {
-                        sTemp = L"";
-                        if(sBefehl.sOriginal[iBigNormal] == '>')
-                        {
-                            while(sBefehl.sOriginal[iBigNormal] != '<')
-                            {
-                                sTemp += sBefehl.sOriginal[iBigNormal];
-                                iBigNormal--;
-                            }
-                            sTemp += '<';
-                        }
+							if(sTempBefehl.find(L"COLOR") == std::wstring::npos)
+							{
+								break;
+							}
+						}
+					}//</while>
 
-                        if(sTemp == L">LAMRON<")    { bBig = false; break; }
-                        else if (sTemp == L">GIB<") { bBig = true; break; }
-                    }
-                    if(iAnzahlZeichen < 14 && bBig == false)   //Leerzeichen einfügen, falls Zeichenanzahl
-                    {                                          //kleiner der maximal darstellbaren Charakter
-                        /*
-                         * Big behandeln:
-                         * Wenn vor firstchar noch ein <BIG> kommt (ohne weitere Zeichen dazwischen) dann
-                         * Leerzeichen nochmal durch zwei teilen.
-                         */
+					/*
+						Zwischen BIG und NORMAL unterscheiden:
+						Von aktueller firstchar-Position aus nach <BIG> und <NORMAL> suchen,
+						um Leerzeichen korrekt zu berechnen
+					*/
 
-                        iLeerzeichen = 14 - (iAnzahlZeichen); //Fehlende Leerzeichen berechnen
+					for(int iBigNormal = firstchar; iBigNormal > 0;iBigNormal--)
+					{
+						sTemp = L"";
+						if(sBefehl.sOriginal[iBigNormal] == '>')
+						{
+							while(sBefehl.sOriginal[iBigNormal] != '<')
+							{
+								sTemp += sBefehl.sOriginal[iBigNormal];
+								iBigNormal--;
+							}
+							sTemp += '<';
+						}
 
-                        for(int spaces = 0;spaces < iLeerzeichen;spaces++)
-                        {
-                            sBefehl.sOriginal.insert(lastchar+1,L" ");
-                        }
+						if(sTemp == L">LAMRON<")    { bBig = false; break; }
+						else if (sTemp == L">GIB<") { bBig = true; break; }
+					}
+					if(iAnzahlZeichen < 14 && bBig == false)   //Leerzeichen einfügen, falls Zeichenanzahl
+					{                                          //kleiner der maximal darstellbaren Charakter
+						/*
+						 * Big behandeln:
+						 * Wenn vor firstchar noch ein <BIG> kommt (ohne weitere Zeichen dazwischen) dann
+						 * Leerzeichen nochmal durch zwei teilen.
+						 */
 
-                        firstchar = lastchar = -1;
+						iLeerzeichen = 14 - (iAnzahlZeichen); //Fehlende Leerzeichen berechnen
 
-                        break;
-                    }
-                    else if(iAnzahlZeichen < 7 && bBig == true)   //Leerzeichen einfügen, falls Zeichenanzahl
-                    {                                             //kleiner der maximal darstellbaren Charakter
-                        /*
-                         * Big behandeln:
-                         * Wenn vor firstchar noch ein <BIG> kommt (ohne weitere Zeichen dazwischen) dann
-                         * Leerzeichen nochmal durch zwei teilen.
-                        */
+						for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+						{
+							sBefehl.sOriginal.insert(lastchar+1,L" ");
+						}
+						firstchar = lastchar = -1;
 
-                        iLeerzeichen = 7 - (iAnzahlZeichen); //Fehlende Leerzeichen berechnen
+						break;
+					}
+					else if(iAnzahlZeichen < 7 && bBig == true)   //Leerzeichen einfügen, falls Zeichenanzahl
+					{                                             //kleiner der maximal darstellbaren Charakter
+						/*
+						 * Big behandeln:
+						 * Wenn vor firstchar noch ein <BIG> kommt (ohne weitere Zeichen dazwischen) dann
+						 * Leerzeichen nochmal durch zwei teilen.
+						*/
 
-                        for(int spaces = 0;spaces < iLeerzeichen;spaces++)
-                        {
-                            sBefehl.sOriginal.insert(lastchar+1,L" ");
-                        }
+						iLeerzeichen = 7 - (iAnzahlZeichen); //Fehlende Leerzeichen berechnen
 
-                        firstchar = lastchar = -1;
+						for(int spaces = 0;spaces < iLeerzeichen;spaces++)
+						{
+							sBefehl.sOriginal.insert(lastchar+1,L" ");
+						}
 
-                        break;
-                    }
-                }//</else>
-            }
-        }
-    }
+						firstchar = lastchar = -1;
+
+						break;
+					}
+				}//</else>
+			}
+		}//</else>
+	}//</while>
 
     return;
 }
