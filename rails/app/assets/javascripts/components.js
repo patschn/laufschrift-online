@@ -622,7 +622,7 @@ var ASC333Components = {
 	    autocenterComponentInfo.options.exchangeableWithTools = noAutocenterComponentInfo.options.exchangeableWithTools = [ noAutocenterToolInfo, autocenterToolInfo ];
 
 		var twitter = [
-			[ 'TWITTER' , "Ruft die letzten drei Tweets ab" ],
+			[ 'TWITTER' , "Ruft die letzten drei Tweets ab und aktualisiert selbstständig. Für diesen Befehl werden keine Farben und Animationen unterstützt." ],
 			];
 		var openAnimations = [
 		    [ 'LEFT', "Von rechts nach links. Bei dieser Animation wird der Text standardmäßig linksbündig angezeigt." ],
@@ -679,7 +679,7 @@ var ASC333Components = {
 					extraClass : 'button-color-' + type + '-' + color,
 					factoryArguments : [color],
 					toolText : '',
-					tooltip: (type === 'fg' && color === 'rainbow') ? 'Dreifarbige Anzeige. Die Hintergrundfarbe wird automatisch auf schwarz gesetzt und ist nicht änderbar.' : ''
+					tooltip: (type === 'fg' && color === 'rainbow') ? 'Dreifarbige Anzeige. Die Hintergrundfarbe wird automatisch auf schwarz gesetzt und ist nicht änderbar. Sollte die Hintergrundfarbe trotzdem geändert werden, wird die Vordergrundfarbe zu gelb gewählt.' : ''
 				}));
 			});
 		});
