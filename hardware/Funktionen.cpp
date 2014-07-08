@@ -117,10 +117,13 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             {
             	if(iColors[COLOR_FB] == 32)	//Farbe Rainbow
             	{
-            		//Bei Hintergrundänderung auf Schriftfarbe Gelb schalten
-            		iColors[COLOR_FG] = GetCode(L"<COLOR y>");
-            		iColors[COLOR_BG] = GetCode(sTemp);
-            		iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
+            		if(sTemp != L"<BGCOLOR b>")	//Bei Regenbogen: Schwarzen Hintergrund ignorieren
+            		{
+						//Bei Hintergrundänderung auf Schriftfarbe Gelb schalten
+						iColors[COLOR_FG] = GetCode(L"<COLOR y>");
+						iColors[COLOR_BG] = GetCode(sTemp);
+						iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
+            		}
             	}
             	else if((sTemp == L"<BGCOLOR b>") && (iColors[COLOR_FG] == GetCode(L"<COLOR b>")))
             	{
