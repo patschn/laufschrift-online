@@ -19,7 +19,7 @@ void timeoutHandler(int n)
 
 int main(int argc, char *argv[])
 {
-    //Nach 3 Sekunden Programm töten
+    //Nach 5 Sekunden Programm töten
     timer_t timer;
     if (timer_create(CLOCK_MONOTONIC, NULL, &timer) != 0)
     {
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     }
     struct itimerspec timerSpec;
     timerSpec.it_interval.tv_sec = timerSpec.it_interval.tv_nsec = 0;
-    timerSpec.it_value.tv_sec = 3;
+    timerSpec.it_value.tv_sec = 5;
     timerSpec.it_value.tv_nsec = 0;
     if (timer_settime(timer, 0, &timerSpec, NULL) != 0)
     {
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     {
         return 1;
     }
-
+std::cout << Sequenz.sKonvertiert << std::endl;
     //Verbindung öffnen
     if(Lauflicht.OeffneRS232() == false)
     {
