@@ -107,7 +107,13 @@ namespace SWP
 
             /**
             	void AutoLeft(stSequenz &sBefehl):
-            	Behandelt die Befehle Autocenter und Left;
+            	Behandelt die Befehle Autocenter und Left. 
+            	
+            	Autocenter war ursprünglich nur in der Originalsoftware verfügbar,
+            	wird aber hier ebenfalls implementiert.
+            	
+            	Left muss aufgrund undefiniertem Verhalten behandelt werden 
+            	(Left wiederholte die Sequenzen ohne dazwischen Leerzeichen einzufügen.)
             */
             void AutoLeft(stSequenz &sBefehl);
 
@@ -134,14 +140,15 @@ namespace SWP
 
             /**
 				bool m_bFlagBig:
-				Flag, der anzeigt ob <BIG> im Befehlsstring vorkommt
+				Flag, der anzeigt ob <BIG> im Befehlsstring vorkommt. Die "breiten" Zeichen und Befehle sind in der Laufschrift intern (also
+				im Speicher) um 128 'Speicherstellen' verschoben gespeichert.
              */
 
             bool m_bFlagBig;
 
             /**
             	bool m_bFlagFail:
-            	Flag, der anzeigt ob der Konvertierungsvorgang erfolgreich war
+            	Flag, der anzeigt ob der Konvertierungsvorgang erfolgreich war.
              */
             bool m_bFlagFail;
 

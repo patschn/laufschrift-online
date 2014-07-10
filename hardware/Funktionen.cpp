@@ -17,6 +17,8 @@ SWP::CLauflicht::CLauflicht()
 
     //Com-Port festlegen:
     m_sComPort = "/dev/ttyAMA0";
+
+    //Buchstabenanzahl zu Beginn auf 0
     m_iLetters = 0;
     m_bFlagBig = false;
     m_bFlagFail = false;
@@ -45,7 +47,6 @@ void SWP::CLauflicht::LeseString(stSequenz &sBefehl)
     std::wcin.clear();
 
     //String speichern:
-
     for(std::wstring line; std::getline(std::wcin, line);)
     {
         sBefehl.sOriginal = line;   //String der Website
@@ -68,7 +69,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     CheckAnimation(sBefehl);
 
 	if(m_bFlagFail == true) { return false; }
-//-------------------------------------------------------------------------------
+
     /**
         int iColors[3]: Dient zur Speicherung der Farbwerte
         iColors[COLOR_FG]: Vordergrundfarbe
@@ -81,9 +82,10 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     iColors[COLOR_BG] = 0;
     iColors[COLOR_FB] = 3;
 
+    //Autocenter und Left behandeln
     AutoLeft(sBefehl);
 
-	//Temporäre Variable zur Verarbeitung anlegen
+	//Temporäre Variable zur Verarbeitung anlegen (beinhaltet den aktuellen Befehl
     std::wstring sTemp;
 
     //Start der Konvertierung - der fertige Befehl wird in sBefehl.sKonvertiert gespeichert
@@ -101,18 +103,19 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
             sTemp += '>';   //Da bei '>' die Schleife abgebrochen wird, muss das Zeichen für das Ende des Befehls
                             //hinzugefügt werden
 
-            if(sTemp == L"<BIG>")
+            if(sTemp == L"<BIG>")	//Prüfen, ob der Befehl BIG vorliegt
             {
             	m_bFlagBig = true;
             	continue;
             }
-            if(sTemp == L"<NORMAL>")
+
+            if(sTemp == L"<NORMAL>")	//Prüfen, ob der Befehl NORMAL vorliegt
             {
             	m_bFlagBig = false;
             	continue;
             }
 
-            //Prüfen, ob Farbe vorliegt
+            //Prüfen, ob Hintergrundfarbe vorliegt
             if(sTemp == L"<BGCOLOR b>" || sTemp == L"<BGCOLOR r>" || sTemp == L"<BGCOLOR g>" || sTemp == L"<BGCOLOR y>")
             {
             	if(iColors[COLOR_FB] == 32)	//Farbe Rainbow
@@ -135,7 +138,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 					iColors[COLOR_BG] = GetCode(sTemp);
 					iColors[COLOR_FB] = iColors[COLOR_FG] + iColors[COLOR_BG];
 				}
-            }
+            }//Prüfen, ob Vordergrundfarbe vorliegt
             else if(sTemp == L"<COLOR b>" || sTemp == L"<COLOR r>" || sTemp == L"<COLOR g>" || sTemp == L"<COLOR y>")
             {
                     //Farbe in Tabelle nachschauen und Variablen aktualisieren
@@ -182,6 +185,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
         {
             sTemp = sBefehl.sOriginal[i];
 
+            //Prüfen, ob Sonderzeichen vorliegen (Sonderzeichen müssen gesondert behandelt werden)
             if(sTemp == L"Ω" || sTemp == L"Σ" || sTemp == L"¤" || sTemp == L"æ" ||
                         		sTemp == L"£" || sTemp == L"🍷" || sTemp == L"♪" ||
                         		sTemp == L"🚗" || sTemp == L"⛵" || sTemp == L"🕓" ||
@@ -255,8 +259,9 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
     SKonvertiertTemp += sBefehl.sKonvertiert;
     sBefehl.sKonvertiert = SKonvertiertTemp;
 
+    //Endbefehl hinzufügen
     sBefehl.sKonvertiert += GetCode(L"<END>");
-    sBefehl.sKonvertiert += 177;
+    sBefehl.sKonvertiert += 177;	//Leider unbekannter Befehl, dient aber vermutlich zur Löschung der vorherigen Sequenz
     sBefehl.sKonvertiert += GetCode(L"<END>");
 
     if(m_bFlagFail == false)	//Sequenz erfolgreich konvertiert
@@ -272,7 +277,7 @@ bool SWP::CLauflicht::KonvertiereString(stSequenz &sBefehl)
 void SWP::CLauflicht::SendeString(stSequenz sBefehl)
 {
     m_sl.WriteString(sBefehl.sKonvertiert.c_str());
-    usleep(300000);
+    usleep(300000);	//Pause von 300ms zwischen Sequenz und Uhrzeitübertragung
     m_sl.WriteString(GetClock().c_str());
 }
 
@@ -611,6 +616,7 @@ void SWP::CLauflicht::AutoLeft(stSequenz &sBefehl)
 
 
                 //Leerzeichen berechnen und einfügen
+                //(bei BIG-Zeichen passen max. 7 Zeichen auf die Laufschrift, sonst 14)
                 if(lastchar - firstchar < 7 && bBig == true)
                 {
                     iLeerzeichen = 7 - (lastchar - firstchar);
