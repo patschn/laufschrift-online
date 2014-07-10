@@ -8,7 +8,7 @@
 #include <string>
 #include <map>
 #include <fstream>
-#include "serialib.h"
+#include "serialib.h"	//Von der Website: http://serialib.free.fr/
 #ifndef _FUNKTIONEN_HPP
 #define _FUNKTIONEN_HPP
 
@@ -24,7 +24,7 @@ namespace SWP
     struct stSequenz
     {
         std::wstring sOriginal;      //Hier ist der String, der von der Webseite übermittelt wurde
-        std::string sKonvertiert;    //Hier ist (nach der Konvertierung) der String als HexCode
+        std::string sKonvertiert;    //Hier ist der fertigkonvertierte String gespeichert
     };
 
     class CLauflicht
@@ -125,8 +125,6 @@ namespace SWP
 
             /**
                 int m_iComPort: Der verwendete Comport. Jede Nummer ist jeweils einem Port in /dev zugeordnet.
-                Die Liste ist in rs232.c zu finden.
-                Hier wird die Nummer 22 für ttyAMA0 verwendet.
             */
             std::string m_sComPort;
 
