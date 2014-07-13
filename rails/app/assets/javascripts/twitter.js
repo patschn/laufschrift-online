@@ -1,6 +1,6 @@
 var Twitter = (function() {
-    // Array of tweets
-    // Each tweet is an array [ id, text ]
+    // Tweet-Liste
+    // Jeder Tweet ist ein Array [ id, text ]
     var tweets = [];
     var tweetsWereUpdated = false;
     
@@ -37,7 +37,7 @@ var Twitter = (function() {
 		    if (xhr.status === 500) {
 			    errMsg = xhr.responseText;
 		    }
-		    FlashMessage.error('Fehler beim Laden des Tweets: ' + status + errMsg);
+		    FlashMessage.error('Fehler beim Laden der Tweets: ' + status + errMsg);
 		    dfd.reject(e);
 	    });
 	    return dfd.promise();

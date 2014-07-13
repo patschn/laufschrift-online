@@ -1,44 +1,6 @@
 "use strict";
 
-
-$(document).ready(function() {
-/* 
-
-  function A() {
-      var priv;
-      
-      this.read = function() {
-          console.log("priv is " + priv);
-      };
-      
-      this.changePriv = function() {
-          console.log("changePriv()");
-          priv = 5;
-      };
-  }
-  A.prototype.read2 = function() {
-      console.log("priv is " + priv);
-  };
-
-  function B() {
-      A.call(this);
-      
-      var superChangePriv = this.changePriv;
-      this.changePriv = function() {
-          superChangePriv.apply(this);
-      };
-  }
-  B.prototype = Object.create(A.prototype);
-  B.prototype.constructor = B;
-
-  var t = new B();
-  var t2 = new B();
-  t.read();
-  t2.read();
-  t.changePriv();
-  t.read();
-  t2.read();
-  */
+/*$(document).ready(function() {
   function checkStr(str) {
     var components = SequenceCodec.decodeFromString(str);
     var newstr = SequenceCodec.encodeToString(components, false);
@@ -47,7 +9,7 @@ $(document).ready(function() {
     }
   }
   
-  /*checkStr("<RIGHT>");
+  checkStr("<RIGHT>");
   checkStr("<TEXT test><LEFT><TEXT asdefdings><COLOR r><TEXT bld>");
   checkStr("<TEXT test><LEFT>");
   checkStr("<TEXT test><LEFT><TEXT aaa><COLOR g>");
@@ -58,8 +20,5 @@ $(document).ready(function() {
   checkStr("<TEXT \\>>");
   checkStr("<TEXT \\\\><LEFT>");
   checkStr("<TEXT a><LEFT><TEXT \\>>");
-  checkStr("<TEXT a><LEFT><TEXT \\<>");*/
-  
-  //SequenceControl.loadSequenceFromText('<GROUP <COLOR y><BGCOLOR b><LEFT>bla<WAIT 5>><COLOR r>test');
-  //SequenceControl.loadSequenceFromText('<COLOR r>');
-});
+  checkStr("<TEXT a><LEFT><TEXT \\<>");
+});*/
